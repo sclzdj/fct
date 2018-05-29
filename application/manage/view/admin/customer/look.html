@@ -1,0 +1,147 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<form id="add_form">
+
+
+<div class="add_edit">
+    <div class="title">客户基本信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="looktips">客户名称：</span>
+                {if condition='$customer.name!==""'}
+                <span class="lacon">{$customer.name}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">联系电话：</span>
+                {if condition='$customer.mobile!==""'}
+                <span class="lacon">{$customer.mobile}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">性别：</span>
+                {if condition='$customer.sex!==""'}
+                <span class="lacon">{$customer.sex}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">所在城市：</span>
+                {if condition='$customer.region_text!==""'}
+                <span class="lacon">{$customer.region_text}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">意向车源：</span>
+                {if condition='$customer.car_source !== ""'}
+                <span class="lacon">{$customer.car_source}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">客户来源：</span>
+                {if condition='$customer.source!==""'}
+                <span class="lacon">{$customer.source}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">客户状态：</span>
+                <span class="lacon">
+                {switch name="car_source.state"}
+                    {case value="0"}
+                    未到店
+                    {/case}
+                    {case value="1"}
+                    已到店
+                    {/case}
+                    {case value="2"}
+                    已预订
+                    {/case}
+                    {case value="3"}
+                    已成交
+                    {/case}
+                    {case value="-1"}
+                    战败
+                    {/case}
+                    {default /}
+                {/switch}
+                </span>
+            </li>
+            <li>
+                <span class="looktips">所属车商：</span>
+                {if condition='$customer.shop_name!==""'}
+                <span class="lacon">{$customer.shop_name}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">录入人：</span>
+                {if condition='$customer.admin_name!==""'}
+                <span class="lacon">{$customer.admin_name}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">最后跟进时间：</span>
+                {if condition='$customer.follow_at_str!==""'}
+                <span class="lacon">{$customer.follow_at_str}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">创建时间：</span>
+                {if condition='$customer.created_at_str!==""'}
+                <span class="lacon">{$customer.created_at_str}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips" style="vertical-align:top;">客户简介：</span>
+                {if condition='$customer.remark!==""'}
+                <span class="lacon">{$customer.remark}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:window.history.go(-1);" class="btn btn-minw btn-primary rbt">返&nbsp;回</a>
+</div>
+
+</form>
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

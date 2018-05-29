@@ -1,0 +1,326 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<form id="add_form">
+
+<div class="add_edit">
+    <div class="title">商户基本信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li class="look">
+                <span class="looktips">商户号：</span>
+                <span class="lacon">{$merchant.sn}</span>
+            </li>
+            <li class="look">
+                <span class="looktips"></span>
+                <span class="lacon"></span>
+            </li>
+            <li class="look">
+                <span class="looktips">公司名称：</span>
+                {if condition='$merchant.company_name!==""'}
+                <span class="lacon">{$merchant.company_name}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">店铺名称：</span>
+                {if condition='$merchant.shop_name!==""'}
+                <span class="lacon">{$merchant.shop_name}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">合同编号：</span>
+                {if condition='$merchant.contract_no!==""'}
+                <span class="lacon">{$merchant.contract_no}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">合同有效期：</span>
+                {if condition='$merchant.contract_valid_start!=="" || $merchant.contract_valid_end!==""'}
+                <span class="lacon">{$merchant.contract_valid_start}</span>~~<span class="lacon">{$merchant.contract_valid_end}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">证照类型：</span>
+                {if condition='$merchant.licence_type!==""'}
+                <span class="lacon">{$merchant.licence_type}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">证件号码：</span>
+                {if condition='$merchant.licence_no!==""'}
+                <span class="lacon">{$merchant.licence_no}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">营业执照所在地：</span>
+                {if condition='$merchant.region_text!==""'}
+                <span class="lacon">{$merchant.region_text}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">详细地址：</span>
+                {if condition='$merchant.licence_address!==""'}
+                <span class="lacon">{$merchant.licence_address}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">营业执照：</span>
+                {if condition='$merchant.licence_img===""'}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {else/}
+                <div class="imgone">
+                    <a href="javascript:void;">
+                        <img src="{$merchant.licence_img}" onclick="window.open('{$merchant.licence_img}');" title="点击查看大图">
+                    </a>
+                </div>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">营业执照有效期：</span>
+                {if condition='$merchant.licence_valid_start!=="" || $merchant.licence_valid_end!==""'}
+                <span class="lacon">{$merchant.licence_valid_start}</span>~~<span class="lacon">{$merchant.licence_valid_end}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">办公地址：</span>
+                {if condition='$merchant.work_address!==""'}
+                <span class="lacon">{$merchant.work_address}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">客服电话：</span>
+                {if condition='$merchant.custom_tel!==""'}
+                <span class="lacon">{$merchant.custom_tel}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">法人姓名：</span>
+                {if condition='$merchant.corporation_name!==""'}
+                <span class="lacon">{$merchant.corporation_name}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">联系电话：</span>
+                {if condition='$merchant.mobile!==""'}
+                <span class="lacon">{$merchant.mobile}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">身份证号：</span>
+                {if condition='$merchant.identcard_no!==""'}
+                <span class="lacon">{$merchant.identcard_no}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">身份证正面照片：</span>
+                {if condition='$merchant.identcard_front_img===""'}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {else/}
+                <div class="imgone">
+                    <a href="javascript:void;">
+                        <img src="{$merchant.identcard_front_img}" onclick="window.open('{$merchant.identcard_front_img}');" title="点击查看大图">
+                    </a>
+                </div>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">身份证背面照片：</span>
+                {if condition='$merchant.identcard_back_img===""'}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {else/}
+                <div class="imgone">
+                    <a href="javascript:void;">
+                        <img src="{$merchant.identcard_back_img}" onclick="window.open('{$merchant.identcard_back_img}');" title="点击查看大图">
+                    </a>
+                </div>
+                {/if}
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+<div class="add_edit">
+    <div class="title">联系人信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li class="look">
+                <span class="looktips">业务负责人：</span>
+                {if condition='$merchant.businesser_name!==""'}
+                <span class="lacon">{$merchant.businesser_name}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">业务负责人座机：</span>
+                {if condition='$merchant.businesser_tel!==""'}
+                <span class="lacon">{$merchant.businesser_tel}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">业务负责人手机号：</span>
+                {if condition='$merchant.businesser_mobile!==""'}
+                <span class="lacon">{$merchant.businesser_mobile}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">业务负责人邮箱：</span>
+                {if condition='$merchant.businesser_email!==""'}
+                <span class="lacon">{$merchant.businesser_email}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">财务负责人：</span>
+                {if condition='$merchant.financer_name!==""'}
+                <span class="lacon">{$merchant.financer_name}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">财务负责人座机：</span>
+                {if condition='$merchant.financer_tel!==""'}
+                <span class="lacon">{$merchant.financer_tel}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">财务负责人手机号：</span>
+                {if condition='$merchant.financer_mobile!==""'}
+                <span class="lacon">{$merchant.financer_mobile}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">财务负责人邮箱：</span>
+                {if condition='$merchant.financer_email!==""'}
+                <span class="lacon">{$merchant.financer_email}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+<div class="add_edit">
+    <div class="title">登录信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li class="look">
+                <span class="looktips">用户名：</span>
+                {if condition='$merchant.admin_name!==""'}
+                <span class="lacon">{$merchant.admin_name}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li class="look">
+                <span class="looktips">登录密码：</span>
+                <span class="lacon">**********</span>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+<div class="add_edit">
+    <div class="title">车行照片</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li style="width: 100%;">
+                {if condition='$merchant.imgs'}
+                <div>
+                    {volist name="merchant.imgs" id="vo"}
+                    <div class="imgall">
+                        <img src="{$vo}" onclick="window.open('{$vo}');" target="_blank" title="点击查看大图，拖拽调整顺序">
+                    </div>
+                    {/volist}
+                </div>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+<div class="add_edit">
+    <div class="con">
+        <ul>
+            <li class="look">
+                <span class="looktips">商户状态：</span>
+                <span class="lacon">{if condition='$merchant.state'}开通{else/}冻结{/if}</span>
+            </li>
+            <li class="look">
+                <span class="looktips">创建时间：</span>
+                <span class="lacon">{$merchant.created_at_str}</span>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:window.history.go(-1);" class="btn btn-minw btn-primary rbt">返&nbsp;回</a>
+</div>
+
+</form>
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

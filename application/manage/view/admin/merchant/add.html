@@ -1,0 +1,452 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__ADMIN_JS__/ajaxfileupload.js"></script>
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<form id="add_form">
+
+<div class="add_edit">
+    <div class="title">商户基本信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="latips"><span class="required">*</span>公司名称：</span>
+                <input type="text" name="company_name" value="" placeholder="请输入公司名称">
+                <span class="bztips">只允许输入汉字或中英文()，不允许输入字母、数字、及其他特殊符号</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>店铺名称：</span>
+                <input type="text" name="shop_name" value="" placeholder="请输入店铺名称">
+                <span class="bztips">允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：8-30个字符</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>合同编号：</span>
+                <input type="text" name="contract_no" value="" placeholder="请输入合同编号">
+                <span class="bztips">允许输入大写字母、数字、- 三种字符，字符长度：10-30个字符，例：HC-JM-20180415001</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>合同有效期：</span>
+                <input type="text" name="contract_valid_start" value="" placeholder="请选择开始日期" style="width: 11%;min-width: 95px;" class="timepick">~~
+                <input type="text" name="contract_valid_end" value="" placeholder="请选择结束日期" style="width: 11%;min-width: 95px;" class="timepick">
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>证照类型：</span>
+                <select name="licence_type">
+                    <option value="">请选择证照类型</option>
+                    <option value="工商营业执照">工商营业执照</option>
+                    <option value="统一社会信用代码营业执照">统一社会信用代码营业执照</option>
+                </select>
+                <span class="bztips">选择工商营业执照时证件号码只允许输入13位数字；选择统一社会信用代码用业执照时证件号码只允许输入18位数字</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>证件号码：</span>
+                <input type="text" name="licence_no" value="" placeholder="请输入证件号码">
+                <span class="bztips">按情况只能输入13位数字或18位数字</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>营业执照所在地：</span>
+                <select name="licence_province_id" style="width: 8%;min-width: 90px;" id="select_province">
+                    <option value="">请选择省份</option>
+                    {volist name="province" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>&nbsp;
+                <select name="licence_city_id" style="width: 8%;min-width: 90px;" id="select_city">
+                    <option value="">请选择城市</option>
+                </select>&nbsp;
+                <select name="licence_area_id" style="width: 8%;min-width: 90px;" id="select_area">
+                    <option value="">请选择区县</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>详细地址：</span>
+                <input type="text" name="licence_address" value="" placeholder="请输入详细地址">
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>上传营业执照：</span>
+                <input type="hidden" name="licence_img" value="" class="licence_img">
+                <div class="addimg addoneimg" title="点击上传" ralate="licence_img" suffix='png,jpg,jpeg' msize='3145728'><img src="__ADMIN_IMG__/add.png"></div>
+                <span class="bztips">支持扩展名：png,jpg,jpeg，大小不超过3M</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>营业执照有效期：</span>
+                <input type="text" name="licence_valid_start" value="" placeholder="请选择开始日期" style="width: 11%;min-width: 95px;" class="timepick">~~
+                <input type="text" name="licence_valid_end" value="" placeholder="请选择结束日期" style="width: 11%;min-width: 95px;" class="timepick">
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>办公地址：</span>
+                <input type="text" name="work_address" value="" placeholder="请输入办公地址">
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>客服电话：</span>
+                <input type="text" name="custom_tel" value="" placeholder="请输入客服电话">
+                <span class="bztips">只允许输入数字</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>法人姓名：</span>
+                <input type="text" name="corporation_name" value="" placeholder="请输入法人姓名">
+                <span class="bztips">字符限制4-8个字符</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>联系电话：</span>
+                <input type="text" name="mobile" value="" placeholder="请输入联系电话">
+                <span class="bztips">只允许输入11位数字</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>身份证号：</span>
+                <input type="text" name="identcard_no" value="" placeholder="请输入身份证号">
+                <span class="bztips">需符合身份证号码的标准格式</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>上传身份证正面照片：</span>
+                <input type="hidden" name="identcard_front_img" value="" class="identcard_front_img">
+                <div class="addimg addoneimg" title="点击上传" ralate="identcard_front_img" suffix='png,jpg,jpeg' msize='3145728'><img src="__ADMIN_IMG__/add.png"></div>
+                <span class="bztips">支持扩展名：png,jpg,jpeg，大小不超过3M</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>上传身份证背面照片：</span>
+                <input type="hidden" name="identcard_back_img" value="" class="identcard_back_img">
+                <div class="addimg addoneimg" title="点击上传" ralate="identcard_back_img" suffix='png,jpg,jpeg' msize='3145728'><img src="__ADMIN_IMG__/add.png"></div>
+                <span class="bztips">支持扩展名：png,jpg,jpeg，大小不超过3M</span>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+<div class="add_edit">
+    <div class="title">联系人信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="latips"><span class="required">*</span>业务负责人：</span>
+                <input type="text" name="businesser_name" value="" placeholder="请输入业务负责人">
+                <span class="bztips">字符限制4-8个字符</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>业务负责人座机：</span>
+                <input type="text" name="businesser_tel_1" value="" placeholder="请输入区号" style="width: 6%;min-width: 25px;">-
+                <input type="text" name="businesser_tel_2" value="" placeholder="请输入电话号码" style="width: 14%;min-width: 60px;">
+                <span class="bztips">区号允许3位和4位数字，当区号为3位时，号码是8位，为4时，号码是7位</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>业务负责人手机号：</span>
+                <input type="text" name="businesser_mobile" value="" placeholder="请输入业务负责人">
+                <span class="bztips">只允许输入11位数字</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>业务负责人邮箱：</span>
+                <input type="text" name="businesser_email" value="" placeholder="请输入业务负责人">
+                <span class="bztips">需符合邮箱标准格式</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>财务负责人：</span>
+                <input type="text" name="financer_name" value="" placeholder="请输入业务负责人">
+                <span class="bztips">字符限制4-8个字符</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>财务负责人座机：</span>
+                <input type="text" name="financer_tel_1" value="" placeholder="请输入区号" style="width: 6%;min-width: 25px;">-
+                <input type="text" name="financer_tel_2" value="" placeholder="请输入电话号码" style="width: 14%;min-width: 60px;">
+                <span class="bztips">区号允许3位和4位数字，当区号为3位时，号码是8位，为4时，号码是7位</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>财务负责人手机号：</span>
+                <input type="text" name="financer_mobile" value="" placeholder="请输入业务负责人">
+                <span class="bztips">只允许输入11位数字</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>财务负责人邮箱：</span>
+                <input type="text" name="financer_email" value="" placeholder="请输入业务负责人">
+                <span class="bztips">需符合邮箱标准格式</span>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+<div class="add_edit">
+    <div class="title">登录信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="latips"><span class="required">*</span>用户名：</span>
+                <input type="text" name="admin_name" value="" placeholder="请输入用户名">
+                <span class="bztips">允许数字、大小写字母及@符号（邮箱时）的3-20个字符</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>登录密码：</span>
+                <input type="text" name="admin_password" value="" placeholder="请输入登录密码">
+                <span class="bztips">允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成</span>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+<div class="add_edit">
+    <div class="title">车行照片</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li style="width: 100%;">
+                <div id="sortable">
+                </div>
+                <div style="clear: both;"></div>
+                <div class="addimg2 addallimg" title="点击上传" suffix='png,jpg,jpeg' msize='31457280'><img src="__ADMIN_IMG__/add.png"></div>
+            </li>
+            <li style="width: 100%;line-height: 20px;font-size: 12px;color: #999;margin:20px 10px;">
+                提示：1.本地上传图片大小不超过30M，图片格式支持png,jpg,jpeg；2.您最多可上传4张图片；3.点击图片可以预览，拖拽图片可移动位置
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+
+
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="add_form_submit">确&nbsp;定</a>
+</div>
+
+</form>
+
+<form style="display: none;" id='up_one_form' enctype="multipart/form-data"><input type="file" name="file" id="up_one_form_in" ralate="" suffix="" msize=""></form>
+<form style="display: none;" id='up_many_form' enctype="multipart/form-data"><input type="file" name="file[]" id='up_many_form_in' multiple="multiple" suffix='' msize=''></form>
+
+<script>
+    $(function(){
+        //多图上传
+        $("body").on('click','.addallimg',function(){
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            $('#up_many_form_in').attr('suffix',suffix);
+            $('#up_many_form_in').attr('msize',msize);
+            $('#up_many_form_in').click();
+        });
+        $("body").on('change','#up_many_form_in',function(){
+            var up_len=this.files.length;
+            if(up_len==0){
+                $('#up_many_form_in').attr('suffix','');
+                $('#up_many_form_in').attr('msize','');
+                return false;
+            }
+            var len=$('#sortable .imgall').length;
+            var max_len=4;
+            if (max_len-len<up_len) {
+                Dolphin.notify('你最多还只能上传'+(max_len-len)+'张', 'danger');
+                return false;
+            }
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            Dolphin.loading();
+            $.ajaxFileUpload({
+                fileElementId: 'up_many_form_in',    //需要上传的文件域的ID，即<input type="file">的ID。
+                url: "{:url('index/file/upload',['type'=>'image','multiple'=>'1'])}", //后台方法的路径
+                type: 'post',   //当要提交自定义参数时，这个参数要设置成post
+                data:{suffix:suffix,msize:msize},
+                dataType: 'json',   //服务器返回的数据类型。可以为xml,script,json,html。如果不填写，jQuery会自动判断。
+                secureuri: false,   //是否启用安全提交，默认为false。
+                async : true,   //是否是异步
+                success: function(data) {   //提交成功后自动执行的处理函数，参数data就是服务器返回的数据。
+                    Dolphin.loading('hide');
+                    $('#up_many_form_in').attr('suffix','');
+                    $('#up_many_form_in').attr('msize','');
+                    if (data.code==200) {
+                        var html='';
+                        $(data.data).each(function(k,v){
+                            html+='<div class="imgall"><img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除"><img src="'+v+'" onclick="window.open(\''+v+'\');" target="_blank" title="点击查看大图，拖拽调整顺序"><input type="hidden" name="imgs[]" value="'+v+'"></div>';
+                        });
+                        $('#sortable').append(html);
+                        var new_len=$('#sortable .imgall').length;
+                        if(new_len>=max_len){
+                            $('.addallimg').addClass('addallimgno');
+                            $('.addallimg').attr('title','');
+                            $('.addallimg').removeClass('addallimg');
+                        }
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error: function(data, status, e) {  //提交失败自动执行的处理函数。
+                    Dolphin.loading('hide');
+                    $('#up_many_form_in').attr('suffix','');
+                    $('#up_many_form_in').attr('msize','');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        //单图上传
+        $("body").on('click','.addoneimg',function(){
+            var ralate=$(this).attr('ralate');
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            $('#up_one_form_in').attr('ralate',ralate);
+            $('#up_one_form_in').attr('suffix',suffix);
+            $('#up_one_form_in').attr('msize',msize);
+            $('#up_one_form_in').click();
+        });
+        $("body").on('change','#up_one_form_in',function(){
+            var ralate=$(this).attr('ralate');
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            Dolphin.loading();
+            $.ajaxFileUpload({
+                fileElementId: 'up_one_form_in',    //需要上传的文件域的ID，即<input type="file">的ID。
+                url: "{:url('index/file/upload',['type'=>'image','multiple'=>'0'])}", //后台方法的路径
+                type: 'post',   //当要提交自定义参数时，这个参数要设置成post
+                data:{suffix:suffix,msize:msize},
+                dataType: 'json',   //服务器返回的数据类型。可以为xml,script,json,html。如果不填写，jQuery会自动判断。
+                secureuri: false,   //是否启用安全提交，默认为false。
+                async : true,   //是否是异步
+                success: function(data) {   //提交成功后自动执行的处理函数，参数data就是服务器返回的数据。
+                    Dolphin.loading('hide');
+                    $('#up_one_form_in').attr('ralate','');
+                    $('#up_one_form_in').attr('suffix','');
+                    $('#up_one_form_in').attr('msize','');
+                    if (data.code==200) {
+                        $('.'+ralate).val(data.data);
+                        $('.'+ralate).parent().find('.addimg').remove();
+                        $('.'+ralate).parent().find('.imgone').remove();
+                        var html='<div class="imgone"><a href="javascript:;"><img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除"><img src="'+data.data+'" onclick="window.open(\''+data.data+'\');" title="点击查看大图"></a><span class="editimg addoneimg" title="点击更换" ralate="'+ralate+'" suffix="'+suffix+'" msize="'+msize+'">修改</span></div>';
+                        $('.'+ralate).after(html);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error: function(data, status, e) {  //提交失败自动执行的处理函数。
+                    Dolphin.loading('hide');
+                    $('#up_one_form_in').attr('ralate','');
+                    $('#up_one_form_in').attr('suffix','');
+                    $('#up_one_form_in').attr('msize','');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+
+        //拖拽排序
+        $( "#sortable" ).sortable();
+        $( "#sortable" ).disableSelection();
+
+        //单图删除
+        $("body").on('click','.add_edit .con ul li .imgone a img.delimg',function(){
+            var ralate=$(this).parent().parent().find('.editimg').attr('ralate');
+            var suffix=$(this).parent().parent().find('.editimg').attr('suffix');
+            var msize=$(this).parent().parent().find('.editimg').attr('msize');
+            $(this).parent().parent().parent().find('input').val('');
+            $(this).parent().parent().parent().find('input').after('<div class="addimg addoneimg" title="点击上传" ralate="'+ralate+'" suffix="'+suffix+'" msize="'+msize+'"><img src="__ADMIN_IMG__/add.png"></div>');
+            $(this).parent().parent().remove();
+        });
+        //多图删除
+        $("body").on('click','.add_edit .con ul li .imgall img.delimg',function(){
+            $(this).parent().remove();
+            $('.addallimgno').addClass('addallimg');
+            $('.addallimgno').attr('title','点击上传');
+            $('.addallimgno').removeClass('addallimgno');
+        });
+        //提交
+        $('#add_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/merchant/add")}',
+                data:$('#add_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/merchant/add")}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        //查出城市
+        $('#select_province').change(function(){
+            var val=$(this).val();
+            if(val===''){
+                $('#select_city').html('<option value="">请选择城市</option>');
+                $('#select_area').html('<option value="">请选择区县</option>');
+            }else{
+                $.ajax({
+                    type:'GET',
+                    url:'{:url("index/region/getChilds")}',
+                    data:{'id':val},
+                    dataType:'JSON',
+                    success:function(data){
+                        if (data.code==200) {
+                            var html='<option value="">请选择城市</option>';
+                            $(data.region).each(function(k,v){
+                                html+='<option value="'+v.id+'">'+v.name+'</option>';
+                            });
+                            $('#select_city').html(html);
+                            $('#select_area').html('<option value="">请选择区县</option>');
+                        } else {
+                            Dolphin.notify(data.msg, 'danger');
+                        }
+                    },
+                    error:function(xhr,status,error){
+                        Dolphin.notify('服务器错误~', 'danger');
+                    }
+                });
+            }
+        });
+        //查出区县
+        $('#select_city').change(function(){
+            var val=$(this).val();
+            if(val===''){
+                $('#select_area').html('<option value="">请选择区县</option>');
+            }else{
+                $.ajax({
+                    type:'GET',
+                    url:'{:url("index/region/getChilds")}',
+                    data:{'id':val},
+                    dataType:'JSON',
+                    success:function(data){
+                        if (data.code==200) {
+                            var html='<option value="">请选择区县</option>';
+                            $(data.region).each(function(k,v){
+                                html+='<option value="'+v.id+'">'+v.name+'</option>';
+                            });
+                            $('#select_area').html(html);
+                        } else {
+                            Dolphin.notify(data.msg, 'danger');
+                        }
+                    },
+                    error:function(xhr,status,error){
+                        Dolphin.notify('服务器错误~', 'danger');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

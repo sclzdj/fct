@@ -1,0 +1,77 @@
+.filter_search{background: #fff;margin-bottom: 30px;padding: 20px 1%;}
+.filter_search form .blo{display: inline-block;float: left;margin-right: 30px;margin-top: 5px;margin-bottom: 5px;}
+.filter_search form .blo:last-child{margin-right: 0px;}
+.filter_search form .blo span.latips{font-size: 14px;display:inline-block;float: left;height: 34px;line-height: 34px;}
+.filter_search form .blo input[type="text"]{padding:0 3px;width:120px;height: 34px;line-height: 34px; font-size: 14px;float: left;border: 1px solid #ccc;}
+.filter_search form .blo select{padding:0 3px;width:120px;height: 34px;line-height: 34px; font-size: 14px;float: left;border: 1px solid #ccc;}
+.filter_search form .blo input.timepick{cursor: pointer;}
+.filter_search .blo a.byt{float: left;}
+.filter_search .blo a.rbt{float: right;margin-top: 5px;}
+.add_edit{background: #fff;margin-bottom: 30px;}
+.add_edit label{cursor: pointer;}
+.add_edit .tab{display:block;background: #f9f9f9;}
+.add_edit .tab ul{list-style: none;margin:0;padding: 0;}
+.add_edit .tab ul li{list-style: none;margin:0;display: inline-block;font-size: 14px;font-weight: bold; padding:0 20px;height:50px;line-height: 50px;text-transform: uppercase;}
+.add_edit .tab ul li.notive:hover{color: #5c90d2;cursor: pointer;}
+.add_edit .tab ul li.active{background: #fff;}
+.add_edit .title{display:inline-block;font-size: 15px;font-weight: 600;text-transform: uppercase;height:60px;line-height: 60px;background: #f9f9f9;width: 150px;text-align: center;}
+.add_edit .con{padding: 20px;}
+.add_edit .con ul{list-style: none;margin:0;padding: 0;}
+.add_edit .con ul li{list-style: none;margin:0;padding: 0 1%;width: 100%;float: left;margin: 10px 0;font-size:14px;}
+.add_edit .con ul li.look{list-style: none;margin:0;padding: 0 1%;width: 50%;float: left;margin: 10px 0;font-size:14px;}
+.add_edit .con ul li span.required{display:inline-block;width:20px;color: #f00000; font-weight: bold;text-align: center;vertical-align: top;}
+.add_edit .con ul li table.ccopts{width: 100%;}
+.add_edit .con ul li span.latips{vertical-align: top;display:inline-block;height: 34px;line-height: 34px;width: 160px;text-align: right;max-width: 28%;}
+.add_edit .con ul li table.ccopts tr td{height: 34px;line-height: 34px;padding:0 1px;font-size: 12px;}
+.add_edit .con ul li table.ccopts tr td input{vertical-align:middle;width: 16px;height: 16px;margin: 0 3px;display: inline-block;}
+.add_edit .con ul li table.ccopts tr td span{vertical-align:middle;display: inline-block;line-height: 20px;font-size: 12px;min-width: 80px;}
+.add_edit .con ul li span.bztips{display:inline-block;height: 34px;line-height: 34px;font-size: 13px;color: #999;text-indent: 10px;}
+.add_edit .con ul li span.numtips{display:inline-block;font-size: 14px;color: #666;text-indent: 5px;}
+.add_edit .con ul li span.lacon{display:inline-block;height: 34px;line-height: 34px;max-width: 50%;}
+.add_edit .con ul li span.zui{display:inline-block;font-size: 14px;vertical-align:top;color: #666;height: 34px;line-height: 34px;border: 1px solid #ccc;border-left: none;width: 70px;text-align: center;}
+.add_edit .con ul li span.looktips{display:inline-block;height: 34px;line-height: 34px;max-width: 40%;}
+.add_edit .con ul li input[type="text"]{padding:0 5px;width:40%;min-width:240px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;}
+.add_edit .con ul li input[type="radio"]{vertical-align:top;line-height: 34px;display: inline-block;width: 16px;height: 16px;margin-top:9px;margin-right: 3px; }
+.add_edit .con ul li button{padding:0 5px;min-width:80px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;background: #fff;}
+.add_edit .con ul li button:hover{background: #eee;}
+.add_edit .con ul li textarea{padding:0 5px;width:40%;min-width:240px;height: 34px;line-height: 24px; border: 1px solid #ccc;height: 125px;}
+.add_edit .con ul li label{font-weight: normal;font-size: 14px;cursor: pointer;line-height: 34px;margin: 0;}
+.add_edit .con ul li select{padding:0 5px;width:15%;min-width:200px;height: 34px;line-height: 34px; border: 1px solid #ccc;}
+.add_edit .con ul li .addimg{display: inline-block;width: 88px;height: 88px;border:1px solid #c6c6c6;cursor: pointer;}
+.add_edit .con ul li .addimg img{width: 42px;height: 42px;margin:22px;}
+.add_edit .con ul li .imgone{display:inline-block;height: 88px;cursor: pointer;position: relative;margin-right: 40px;}
+.add_edit .con ul li .imgone a{display: inline-block;height: 88px;position: relative;}
+.add_edit .con ul li .imgone a img{max-width: 88px;max-height: 88px;}
+.add_edit .con ul li .imgone a img.delimg{width: 20px;height: 20px;position: absolute;right: 0px;top: 0px;opacity: 0.9;}
+.add_edit .con ul li .imgone a img.delimg:hover{opacity: 1;}
+.add_edit .con ul li .imgone span.editimg{cursor: pointer;position:absolute; bottom:5px;right:-40px;width: 40px;text-align: center;}
+.add_edit .con ul li .imgall{display:inline-block;height: 120px;cursor: pointer;position: relative;margin-right: 20px;margin-bottom:10px;float: left;}
+.add_edit .con ul li .imgall img.delimg{width: 20px;height: 20px;position: absolute;right: 0px;top: 0px;opacity: 0.9;}
+.add_edit .con ul li .imgall img.delimg:hover{opacity: 1;}
+.add_edit .con ul li .imgall a{display: inline-block;height: 120px;}
+.add_edit .con ul li .imgall img{max-width: 120px;max-height: 120px;}
+.add_edit .con ul li .addimg2{display: inline-block;width: 120px;height: 120px;border:1px solid #c6c6c6;cursor: pointer;}
+.add_edit .con ul li .addallimgno{cursor: auto;opacity: 0.3;}
+.add_edit .con ul li .addimg2 img{width: 58px;height: 58px;margin:30px;}
+.add_edit .con ul li input.timepick{cursor: pointer;}
+.add_edit .con ul li input.colorpick{cursor: pointer;}
+.onpickcolor{width: 76px;height: 24px;position: absolute;left: 5px;top:5px;border: 1px solid #ccc;}
+.colorpick_box{position: relative;display: none;z-index: 99;}
+.colorpick_box dl{padding: 0;margin:0;top:1px;left:0;position: absolute;width: 500px;min-width: 200px;border: 1px solid #ccc;background: #fff;}
+.colorpick_box dl dd{padding: 0;float: left;width: 18%;text-align: center;cursor: pointer;margin: 1%;border: 1px solid rgba(255,255,255,0);}
+.colorpick_box dl dd.active{border: 1px solid #ccc;background: #eee;}
+.colorpick_box dl dd img{width: 76px;height: 24px;display:inline-block;border: 1px solid #ccc;margin: 10px auto;margin-bottom:0;}
+.colorpick_box dl dd span{width: 76px;display:inline-block;text-align: center;margin: 10px auto;margin-top:0;}
+.colorpick_box dl dd p{height:10px;padding: 0;margin:0;display:inline-block;}
+.lit{background: #fff;margin-bottom: 10px;padding: 20px 1%;}
+.lit table.lit_table{width: 100%;}
+.lit table.lit_table tr th{font-size: 14px;font-weight: normal;padding: 10px;}
+.lit table.lit_table tr td{padding: 10px;}
+.lit table.lit_table tr td a{line-height: 30px;font-size: 14px;}
+.lit table.lit_table tr td img{max-width: 120px;max-height: 120px; border: 5px solid #ccc;padding: 3px;float: left;margin-right: 10px;}
+.lit table.lit_table tr td input[type="checkbox"]{width: 20px;height: 20px;cursor: pointer;background: #fff;}
+.lit table.lit_table tr td .core span{display: block;height: 30px;line-height: 30px;font-size: 14px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+.list_pi_run{text-align: left;margin:20px 5px;height: 45px;float:left;}
+.list_pi_run label{vertical-align:top;margin-top: 13px;height: 34px;line-height: 34px;font-size: 14px;font-weight: normal;margin-right: 15px;margin-left: 30px;cursor: pointer;}
+.list_pi_run label input[type="checkbox"]{width: 20px;height: 20px;background: #fff;vertical-align:middle;margin: 0px;display: inline-block;margin-bottom: 1px;margin-right: 5px;}
+input[type="checkbox"].select_option{width: 20px;height: 20px;cursor: pointer;background: #fff;}

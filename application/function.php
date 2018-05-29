@@ -1,0 +1,195 @@
+<?php
+// +----------------------------------------------------------------------
+// | 海豚PHP框架 [ DolphinPHP ]
+// +----------------------------------------------------------------------
+// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// +----------------------------------------------------------------------
+// | 官方网站: http://dolphinphp.com
+// +----------------------------------------------------------------------
+// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+
+// 为方便系统核心升级，二次开发中需要用到的公共函数请写在这个文件，不要去修改common.php文件
+use app\admin\model\Menu as MenuModel;
+/**
+ * 清空/删除 文件夹
+ * @param string $dirname 文件夹路径
+ * @param bool $self 是否删除当前文件夹
+ * @return bool
+ */
+if(!function_exists('do_rmdir')){
+    function do_rmdir($dirname, $self = true) {
+        if (!file_exists($dirname)) {
+            return false;
+        }
+        if (is_file($dirname) || is_link($dirname)) {
+            return @unlink($dirname);
+        }
+        $dir = dir($dirname);
+        if ($dir) {
+            while (false !== $entry = $dir->read()) {
+                if ($entry == '.' || $entry == '..') {
+                    continue;
+                }
+                do_rmdir($dirname . '/' . $entry);
+            }
+        }
+        $dir->close();
+        $self && @rmdir($dirname);
+    }
+}
+//json输出
+if(!function_exists('json_return')){
+    function json_return($type,$param1='',$param2=''){
+        if($type=='T'){
+            if($param2==='') $param2='success';
+            return json(['code'=>200,'msg'=>$param2,'data'=>$param1]);
+        }else{
+            if($param1==='') $param1='500';
+            return json(['code'=>$param1,'msg'=>$param2]);
+        }
+    }
+}
+//地区文字
+if(!function_exists('region_text')){
+    function region_text($data='',$pix=true){
+        $text='';
+        if(is_array($data)){
+            foreach ($data as $key => $value) {
+                $region=db('regions')->where('id',$value)->find();
+                if($region){
+                    $text.=$region['name'].' ';
+                }
+            }
+            $text=trim($text);
+        }else{
+            $region=db('regions')->where('id',$data)->find();
+            if($region){
+                $text=$region['name'];
+            }
+        }
+        if(!$pix){
+            $text=explode(' ',$text);
+            $text=$text[0];
+        }
+        return $text;
+    }
+}
+
+//记录日志
+if(!function_exists('record_log')){
+    function record_log($module,$controller,$remark){
+        $module_us=config('module_us');
+        $insert=[
+            'runner_id'=>session('user_auth.uid'),
+            'created_at'=>time(),
+            'module'=>$module_us[strtolower($module)][strtolower($controller)],
+            'remark'=>$remark,
+        ];
+        db('logs')->insertGetId($insert);
+    }
+}
+//是否车商,返回车商ID
+if(!function_exists('ismerchant')){
+    function ismerchant($admin_id=0){
+        if($admin_id<=0){
+            $admin_id=session('user_auth.uid');
+        }
+        $role_id=db('admin_user')->where('id',$admin_id)->value('role');
+        if($role_id==2){
+            $merchant_id=db('merchants')->where('admin_id',$admin_id)->value('id');
+            return $merchant_id;
+        }
+        $merchant_id=db('admin_role')->where('id',$role_id)->value('merchant_id');
+        if($merchant_id>0){
+            return $merchant_id;
+        }else{
+            return false;
+        }
+    }
+}
+//是否显示
+if(!function_exists('isaccess')){
+    function isaccess($menu_id=0){
+        $uid=defined('UID')?UID:session('user_auth.uid');
+        $role=db('admin_user')->where('id',$uid)->value('role');
+        if($role==1) return true;//完全管理员豁免
+        if($menu_id<=0){
+            // 获取当前操作的id
+            $location = MenuModel::getLocation();
+            $action   = end($location);
+            $menu_id=$action['id'];
+        }  
+        //管理员
+        $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
+        eval('$menu_auth='.$menu_auth.';');
+        if(!in_array($menu_id, $menu_auth)){
+            return false;
+        }
+        //车商
+        if(ismerchant()){
+            $menu_auth=db('admin_role')->where('id','2')->value('menu_auth');
+            eval('$menu_auth='.$menu_auth.';');
+            if(!in_array($menu_id, $menu_auth)){
+                return false;
+            }
+        }
+        //具体权限
+        $menu_auth=db('admin_role')->where('id',$role)->value('menu_auth');
+        eval('$menu_auth='.$menu_auth.';');
+        if(in_array($menu_id, $menu_auth)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
+//是否显示
+if(!function_exists('ismeunshow')){
+    function ismeunshow($url_value){
+        $role=db('admin_user')->where('id',UID)->value('role');
+        if($role==1) return true;//完全管理员豁免
+        $menu_id=db('admin_menu')->where('url_value',$url_value)->value('id');
+        //管理员
+        $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
+        eval('$menu_auth='.$menu_auth.';');
+        if(!in_array($menu_id, $menu_auth)){
+            return false;
+        }
+        //车商
+        if(ismerchant()){
+            $menu_auth=db('admin_role')->where('id','2')->value('menu_auth');
+            eval('$menu_auth='.$menu_auth.';');
+            if(!in_array($menu_id, $menu_auth)){
+                return false;
+            }
+        }
+        //具体权限
+        $menu_auth=db('admin_role')->where('id',$role)->value('menu_auth');
+        eval('$menu_auth='.$menu_auth.';');
+        if(in_array($menu_id, $menu_auth)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
+//树形数组结构
+if(!function_exists('get_arr_tree')){
+    function get_arr_tree($items,$pid ="parent_id") {
+        $map  = [];
+        $tree = [];    
+        foreach ($items as &$it){ //数据的ID名生成新的引用索引树
+            $map[$it['id']] = &$it;
+        }  
+        foreach ($items as &$it){
+            $parent = &$map[$it[$pid]];
+            if($parent) {
+                $parent['son'][] = &$it;
+            }else{
+                $tree[] = &$it;
+            }
+        }
+        return $tree;
+    }
+}

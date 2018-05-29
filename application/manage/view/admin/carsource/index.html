@@ -1,0 +1,279 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+
+<div class="filter_search">
+    <form action="{:url('manage/carsource/index')}" name="search_form">
+        <div class="blo"><span class="latips">车源号：</span><input type="text" name="sn" value="{$filter.sn}" placeholder="请输入车源号"></div>
+        <div class="blo"><span class="latips">审核状态：</span>
+            <select name="audit">
+                <option value="">全部</option>
+                <option value="0" {if condition='$filter.audit==="0"'}selected="selected"{/if}>待审核</option>
+                <option value="1" {if condition='$filter.audit==="1"'}selected="selected"{/if}>已通过</option>
+                <option value="2" {if condition='$filter.audit==="2"'}selected="selected"{/if}>已拒绝</option>
+            </select>
+        </div>
+        <div class="blo"><span class="latips">车型：</span>
+            <select name="brand_id" value="{$filter.brand_id}" style="margin-right: 5px;">
+                <option value="">全部品牌</option>
+            </select>
+            <select name="serie_id" value="{$filter.serie_id}" style="margin-right: 5px;">
+                <option value="">全部车系</option>
+            </select>
+            <select name="model_id" value="{$filter.model_id}">
+                <option value="">全部车型</option>
+            </select>
+        </div>
+        {if condition='!ismerchant()'}
+        <div class="blo"><span class="latips">店铺名称：</span><input type="text" name="shop_name" value="{$filter.shop_name}" placeholder="请输入店铺名称"></div>
+        <div class="blo"><span class="latips">商户号：</span><input type="text" name="merchant_sn" value="{$filter.merchant_sn}" placeholder="请输入商户号"></div>
+        {/if}
+        <div class="blo"><span class="latips">库存状态：</span>
+            <select name="stock_state">
+                <option value="">全部</option>
+                <option value="0" {if condition='$filter.stock_state==="0"'}selected="selected"{/if}>未上架</option>
+                <option value="1" {if condition='$filter.stock_state==="1"'}selected="selected"{/if}>已上架</option>
+                <option value="2" {if condition='$filter.stock_state==="2"'}selected="selected"{/if}>已预订</option>
+                <option value="3" {if condition='$filter.stock_state==="3"'}selected="selected"{/if}>已出售</option>
+                <option value="4" {if condition='$filter.stock_state==="4"'}selected="selected"{/if}>已退库</option>
+            </select>
+        </div>
+        <div class="blo"><span class="latips">发布日期：</span><input type="text" name="audit_at_start" value="{$filter.audit_at_start}" class="timepick" readonly="readonly" placeholder="请选择开始日期"><span class="latips">~~</span><input type="text" name="audit_at_end" value="{$filter.audit_at_end}" class="timepick" readonly="readonly" placeholder="请选择结束日期"><a href="javascript:;" onclick="search_form.submit();" class="btn btn-minw btn-primary byt" style="margin-left: 30px;">查&nbsp;询</a></div>
+        <input type="hidden" name="order" value="{$order}">
+    </form>
+    <div style="clear: both;"></div>
+</div>
+{volist name="data" id="vo"}
+<div class="lit">
+    <table class="lit_table">
+        <tr>
+            <th></th>
+            <th style="padding-left: 0;">{$vo.audit_at_str}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;车源号：{$vo.sn}</th>
+            <th style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;text-align: center;">库存状态</th>
+            <th style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;text-align: center;">审核状态</th>
+            <th style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;text-align: center;">库龄</th>
+            <th style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;border-right: 1px solid #ccc;text-align: center;width: 170px;">操作</th>
+        </tr>
+        <tr>
+            <td align="center" style="width: 60px;"><input type="checkbox" value="{$vo.id}" class="one_check"></td>
+            <td style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-left: 1px solid #ccc;">
+                <div style="float: left;min-height: 120px;"><img src="{$vo.main_img}"></div>
+                <div class="core">
+                    <span>阿斯顿马丁  V8 Vantage  2013款 4.0T</span>
+                    <span>{$vo.first_plate_year}年/{$vo.mileage}公里&nbsp;&nbsp;{$vo.region_one_text}</span>
+                    <span>{$vo.price}万</span>
+                    <span>{$vo.shop_name}</span>
+                </div>
+            </td>
+            <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
+            {switch name="vo.stock_state"}
+                {case value="0"}
+                未上架
+                {/case}
+                {case value="1"}
+                已上架
+                {/case}
+                {case value="2"}
+                已预订
+                {/case}
+                {case value="3"}
+                已出售
+                {/case}
+                {case value="4"}
+                已退库
+                {/case}
+                {default /}
+            {/switch}
+            </td>
+            <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
+            {switch name="vo.audit"}
+                {case value="0"}
+                待审核
+                {/case}
+                {case value="1"}
+                已通过
+                {/case}
+                {case value="2"}
+                已拒绝
+                {/case}
+                {default /}
+            {/switch}
+            </td>
+            <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">{$vo.reservoir_age}天</td>
+            <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">
+                {if condition='$vo.audit eq 0'}
+                    {if condition='ismeunshow("manage/carsource/enable")'}
+                    <a href="javascript:;" onclick="carsource_update_audit({$vo.id},1);">通过</a>&nbsp;
+                    {/if} 
+                    {if condition='ismeunshow("manage/carsource/disable")'}
+                    <a href="javascript:;" onclick="carsource_update_audit({$vo.id},0);">拒绝</a>&nbsp; 
+                    {/if}
+                {/if}
+                {if condition='$vo.stock_state eq 0'}
+                    {if condition='ismeunshow("manage/carsource/upstock")'}
+                    <a href="javascript:;" onclick="carsource_update_stock_state({$vo.id},1);">上架</a>&nbsp;
+                    {/if}
+                {/if}
+                {if condition='$vo.stock_state eq 1'}
+                    {if condition='ismeunshow("manage/carsource/downstock")'}
+                    <a href="javascript:;" onclick="carsource_update_stock_state({$vo.id},0);">下架</a>&nbsp;
+                    {/if}
+                {/if}
+                {if condition='$vo.stock_state neq 4'}
+                    {if condition='ismeunshow("manage/carsource/outstock")'}
+                        <a href="javascript:;" onclick="carsource_update_stock_state({$vo.id},4);">退库</a>&nbsp;
+                    {/if}
+                {/if}
+                {if condition='ismeunshow("manage/carsource/edit")'}
+                    <a href="{:url('manage/carsource/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
+                {/if}
+                {if condition='ismeunshow("manage/carsource/look")'}
+                    <a href="{:url('manage/carsource/look',['id'=>$vo['id']])}">详情</a>
+                {/if} 
+                {if condition='ismeunshow("manage/carsource/printig")'}
+                    <a href="{:url('manage/carsource/printig',['id'=>$vo['id']])}">打印价签</a>
+                {/if} 
+            </td>
+        </tr>
+    </table>
+</div>
+{/volist}
+
+{if condition='count($data)'}
+<div class="list_pi_run">
+    <label><input type="checkbox" id="all_check">全选</label>
+    {if condition='ismeunshow("manage/carsource/enable")'}
+    <a href="javascript:;" class="btn btn-minw btn-primary rbt" style="margin-top: 13px;" onclick="carsource_update_audit('',1);">批量通过</a>
+    {/if} 
+    {if condition='ismeunshow("manage/carsource/disable")'}
+    <a href="javascript:;" class="btn btn-minw btn-primary rbt" style="margin-top: 13px;" onclick="carsource_update_audit('',0);">批量拒绝</a>
+    {/if} 
+</div>
+{/if} 
+<div style="text-align: right;margin:20px 5px;height: 45px;">
+    {notempty name="page"}
+        {$page}  
+    {/notempty}
+</div>
+<div style="margin-bottom: 40px;"></div>
+    
+<script type="text/javascript">
+    //上架，下架，退库
+    function carsource_update_stock_state(id,stock_state){
+        var tips='';
+        var url='';
+        if(stock_state==0){
+            url='{:url("manage/carsource/downstock")}';
+            tips='确定下架此车源吗？';
+        }else if(stock_state==1){
+            url='{:url("manage/carsource/upstock")}';
+            tips='确定上架此车源吗？';
+        }else if(stock_state==4){
+            url='{:url("manage/carsource/outstock")}';
+            tips='确定把此车源退库吗？';
+        }else{
+            return false;
+        }
+        if(confirm(tips)){
+            $.ajax({
+                type:'GET',
+                url:url,
+                data:{'id':id},
+                dataType:'JSON',
+                success:function(data){
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        }  
+    }
+    //审核
+    function carsource_update_audit(ids,state){
+        var new_ids=[];
+        if(ids===''){
+            $('.one_check').each(function(){
+                if($(this).prop("checked")){
+                    new_ids.push($(this).val());
+                }
+            });
+            new_ids=new_ids.join(',');
+            if(new_ids===''){
+                Dolphin.notify('请选择要批量操作的数据！', 'danger');
+                return false;
+            }
+            ids=new_ids;
+        }
+        var pix=state?"通过审核":"拒绝";
+        var tips='';
+        if(ids===''){
+            tips="确定要批量"+pix+"吗？";
+            type='GET';
+        }else{
+            tips="确定要"+pix+"吗？";
+            type='POST';
+        }
+        if(confirm(tips)){
+            var url='';
+            if(state){
+                url='{:url("manage/carsource/enable")}';
+            }else{
+                url='{:url("manage/carsource/disable")}';
+            }
+            $.ajax({
+                type:type,
+                url:url,
+                data:{'id':ids},
+                dataType:'JSON',
+                success:function(data){
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        }  
+    }
+    $(function(){
+        //全选
+        $('#all_check').click(function(){
+            var checked = $(this).prop("checked");
+            if(checked){
+                $('.one_check').prop('checked',true);
+            }else{
+                $('.one_check').removeAttr('checked');
+            }
+        });
+    });
+</script>
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

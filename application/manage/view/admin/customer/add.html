@@ -1,0 +1,201 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__ADMIN_JS__/ajaxfileupload.js"></script>
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<form id="add_form">
+
+<div class="add_edit">
+    <div class="title">客户基本信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="latips"><span class="required">*</span>客户姓名：</span>
+                <input type="text" name="name" value="" placeholder="请输入客户姓名">
+                <span class="bztips">只允许输入汉字，字符长度：4-8个字符</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>联系电话：</span>
+                <input type="text" name="mobile" value="" placeholder="请输入联系电话">
+                <span class="bztips">允许输入11位数字</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>性别：</span>
+                <label><input type="radio" name="sex" value="男">男</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <label><input type="radio" name="sex" value="女">女</label>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>所在城市：</span>
+                <select name="province_id" style="width: 8%;min-width: 90px;" id="select_province">
+                    <option value="">请选择省份</option>
+                    {volist name="province" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>&nbsp;
+                <select name="city_id" style="width: 8%;min-width: 90px;" id="select_city">
+                    <option value="">请选择城市</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>意向车源：</span>
+                <input type="hidden" name="car_source_id" value="">
+                <input type="hidden" name="defind_model" value="">
+                <button id="select_source">+选择</button>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>客户来源：</span>
+                <select name="source">
+                    <option value="">请选择客户来源</option>
+                    <option value="朋友介绍">朋友介绍</option>
+                    <option value="客户介绍">客户介绍</option>
+                    <option value="主动预约">主动预约</option>
+                    <option value="电话咨询">电话咨询</option>
+                    <option value="职员引介">职员引介</option>
+                    <option value="平台转交">平台转交</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>客户状态：</span>
+                <select name="state">
+                    <option value="">请选择客户状态</option>
+                    <option value="0">未到店</option>
+                    <option value="1">已到店</option>
+                    <option value="2">已预订</option>
+                    <option value="3">已成交</option>
+                    <option value="-1">战败</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips">客户简介：</span>
+                <textarea name="remark" maxlength="200" placeholder="请输入客户简介" class="numtext"></textarea>
+                <span class="numtips">已输入<b>0</b>/200个字</span>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="add_form_submit">确&nbsp;定</a>
+</div>
+
+</form>
+
+<style type="text/css">
+    #iframe_big_box{display:block;justify-content: center;align-items: center;position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background-color: rgba(0,0,0,0.4); z-index: 9999;visibility:hidden;}
+    #iframe_small_box{border: 1px solid #f2f2f2;background-color: #f2f2f2;margin:auto;max-height: 90%;width: 90%; display: block;max-width: 1200px;padding-bottom: 30px;}
+</style>
+<div id="iframe_big_box" isshow='0'>
+    <iframe src="{:url('index/iframe/customercarsourcelist')}" frameborder="0" id="iframe_small_box" name="iframe_small_box"></iframe>
+</div>
+
+
+<script>
+    $(function(){
+        //选择车源
+        $('#select_source').click(function(){
+            $('#iframe_big_box').attr('isshow','1');
+            $('#iframe_big_box').show();
+            if (!!window.ActiveXObject || "ActiveXObject" in window){
+                $(window.frames["iframe_small_box"].document).find(".filter_search a.byt").click();
+            }
+            return false;
+        });
+        //框架加载
+        $('#iframe_small_box').load(function(){
+            var container=$(window.frames["iframe_small_box"].document).find(".content");
+            $("#iframe_small_box").css({
+                'height':(container.height()+100)+'px',
+            });
+            var h = document.documentElement.clientHeight || document.body.clientHeight;
+            var small_h=$('#iframe_small_box').height();
+            $("#iframe_small_box").css({
+                'marginTop':((h-small_h)/2)+'px',
+            });
+            if($('#iframe_big_box').attr('isshow')=='1'){
+                $('#iframe_big_box').show();
+            }else{
+                $('#iframe_big_box').hide();
+                $('#iframe_big_box').css('visibility','visible');
+            }
+        });
+        //文本域字符提示
+        $('textarea.numtext').keyup(function(){
+            var len = $(this).val().length;
+            $(this).parent().find('.numtips b').html(len);
+        });
+        //提交
+        $('#add_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/customer/add")}',
+                data:$('#add_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/customer/add")}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        //查出城市
+        $('#select_province').change(function(){
+            var val=$(this).val();
+            if(val===''){
+                $('#select_city').html('<option value="">请选择城市</option>');
+            }else{
+                $.ajax({
+                    type:'GET',
+                    url:'{:url("index/region/getChilds")}',
+                    data:{'id':val},
+                    dataType:'JSON',
+                    success:function(data){
+                        if (data.code==200) {
+                            var html='<option value="">请选择城市</option>';
+                            $(data.region).each(function(k,v){
+                                html+='<option value="'+v.id+'">'+v.name+'</option>';
+                            });
+                            $('#select_city').html(html);
+                        } else {
+                            Dolphin.notify(data.msg, 'danger');
+                        }
+                    },
+                    error:function(xhr,status,error){
+                        Dolphin.notify('服务器错误~', 'danger');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

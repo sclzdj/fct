@@ -1,0 +1,569 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__ADMIN_JS__/ajaxfileupload.js"></script>
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<form id="add_form">
+
+<div class="add_edit">
+    <div class="tab">
+        <ul>
+            <li class="active" con="con1" state="1">车源信息</li>
+            <li class="notive" con="con2" state="0">检测报告</li>
+        </ul>
+    </div>
+    <div style="clear: both;"></div>
+    <div class="con">
+    <div class='tab_con' id="con1">
+        <ul>
+            <li>
+                <span class="latips">行驶证图片：</span>
+                <input type="hidden" name="driving_img" value="" class="driving_img">
+                <div class="addimg addoneimg" title="点击上传" ralate="driving_img" suffix='png,jpg,jpeg' msize='3145728'><img src="__ADMIN_IMG__/add.png"></div>
+                <span class="bztips">支持扩展名：png,jpg,jpeg，大小不超过3M</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>车架号：</span>
+                <input type="text" name="vin_no" value="" placeholder="请输入车架号">
+                <span class="bztips">允许大写字母和数字组合，字符长度：34个字符，例：WDBGP57B6PB127810</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>车型：</span>
+                <select name="brand_id" style="width: 8%;min-width: 90px;" id="select_brand">
+                    <option value="">请选择品牌</option>
+                </select>&nbsp;
+                <select name="serie_id" style="width: 8%;min-width: 90px;" id="select_serie">
+                    <option value="">请选择车系</option>
+                </select>&nbsp;
+                <select name="model_id" style="width: 8%;min-width: 90px;" id="select_model">
+                    <option value="">请选择车型</option>
+                </select>&nbsp;
+                <a href="javascript:;">查看参数</a>
+            </li>
+            <li>
+                <span class="latips">加装配置：</span>
+                <textarea name="install_config" maxlength="1000" placeholder="请输入加装配置" class="numtext"></textarea>
+                <span class="numtips">已输入<b>0</b>/1000个字</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>价格：</span>
+                <input type="text" name="price" value="" placeholder="请输入价格" style="width: 20%;"><span class="zui">万元</span>
+                <span class="bztips">只允许输入数字与符号.  格式：XXX.XX，两位小数</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>车身颜色：</span>
+                <div style="display: inline-block;position: relative;">
+                <input type="text" name="color" value="" placeholder="请选择车身颜色" readonly="readonly" class="colorpick" id="color" pick="color1">
+                <a href="javascript:;" style="color: #646464;line-height: 34px;" inid='color' piid='color1' class="clearcolor">清除</a>
+                <div class="colorpick_box" id='color1' pick='color'>
+                    <dl>
+                        {volist name="colorpick" id="vo"}
+                        <dd coval="{$vo.1}">
+                            <img src="__ADMIN_IMG__/colorpick/{$vo.1}">
+                            <p></p>
+                            <span>{$vo.0}</span>
+                        </dd>
+                        {/volist}
+                        <div style="clear: both;"></div>
+                    </dl>
+                </div>
+                </div>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>是否上牌：</span>
+                <label><input type="radio" name="is_oncard" value="1" checked="checked">已上牌</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <label><input type="radio" name="is_oncard" value="0">未上牌</label>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>定期保养：</span>
+                <label><input type="radio" name="maintain" value="4S店定期保养" checked="checked">4S店定期保养</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <label><input type="radio" name="maintain" value="非4S店定期保养">非4S店定期保养</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <label><input type="radio" name="maintain" value="无定期保养">无定期保养</label>
+            </li>
+            <li>
+                <span class="latips">车牌所在地：</span>
+                <select name="plate_province_id" style="width: 8%;min-width: 90px;" id="select_province">
+                    <option value="">请选择省份</option>
+                    {volist name="province" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>&nbsp;
+                <select name="plate_city_id" style="width: 8%;min-width: 90px;" id="select_city">
+                    <option value="">请选择城市</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>表显里程：</span>
+                <input type="text" name="mileage" value="" placeholder="请输入表显里程" style="width: 20%;"><span class="zui">万公里</span>
+                <span class="bztips">只允许输入数字与符号，格式：X.X 共三个字符</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>首次上牌时间：</span>
+                <input type="text" name="first_plate_at" value="" placeholder="请选择日期" style="width: 11%;min-width: 95px;" class="timepick">
+            </li>
+            <li>
+                <span class="latips">年检有效期至：</span>
+                <input type="text" name="year_check_at" value="" placeholder="请选择日期" style="width: 11%;min-width: 95px;" class="timepick">
+            </li>
+            <li>
+                <span class="latips">保险有效期至：</span>
+                <input type="text" name="insurance_at" value="" placeholder="请选择日期" style="width: 11%;min-width: 95px;" class="timepick">
+            </li>
+            <li>
+                <span class="latips">出厂日期：</span>
+                <input type="text" name="out_factory_at" value="" placeholder="请选择日期" style="width: 11%;min-width: 95px;" class="timepick">
+            </li>
+            <li>
+                <span class="latips">新车指导价：</span>
+                <input type="text" name="guid_price" value="" placeholder="请输入新车指导价" style="width: 20%;"><span class="zui">万元</span>
+                <span class="bztips">只允许输入数字与符号.  格式：XXX.XX，两位小数</span>
+            </li>
+            <li>
+                <span class="latips">过户次数：</span>
+                <input type="text" name="transfer_num" value="" placeholder="请输入过户次数" style="width: 20%;"><span class="zui">次</span>
+                <span class="bztips">只允许输入数字</span>
+            </li>
+            <li>
+                <span class="latips">钥匙数量：</span>
+                <input type="text" name="key_num" value="" placeholder="请输入钥匙数量" style="width: 20%;"><span class="zui">把</span>
+                <span class="bztips">只允许输入数字</span>
+            </li>
+            <li>
+                <span class="latips">内饰颜色：</span>
+                <div style="display: inline-block;position: relative;">
+                <input type="text" name="inner_color" value="" placeholder="请选择内饰颜色" readonly="readonly" class="colorpick" id="inner_color" pick="inner_color1">
+                <a href="javascript:;" style="color: #646464;line-height: 34px;" inid='inner_color' piid='inner_color1' class="clearcolor">清除</a>
+                <div class="colorpick_box" id='inner_color1' pick='inner_color'>
+                    <dl>
+                        {volist name="colorpick" id="vo"}
+                        <dd coval="{$vo.1}">
+                            <img src="__ADMIN_IMG__/colorpick/{$vo.1}">
+                            <p></p>
+                            <span>{$vo.0}</span>
+                        </dd>
+                        {/volist}
+                        <div style="clear: both;"></div>
+                    </dl>
+                </div>
+                </div>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>车况介绍：</span>
+                <textarea name="car_condition" maxlength="1000" placeholder="请输入车况介绍" class="numtext"></textarea>
+                <span class="numtips">已输入<b>0</b>/1000个字</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>车源图片：</span>
+                <div style="display: inline-block;max-width: 70%;">
+                <div id="sortable">
+                </div>
+                <div style="clear: both;"></div>
+                <div class="addimg2 addallimg" title="点击上传" suffix='png,jpg,jpeg' msize='31457280'><img src="__ADMIN_IMG__/add.png"></div>
+                </div>
+            </li>
+            <li style="width: 100%;line-height: 20px;font-size: 12px;color: #999;margin:20px 10px;padding-left: 170px;">
+                提示：1.本地上传图片大小不超过30M，图片格式支持png,jpg,jpeg；2.您最多可上传4-15张图片；3.点击图片可以预览，拖拽图片可移动位置
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+    <div class='tab_con' id="con2" style="display: none;">
+        <ul>
+            <li>
+                <span class="latips">车源检测结论：</span>
+                <textarea name="check_result" maxlength="1000" placeholder="请输入车源检测结论" class="numtext"></textarea>
+                <span class="numtips">已输入<b>0</b>/1000个字</span>
+            </li>
+            <li>
+                <table class="ccopts">
+                    {volist name='option' id='value'}
+                    <tr style="background: #f1f1f1;">
+                        <td style="padding: 0;" width="120"><label><em style="color: rgba(255,255,255,0);">*</em><input type="checkbox" name="option_ids[]" value="{$value.id}" id="opid{$value.id}"><span>{$value.name}：</span></label></td>
+                        <td width="120"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        {volist name='value.son' id='val' key="val_k"}
+                        {php}
+                            $count=count($val['son']);
+                            $ka=5;
+                            $pix=ceil($count/$ka);
+                            $yu=$count%$ka;
+                            $cha=0;
+                            if($yu>0) $cha=$ka-$yu;
+                            $min=1;
+                            $html='';
+                            $border='';
+                            if($val_k!=0){
+                                $border=' style="border-top: 1px solid #f1f1f1;"';
+                            }
+                            if($pix<=$min){
+                                $html='<tr><td></td><td'.$border.'><label><input type="checkbox" name="option_ids[]" value="'.$val['id'].'" id="opid'.$val['id'].'" class="opid'.$value['id'].'"><span style="width: 92px;background: #f1f1f1;padding-left: 3px;">'.$val['name'].'：</span></label></td>';
+                                foreach($val['son'] as $k=>$v){
+                                    $html.='<td'.$border.'><label><input type="checkbox" name="option_ids[]" value="'.$v['id'].'" id="" class="opid'.$val['id'].' opid'.$value['id'].'"><span>'.$v['name'].'</span></label></td>';
+                                }
+                                for($z=0;$z<$cha;$z++){
+                                    $html.='<td'.$border.'></td>';
+                                }
+                                $html.='</tr>';
+                            }else{
+                                $html='<tr><td></td><td'.$border.'><label><input type="checkbox" name="option_ids[]" value="'.$val['id'].'" id="opid'.$val['id'].'" class="opid'.$value['id'].'"><span style="width: 92px;background: #f1f1f1;padding-left: 3px;">'.$val['name'].'：</span></label></td>';
+                                foreach($val['son'] as $k=>$v){
+                                    $html.='<td'.$border.'><label><input type="checkbox" name="option_ids[]" value="'.$v['id'].'" id="" class="opid'.$val['id'].' opid'.$value['id'].'"><span>'.$v['name'].'</span></label></td>';
+                                    if($k>=$ka-1) break;
+                                }
+                                $html.='</tr>';
+                                for($z=1;$z<$pix;$z++){
+                                    $html.='<tr><td></td><td></td>';
+                                    if($yu>0 && $z==$pix-1){
+                                        for($j=0;$j<$yu;$j++){
+                                            $html.='<td><label><input type="checkbox" name="option_ids[]" value="'.$val['son'][$z*$ka+$j]['id'].'" id="" class="opid'.$val['id'].' opid'.$value['id'].'"><span>'.$val['son'][$z*$ka+$j]['name'].'</span></label></td>';
+                                        }
+                                        for($x=0;$x<$cha;$x++){
+                                            $html.='<td></td>';
+                                        }
+                                    }else{
+                                        for($j=0;$j<$ka;$j++){
+                                            $html.='<td><label><input type="checkbox" name="option_ids[]" value="'.$val['son'][$z*$ka+$j]['id'].'" id="" class="opid'.$val['id'].' opid'.$value['id'].'"><span>'.$val['son'][$z*$ka+$j]['name'].'</span></label></td>';
+                                        }
+                                    }  
+                                    $html.='</tr>';
+                                }
+                            }
+                            echo $html;
+                        {/php}
+                        {/volist}
+                    {/volist}
+                </table>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+    </div>
+</div>
+
+
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="add_form_submit">确&nbsp;定</a>
+</div>
+
+
+
+</form>
+
+<form style="display: none;" id='up_one_form' enctype="multipart/form-data"><input type="file" name="file" id="up_one_form_in" ralate="" suffix="" msize=""></form>
+<form style="display: none;" id='up_many_form' enctype="multipart/form-data"><input type="file" name="file[]" id='up_many_form_in' multiple="multiple" suffix='' msize=''></form>
+
+<script>
+    $(function(){
+        //多图上传
+        $("body").on('click','.addallimg',function(){
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            $('#up_many_form_in').attr('suffix',suffix);
+            $('#up_many_form_in').attr('msize',msize);
+            $('#up_many_form_in').click();
+        });
+        $("body").on('change','#up_many_form_in',function(){
+            var up_len=this.files.length;
+            if(up_len==0){
+                $('#up_many_form_in').attr('suffix','');
+                $('#up_many_form_in').attr('msize','');
+                return false;
+            }
+            var len=$('#sortable .imgall').length;
+            var max_len=15;
+            if (max_len-len<up_len) {
+                Dolphin.notify('你最多还只能上传'+(max_len-len)+'张', 'danger');
+                return false;
+            }
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            Dolphin.loading();
+            $.ajaxFileUpload({
+                fileElementId: 'up_many_form_in',    //需要上传的文件域的ID，即<input type="file">的ID。
+                url: "{:url('index/file/upload',['type'=>'image','multiple'=>'1'])}", //后台方法的路径
+                type: 'post',   //当要提交自定义参数时，这个参数要设置成post
+                data:{suffix:suffix,msize:msize},
+                dataType: 'json',   //服务器返回的数据类型。可以为xml,script,json,html。如果不填写，jQuery会自动判断。
+                secureuri: false,   //是否启用安全提交，默认为false。
+                async : true,   //是否是异步
+                success: function(data) {   //提交成功后自动执行的处理函数，参数data就是服务器返回的数据。
+                    Dolphin.loading('hide');
+                    $('#up_many_form_in').attr('suffix','');
+                    $('#up_many_form_in').attr('msize','');
+                    if (data.code==200) {
+                        var html='';
+                        $(data.data).each(function(k,v){
+                            html+='<div class="imgall"><img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除"><img src="'+v+'" onclick="window.open(\''+v+'\');" target="_blank" title="点击查看大图，拖拽调整顺序"><input type="hidden" name="imgs[]" value="'+v+'"></div>';
+                        });
+                        $('#sortable').append(html);
+                        var new_len=$('#sortable .imgall').length;
+                        if(new_len>=max_len){
+                            $('.addallimg').addClass('addallimgno');
+                            $('.addallimg').attr('title','');
+                            $('.addallimg').removeClass('addallimg');
+                        }
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error: function(data, status, e) {  //提交失败自动执行的处理函数。
+                    Dolphin.loading('hide');
+                    $('#up_many_form_in').attr('suffix','');
+                    $('#up_many_form_in').attr('msize','');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        //单图上传
+        $("body").on('click','.addoneimg',function(){
+            var ralate=$(this).attr('ralate');
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            $('#up_one_form_in').attr('ralate',ralate);
+            $('#up_one_form_in').attr('suffix',suffix);
+            $('#up_one_form_in').attr('msize',msize);
+            $('#up_one_form_in').click();
+        });
+        $("body").on('change','#up_one_form_in',function(){
+            var ralate=$(this).attr('ralate');
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            Dolphin.loading();
+            $.ajaxFileUpload({
+                fileElementId: 'up_one_form_in',    //需要上传的文件域的ID，即<input type="file">的ID。
+                url: "{:url('index/file/upload',['type'=>'image','multiple'=>'0'])}", //后台方法的路径
+                type: 'post',   //当要提交自定义参数时，这个参数要设置成post
+                data:{suffix:suffix,msize:msize},
+                dataType: 'json',   //服务器返回的数据类型。可以为xml,script,json,html。如果不填写，jQuery会自动判断。
+                secureuri: false,   //是否启用安全提交，默认为false。
+                async : true,   //是否是异步
+                success: function(data) {   //提交成功后自动执行的处理函数，参数data就是服务器返回的数据。
+                    Dolphin.loading('hide');
+                    $('#up_one_form_in').attr('ralate','');
+                    $('#up_one_form_in').attr('suffix','');
+                    $('#up_one_form_in').attr('msize','');
+                    if (data.code==200) {
+                        $('.'+ralate).val(data.data);
+                        $('.'+ralate).parent().find('.addimg').remove();
+                        $('.'+ralate).parent().find('.imgone').remove();
+                        var html='<div class="imgone"><a href="javascript:;"><img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除"><img src="'+data.data+'" onclick="window.open(\''+data.data+'\');" title="点击查看大图"></a><span class="editimg addoneimg" title="点击更换" ralate="'+ralate+'" suffix="'+suffix+'" msize="'+msize+'">修改</span></div>';
+                        $('.'+ralate).after(html);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error: function(data, status, e) {  //提交失败自动执行的处理函数。
+                    Dolphin.loading('hide');
+                    $('#up_one_form_in').attr('ralate','');
+                    $('#up_one_form_in').attr('suffix','');
+                    $('#up_one_form_in').attr('msize','');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+
+        //拖拽排序
+        $( "#sortable" ).sortable();
+        $( "#sortable" ).disableSelection();
+
+        //单图删除
+        $("body").on('click','.add_edit .con ul li .imgone a img.delimg',function(){
+            var ralate=$(this).parent().parent().find('.editimg').attr('ralate');
+            var suffix=$(this).parent().parent().find('.editimg').attr('suffix');
+            var msize=$(this).parent().parent().find('.editimg').attr('msize');
+            $(this).parent().parent().parent().find('input').val('');
+            $(this).parent().parent().parent().find('input').after('<div class="addimg addoneimg" title="点击上传" ralate="'+ralate+'" suffix="'+suffix+'" msize="'+msize+'"><img src="__ADMIN_IMG__/add.png"></div>');
+            $(this).parent().parent().remove();
+        });
+        //多图删除
+        $("body").on('click','.add_edit .con ul li .imgall img.delimg',function(){
+            $(this).parent().remove();
+            $('.addallimgno').addClass('addallimg');
+            $('.addallimgno').attr('title','点击上传');
+            $('.addallimgno').removeClass('addallimgno');
+        });
+        //导航切换
+        $('.add_edit .tab ul li').click(function(){
+            var state=$(this).attr('state');
+            if(state=='0'){
+                var con=$(this).attr('con');
+                $('.add_edit .con .tab_con').hide();
+                $(this).removeClass('notive');
+                $(this).addClass('active');
+                $(this).attr('state','1');
+                $(this).siblings().removeClass('active');
+                $(this).siblings().addClass('notive');
+                $(this).siblings().attr('state','0');
+                $('#'+con).show();
+            }else{
+                return false;
+            }
+        });
+        //多级选项全选
+        $('.add_edit .con ul li table.ccopts tr td input').click(function(){
+            var checked = $(this).prop("checked");
+            var idname=$(this).attr('id');
+            var clname=$(this).prop("className");
+            if(checked){
+                if(idname!==''){
+                    $('input.'+idname).prop('checked',true);
+                }
+                if(clname!==''){
+                    clname=clname.split(' ');
+                    $(clname).each(function(k,v){
+                        $('#'+v).prop('checked',true);
+                    });
+                }
+            }else{
+                if(idname!==''){
+                    $('input.'+idname).removeAttr('checked');
+                }
+                if(clname!==''){
+                    clname=clname.split(' ');
+                    if(clname.length==1){
+                        var pix=true;
+                        $('.'+clname[0]).each(function(){
+                            if($(this).prop("checked")){
+                                pix=false;
+                            }
+                        });
+                        if(pix){
+                            $('#'+clname[0]).removeAttr('checked');
+                        }
+                    }else{
+                        var pix=true;
+                        $('.'+clname[0]).each(function(){
+                            if($(this).prop("checked")){
+                                pix=false;
+                            }
+                        });
+                        if(pix){
+                            $('#'+clname[0]).removeAttr('checked');
+                        }
+                        var pix1=true;
+                        $('.'+clname[1]).each(function(){
+                            if($(this).prop("checked")){
+                                pix1=false;
+                            }
+                        });
+                        if(pix1){
+                            $('#'+clname[1]).removeAttr('checked');
+                        }
+                    }  
+                }
+            }
+        });
+        //选择颜色
+        $('.colorpick').click(function(){
+            var pick=$(this).attr('pick');
+            $('#'+pick).show();
+        });
+        $('.colorpick_box dl dd').click(function(){
+            $(this).addClass('active');
+            $(this).siblings().removeClass('active');
+            var pick=$(this).parent().parent().attr('pick');
+            var val=$(this).find('span').text();
+            var coval=$(this).attr('coval');
+            $(this).parent().parent().parent().find('.onpickcolor').remove();
+            $(this).parent().parent().before('<img src="__ADMIN_IMG__/colorpick/'+coval+'" class="onpickcolor">');
+            $('#'+pick).css('paddingLeft','86px');
+            $('#'+pick).val(val);
+            $(this).parent().parent().hide();
+        });
+        herhide('color');
+        herhide('inner_color');
+        //清除颜色
+        $('.clearcolor').click(function(){
+            var inid=$(this).attr('inid');
+            var piid=$(this).attr('piid');
+            $(this).parent().find('.onpickcolor').remove();
+            $('#'+inid).css('paddingLeft','5px');
+            $('#'+inid).val('');
+            $('#'+piid).find('dd').removeClass('active');
+        });
+        //文本域字符提示
+        $('textarea.numtext').keyup(function(){
+            var len = $(this).val().length;
+            $(this).parent().find('.numtips b').html(len);
+        });
+        //提交
+        $('#add_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/carsource/add")}',
+                data:$('#add_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/carsource/add")}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        //查出城市
+        $('#select_province').change(function(){
+            var val=$(this).val();
+            if(val===''){
+                $('#select_city').html('<option value="">请选择城市</option>');
+            }else{
+                $.ajax({
+                    type:'GET',
+                    url:'{:url("index/region/getChilds")}',
+                    data:{'id':val},
+                    dataType:'JSON',
+                    success:function(data){
+                        if (data.code==200) {
+                            var html='<option value="">请选择城市</option>';
+                            $(data.region).each(function(k,v){
+                                html+='<option value="'+v.id+'">'+v.name+'</option>';
+                            });
+                            $('#select_city').html(html);
+                        } else {
+                            Dolphin.notify(data.msg, 'danger');
+                        }
+                    },
+                    error:function(xhr,status,error){
+                        Dolphin.notify('服务器错误~', 'danger');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

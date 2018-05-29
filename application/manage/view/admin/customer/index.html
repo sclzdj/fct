@@ -1,0 +1,307 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+
+<div class="filter_search">
+    <form action="{:url('manage/customer/index')}" name="search_form">
+        <div class="blo"><span class="latips">客户名称：</span><input type="text" name="name" value="{$filter.name}" placeholder="请输入客户名称"></div>
+        <div class="blo"><span class="latips">客户状态：</span>
+            <select name="state">
+                <option value="">全部</option>
+                <option value="0" {if condition='$filter.state==="0"'}selected="selected"{/if}>未到店</option>
+                <option value="1" {if condition='$filter.state==="1"'}selected="selected"{/if}>已到店</option>
+                <option value="2" {if condition='$filter.state==="2"'}selected="selected"{/if}>已预订</option>
+                <option value="3" {if condition='$filter.state==="3"'}selected="selected"{/if}>已成交</option>
+                <option value="-1" {if condition='$filter.state==="-1"'}selected="selected"{/if}>战败</option>
+            </select>
+        </div>
+        <div class="blo"><span class="latips">客户来源：</span>
+            <select name="source">
+                <option value="">全部</option>
+                <option value="朋友介绍" {if condition='$filter.source=="朋友介绍"'}selected="selected"{/if}>朋友介绍</option>
+                <option value="客户介绍" {if condition='$filter.source=="客户介绍"'}selected="selected"{/if}>客户介绍</option>
+                <option value="主动预约" {if condition='$filter.source=="主动预约"'}selected="selected"{/if}>主动预约</option>
+                <option value="电话咨询" {if condition='$filter.source=="电话咨询"'}selected="selected"{/if}>电话咨询</option>
+                <option value="职员引介" {if condition='$filter.source=="职员引介"'}selected="selected"{/if}>职员引介</option>
+                <option value="平台转交" {if condition='$filter.source=="平台转交"'}selected="selected"{/if}>平台转交</option>
+            </select>
+        </div>
+        <div class="blo"><span class="latips">所属车商：</span>
+            <select name="merchant_id">
+                <option value="">全部</option>
+                {volist name="merchant" id="vo"}
+                <option value="{$vo.id}" {if condition='$filter.merchant_id eq $vo.id'}selected="selected"{/if}>{$vo.shop_name}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="blo"><span class="latips">联系电话：</span><input type="text" name="mobile" value="{$filter.mobile}" placeholder="请输入联系电话"></div>
+        <div class="blo"><span class="latips">最后跟进日期：</span><input type="text" name="follow_at_start" value="{$filter.follow_at_start}" class="timepick" readonly="readonly" placeholder="请选择开始日期"><span class="latips">~~</span><input type="text" name="follow_at_end" value="{$filter.follow_at_end}" class="timepick" readonly="readonly" placeholder="请选择结束日期"><a href="javascript:;" onclick="search_form.submit();" class="btn btn-minw btn-primary byt" style="margin-left: 30px;">查&nbsp;询</a></div>
+        <input type="hidden" name="order" value="{$order}">
+    </form>
+    <div class="blo">
+        {if condition='ismeunshow("manage/customer/export")'}
+        <a href="{:url('manage/customer/export')}" class="btn btn-minw btn-primary rbt">导&nbsp;出</a>
+        {/if}
+    </div>
+    <div style="clear: both;"></div>
+</div>
+
+
+<div class="table-responsive">
+    <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
+        <thead>
+            <tr>
+                <th>
+                    ID 
+                    <span>
+                    {switch name="order"}
+                        {case value="a.id asc"}
+                        {php}$filter['order']='a.id desc';{/php}
+                        <a href="{:url('manage/customer/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-up"></i> 
+                        </a>
+                        {/case}
+                        {case value="a.id desc"}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('manage/customer/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        {/case}
+                        {case value="a.follow_at asc"}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('manage/customer/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="a.follow_at desc"}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('manage/customer/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {default /}
+                    {/switch}
+                     </span>
+                </th>
+                <th>
+                    客户名称  
+                </th>
+                <th>
+                    联系电话  
+                </th>
+                <th>
+                    客户状态  
+                </th>
+                <th>
+                    客户来源  
+                </th>
+                <th>
+                    意向产品  
+                </th>
+                <th>
+                    所属车商  
+                </th>
+                <th>
+                    录入人  
+                </th>
+                <th>
+                    最后跟进时间
+                    <span>
+                    {switch name="order"}
+                        {case value="a.id asc"}
+                        {php}$filter['order']='a.follow_at desc';{/php}
+                        <a href="{:url('manage/customer/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="a.id desc"}
+                        {php}$filter['order']='a.follow_at desc';{/php}
+                        <a href="{:url('manage/customer/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="a.follow_at asc"}
+                        {php}$filter['order']='a.follow_at desc';{/php}
+                        <a href="{:url('manage/customer/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-up"></i> 
+                        </a>
+                        {/case}
+                        {case value="a.follow_at desc"}
+                        {php}$filter['order']='a.follow_at asc';{/php}
+                        <a href="{:url('manage/customer/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-down"></i> 
+                        </a>
+                        {/case}
+                        {default /}
+                    {/switch}
+                     </span>
+                </th>
+                <th>
+                    操作  
+                </th>
+        </thead>
+        <tbody>
+        {volist name="data" id="vo"}
+        <tr>
+            <td>
+                {$vo.id}                                    
+            </td>
+            <td>
+                {$vo.name}                                    
+            </td>
+            <td>
+                {$vo.mobile}                                    
+            </td>
+            <td>
+                {switch name="vo.state"}
+                    {case value="0"}
+                    未到店
+                    {/case}
+                    {case value="1"}
+                    已到店
+                    {/case}
+                    {case value="2"}
+                    已预订
+                    {/case}
+                    {case value="3"}
+                    已成交
+                    {/case}
+                    {case value="-1"}
+                    战败
+                    {/case}
+                    {default /}
+                {/switch}                                    
+            </td>
+            <td>
+                {$vo.source}                                    
+            </td>
+            <td>
+                {$vo.car_source}                                    
+            </td>
+            <td>
+                {$vo.shop_name}                                    
+            </td>
+            <td>
+                {$vo.admin_name}                                    
+            </td>
+            <td>
+                {$vo.follow_at_str}                                    
+            </td>
+            <td>
+                {if condition='ismeunshow("manage/customer/deliver")'}
+                    <a href="javascript:;" class="deliver" merchant_id="{$vo.merchant_id}" customer_id="{$vo.id}">转交</a>&nbsp;
+                {/if}
+                {if condition='ismeunshow("manage/customer/edit")'}
+                    <a href="{:url('manage/merchant/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
+                {/if}
+                {if condition='ismeunshow("manage/customer/look")'}
+                    <a href="{:url('manage/merchant/look',['id'=>$vo['id']])}">详情</a>
+                {/if}                            
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align: center;margin:20px auto;">
+    {notempty name="page"}
+        {$page}  
+    {/notempty}
+</div>
+<div style="margin-bottom: 20px;"></div>
+
+<style>
+.dj_bigbox{position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background-color: rgba(0,0,0,0.4);display: none;  z-index: 9999;}
+.dj_smallbox{width: 500px;position: fixed; top: 50%;left: 50%;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);background: #f2f2f2;}
+.dj_smallbox .title{background: #3c7ac9; color: #eee;height: 60px;line-height: 60px;padding:0 3%;text-align: center;font-weight: bold;  font-size: 16px;letter-spacing: 2px;}
+.dj_smallbox .con{background: #fff;color: #3c3c3c;padding:20px 3%;font-weight: 200;  font-size: 14px;text-align: center;}
+.dj_smallbox .con label{font-weight: normal; display: block;line-height: 60px;}
+.dj_smallbox .con label input,.dj_smallbox .con label select{font-weight: normal; line-height: 34px;height: 34px; min-width: 60%;padding:0 2%; border: 1px solid #aaaaaa;}    
+</style>
+<div class="dj_bigbox" id="deliver_merchant">      
+    <div class="dj_smallbox">
+        <div class="title">转交客户</div>
+        <div class="con">
+            <label>商户：<select name='merchant_id'>
+                <option value="">请选择</option>
+                {volist name="merchant" id="vo"}
+                <option value="{$vo.id}">{$vo.shop_name}</option>
+                {/volist}
+            <select></label>
+            <div style="margin-top: 20px;"></div>
+            <input type="hidden" name="id" value="">
+            <a href="javascript:;" class='submit btn btn-minw btn-primary' style="margin-right: 40px;">确定</a>
+            <a href="javascript:;" class='cancel btn btn-minw btn-primary'>取消</a>
+        </div>
+    </div>
+</div>  
+
+<script>
+$(function(){
+    //点击转交
+    $('.deliver').click(function(){
+        var customer_id=$(this).attr('customer_id');
+        var merchant_id=$(this).attr('merchant_id');
+        $('#deliver_merchant .dj_smallbox .con input[name="id"]').val(customer_id);
+        $('#deliver_merchant .dj_smallbox .con select[name="merchant_id"] option[value="'+merchant_id+'"]').hide();
+        $('#deliver_merchant').show();
+    });
+    //转交确定
+    $('#deliver_merchant .dj_smallbox a.submit').click(function(){
+        var id=$('#deliver_merchant .dj_smallbox .con input[name="id"]').val();
+        var merchant_id=$('#deliver_merchant .dj_smallbox .con select[name="merchant_id"] option:selected').val();
+        if(merchant_id==''){
+            Dolphin.notify('请选择转交的车商', 'danger');
+            return false;
+        }
+        if(confirm('确定转交吗？')){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/customer/deliver")}',
+                data:{id:id,merchant_id:merchant_id},
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        $('#deliver_merchant').hide();
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        }
+    });
+    //取消
+    $('.dj_bigbox .dj_smallbox a.cancel').click(function(){
+        $('.dj_bigbox').hide();
+        $('.dj_bigbox .dj_smallbox .con label select option').show();
+        $('.dj_bigbox .dj_smallbox .con input').val('');
+    });
+});
+</script>
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}
