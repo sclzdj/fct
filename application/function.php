@@ -108,7 +108,22 @@ if(!function_exists('ismerchant')){
         }
     }
 }
-//是否显示
+//是否为超级管理员
+if(!function_exists('isSupper')){
+    function isSupper($id=''){
+        if($id===''){
+            $uid=defined('UID')?UID:session('user_auth.uid');
+            $id=$uid;
+        }
+        $role=db('admin_user')->where('id',$id)->value('role');
+        if($role=='1'){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
+//是否有权限
 if(!function_exists('isaccess')){
     function isaccess($menu_id=0){
         $uid=defined('UID')?UID:session('user_auth.uid');
@@ -191,5 +206,37 @@ if(!function_exists('get_arr_tree')){
             }
         }
         return $tree;
+    }
+}
+/**
+ * 随机字符
+ * @param number $length 长度
+ * @param string $type 类型
+ * @param number $convert 转换大小写
+ * @return string
+ */
+if(!function_exists('random')){
+    function random($length=4, $type='all', $convert=0){
+        $config = array(
+            'number'=>'1234567890',
+            'letter'=>'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            'small'=>'abcdefghijklmnopqrstuvwxyz',
+            'big'=>'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            'string'=>'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789',
+            'all'=>'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+        );
+        
+        if(!isset($config[$type])) $type = 'string';
+        $string = $config[$type];
+        
+        $code = '';
+        $strlen = strlen($string) -1;
+        for($i = 0; $i < $length; $i++){
+            $code .= $string{mt_rand(0, $strlen)};
+        }
+        if(!empty($convert)){
+            $code = ($convert > 0)? strtoupper($code) : strtolower($code);
+        }
+        return $code;
     }
 }

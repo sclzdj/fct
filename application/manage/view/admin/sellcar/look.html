@@ -1,0 +1,106 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<form id="add_form">
+
+
+<div class="add_edit">
+    <div class="title">个人卖车信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="looktips">联系电话：</span>
+                {if condition='$sellcar.mobile!==""'}
+                <span class="lacon">{$sellcar.mobile}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">所在地区：</span>
+                {if condition='$sellcar.region_text!==""'}
+                <span class="lacon">{$sellcar.region_text}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">车型：</span>
+                {if condition='$sellcar.brand_id!==""'}
+                <span class="lacon">{$sellcar.brand_id}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">排量：</span>
+                {if condition='$sellcar.displacement !== ""'}
+                <span class="lacon">{$sellcar.displacement}升</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">行驶里程：</span>
+                {if condition='$sellcar.mileage!==""'}
+                <span class="lacon">{$sellcar.mileage}万公里</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">上牌日期：</span>
+                {if condition='$sellcar.plate_at_str!==""'}
+                <span class="lacon">{$sellcar.plate_at_str}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">提交日期：</span>
+                {if condition='$sellcar.submit_at_str!==""'}
+                <span class="lacon">{$sellcar.submit_at_str}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips" style="vertical-align:top;">车源图片：</span>
+                {if condition='$sellcar.imgs'}
+                <div style="display: inline-block;max-width: 80%;">
+                    {volist name="sellcar.imgs" id="vo"}
+                    <div class="imgall">
+                        <img src="{$vo}" onclick="window.open('{$vo}');" target="_blank" title="点击查看大图">
+                    </div>
+                    {/volist}
+                </div>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:window.history.go(-1);" class="btn btn-minw btn-primary rbt">返&nbsp;回</a>
+</div>
+
+</form>
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

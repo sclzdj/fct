@@ -11,62 +11,100 @@
 
 
 <div class="add_edit">
-    <div class="title">客户基本信息</div>
+    <div class="title">订单基本信息</div>
     <div style="clear: both;"></div>
     <div class="con">
         <ul>
             <li>
-                <span class="looktips">客户名称：</span>
-                {if condition='$customer.name!==""'}
-                <span class="lacon">{$customer.name}</span>
+                <span class="looktips">订单号：</span>
+                {if condition='$order.sn!==""'}
+                <span class="lacon">{$order.sn}</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
                 {/if}
             </li>
             <li>
-                <span class="looktips">联系电话：</span>
-                {if condition='$customer.mobile!==""'}
-                <span class="lacon">{$customer.mobile}</span>
+                <span class="looktips">成交客户：</span>
+                {if condition='$order.customer_name!==""'}
+                <span class="lacon">{$order.customer_name}</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
                 {/if}
             </li>
             <li>
-                <span class="looktips">性别：</span>
-                {if condition='$customer.sex!==""'}
-                <span class="lacon">{$customer.sex}</span>
+                <span class="looktips">成交车源：</span>
+                {if condition='$order.car_source!==""'}
+                <span class="lacon">{$order.car_source}</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
                 {/if}
             </li>
             <li>
-                <span class="looktips">所在城市：</span>
-                {if condition='$customer.region_text!==""'}
-                <span class="lacon">{$customer.region_text}</span>
+                <span class="looktips">订单总额：</span>
+                {if condition='$order.amount!==""'}
+                <span class="lacon">{$order.amount}万元</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
                 {/if}
             </li>
             <li>
-                <span class="looktips">意向车源：</span>
-                {if condition='$customer.car_source !== ""'}
-                <span class="lacon">{$customer.car_source}</span>
+                <span class="looktips">订金金额：</span>
+                {if condition='$order.earnest!== ""'}
+                <span class="lacon">{$order.earnest}万元</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
                 {/if}
             </li>
             <li>
-                <span class="looktips">客户来源：</span>
-                {if condition='$customer.source!==""'}
-                <span class="lacon">{$customer.source}</span>
+                <span class="looktips">付款时间：</span>
+                {if condition='$order.paid_at!==""'}
+                <span class="lacon">{$order.paid_at}</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
                 {/if}
+            </li>
+            <li>
+                <span class="looktips">付款方式：</span>
+                {if condition='$order.paid_type!==""'}
+                <span class="lacon">{$order.paid_type}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">合同扫描件：</span>
+                {if condition='$order.contract_img===""'}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {else/}
+                <div class="imgone">
+                    <a href="javascript:void;">
+                        <img src="{$order.contract_img}" onclick="window.open('{$order.contract_img}');" title="点击查看大图">
+                    </a>
+                </div>
+                {/if}
+            </li>
+            <li>
+                <span class="looktips">订单状态：</span>
+                <span class="lacon">
+                {switch name="order.state"}
+                    {case value="0"}
+                    已预订
+                    {/case}
+                    {case value="1"}
+                    已成交
+                    {/case}
+                    {case value="-1"}
+                    已违约
+                    {/case}
+                    {default /}
+                    <span class="lacon" style="color:#ccc;">暂无</span>
+                {/switch}
+                </span>
             </li>
             <li>
                 <span class="looktips">客户状态：</span>
                 <span class="lacon">
-                {switch name="customer.state"}
+                {switch name="order.customer_state"}
                     {case value="0"}
                     未到店
                     {/case}
@@ -88,41 +126,17 @@
                 </span>
             </li>
             <li>
-                <span class="looktips">所属车商：</span>
-                {if condition='$customer.shop_name!==""'}
-                <span class="lacon">{$customer.shop_name}</span>
-                {else/}
-                <span class="lacon" style="color:#ccc;">暂无</span>
-                {/if}
-            </li>
-            <li>
-                <span class="looktips">录入人：</span>
-                {if condition='$customer.admin_name!==""'}
-                <span class="lacon">{$customer.admin_name}</span>
-                {else/}
-                <span class="lacon" style="color:#ccc;">暂无</span>
-                {/if}
-            </li>
-            <li>
-                <span class="looktips">最后跟进时间：</span>
-                {if condition='$customer.follow_at_str!==""'}
-                <span class="lacon">{$customer.follow_at_str}</span>
-                {else/}
-                <span class="lacon" style="color:#ccc;">暂无</span>
-                {/if}
-            </li>
-            <li>
                 <span class="looktips">创建时间：</span>
-                {if condition='$customer.created_at_str!==""'}
-                <span class="lacon">{$customer.created_at_str}</span>
+                {if condition='$order.created_at_str!==""'}
+                <span class="lacon">{$order.created_at_str}</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
                 {/if}
             </li>
             <li>
-                <span class="looktips" style="vertical-align:top;">客户简介：</span>
-                {if condition='$customer.remark!==""'}
-                <span class="lacon">{$customer.remark}</span>
+                <span class="looktips" style="vertical-align:top;">订单备注：</span>
+                {if condition='$order.remark!==""'}
+                <span class="lacon">{$order.remark}</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
                 {/if}

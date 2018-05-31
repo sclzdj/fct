@@ -35,17 +35,19 @@ class Merchant extends Admin
         if($filter['state']!==''){
             $map['a.state']=$filter['state'];
         }
+        $filter_at['created_at_start']=$filter['created_at_start'].' 00:00:00';
+        $filter_at['created_at_end']=$filter['created_at_end'].' 23:59:59';
         if($filter['created_at_start']!=='' && $filter['created_at_end']!==''){
-        	$map['a.created_at']=['between time',[$filter['created_at_start'],$filter['created_at_end']]];
+        	$map['a.created_at']=['between time',[$filter_at['created_at_start'],$filter_at['created_at_end']]];
         }elseif($filter['created_at_start']!=='' && $filter['created_at_end']===''){
-        	$map['a.created_at']=['>= time',$filter['created_at_start']];
+        	$map['a.created_at']=['>= time',$filter_at['created_at_start']];
         }elseif($filter['created_at_start']==='' && $filter['created_at_end']!==''){
-        	$map['a.created_at']=['<= time',$filter['created_at_end']];
+        	$map['a.created_at']=['<= time',$filter_at['created_at_end']];
         }
         $order=input('param.order','a.created_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('merchants a')->field('a.id,b.username admin_name,a.company_name,a.shop_name,a.sn,a.created_at,a.state')->join('admin_user b','a.admin_id=b.id','LEFT')->where($map)->order($order)->paginate(15);
+        $object=db('merchants')->alias('a')->field('a.id,b.username admin_name,a.company_name,a.shop_name,a.sn,a.created_at,a.state')->join('admin_user b','a.admin_id=b.id','LEFT')->where($map)->order($order)->paginate(15);
         // 获取分页显示
 		$page = $object->render();
 		$data_all = json_decode(json_encode($object),TRUE);
@@ -78,7 +80,7 @@ class Merchant extends Admin
           '创建时间'=>'string',//text
           '状态'=>'string',//text
         );
-        $data = db('merchants a')->field('a.id,b.username admin_name,a.company_name,a.shop_name,a.sn,a.created_at,a.state')->join('admin_user b','a.admin_id=b.id','LEFT')->where(session('user_index_export_map'))->order(session('user_index_export_order'))->select();
+        $data = db('merchants')->alias('a')->field('a.id,b.username admin_name,a.company_name,a.shop_name,a.sn,a.created_at,a.state')->join('admin_user b','a.admin_id=b.id','LEFT')->where(session('user_index_export_map'))->order(session('user_index_export_order'))->select();
         //处理数据
         foreach ($data as $key => $value) {
         	$data[$key]['created_at']=date('Y-m-d H:i',$value['created_at']);

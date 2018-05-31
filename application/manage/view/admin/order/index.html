@@ -1,0 +1,129 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+
+<div class="filter_search">
+    <form action="{:url('manage/order/index')}" name="search_form">
+        <div class="blo"><span class="latips">订单号：</span><input type="text" name="sn" value="{$filter.sn}" placeholder="请输入订单号"></div>
+        {if condition='!ismerchant()'}
+        {if condition='!ismerchant()'}
+        <div class="blo"><span class="latips">店铺名称：</span>
+            <select name="merchant_id">
+                <option value="">全部</option>
+                {volist name="merchant" id="vo"}
+                <option value="{$vo.id}" {if condition='$filter.merchant_id eq $vo.id'}selected="selected"{/if}>{$vo.shop_name}</option>
+                {/volist}
+            </select>
+        </div>
+        {/if}
+        {/if}
+        <div class="blo"><span class="latips">车型：</span>
+            <select name="brand_id" value="{$filter.brand_id}" style="margin-right: 5px;">
+                <option value="">全部品牌</option>
+            </select>
+            <select name="serie_id" value="{$filter.serie_id}" style="margin-right: 5px;">
+                <option value="">全部车系</option>
+            </select>
+            <select name="model_id" value="{$filter.model_id}">
+                <option value="">全部车型</option>
+            </select>
+        </div>
+        <div class="blo"><span class="latips">付款日期：</span><input type="text" name="paid_at_start" value="{$filter.paid_at_start}" class="timepick" readonly="readonly" placeholder="请选择开始日期"><span class="latips">~~</span><input type="text" name="paid_at_end" value="{$filter.paid_at_end}" class="timepick" readonly="readonly" placeholder="请选择结束日期"><a href="javascript:;" onclick="search_form.submit();" class="btn btn-minw btn-primary byt" style="margin-left: 30px;">查&nbsp;询</a></div>
+        <input type="hidden" name="order" value="{$order}">
+    </form>
+    <div style="clear: both;"></div>
+</div>
+{volist name="data" id="vo"}
+<div class="lit">
+    <table class="lit_table">
+        <tr>
+            <th style="padding-left: 0;">{$vo.paid_at}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单号：{$vo.sn}</th>
+            <th style="" class="dcv"></th>
+            <th style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;border-left: 1px solid #ccc;border-right: 1px solid #ccc;text-align: center;min-width: 150px;" class="ddv">成交客户：{$vo.customer_name}</th>
+        </tr>
+        <tr>
+            <td style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-left: 1px solid #ccc;">
+                <div style="float: left;min-height: 120px;"><img src="{if condition='$vo.is_defind eq 0'}{$vo.main_img}{else/}__ADMIN_IMG__/none.png{/if}"></div>
+                <div class="core">
+                    <span>{if condition='$vo.is_defind eq 0'}{$vo.brand_id}.{$vo.serie_id}.{$vo.model_id}{else/}{if condition='$vo.is_defind eq 1'}{$vo.defind_model}{/if}{/if}</span>
+                    <span>{if condition='$vo.is_defind eq 0'}{$vo.first_plate_year}年/{$vo.mileage}公里&nbsp;&nbsp;{$vo.region_one_text}{/if}</span>
+                    <span>{if condition='$vo.is_defind eq 0'}{$vo.price}万{/if}</span>
+                    <span>{$vo.shop_name}</span>
+                </div>
+            </td>
+            <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
+                <div class="xiao">
+                    <span>订单总额：{$vo.amount}万元&nbsp;&nbsp;&nbsp;&nbsp;{$vo.paid_type}</span><br>
+                    <span>定金：{$vo.earnest}万元</span>
+                </div>
+            </td>
+            <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">
+                {switch name="vo.state"}
+                    {case value="0"}
+                    <a href="javascript:;" class="noclick" style="margin-bottom: 5px;">已预订</a>
+                    {/case}
+                    {case value="1"}
+                    <a href="javascript:;" class="noclick" style="margin-bottom: 5px;">已成交</a>
+                    {/case}
+                    {case value="-1"}
+                    <a href="javascript:;}" class="noclick" style="margin-bottom: 5px;">已违约</a>
+                    {/case}
+                    {default /}
+                {/switch}
+                {if condition='$vo.state eq 0'}
+                    {if condition='ismeunshow("manage/order/edit")'}
+                        <a href="{:url('manage/order/edit',['id'=>$vo['id']])}" class="yesclick" style="margin-bottom: 5px;">修改</a>
+                    {/if}
+                {/if}
+                {if condition='ismeunshow("manage/order/look")'}
+                    <a href="{:url('manage/order/look',['id'=>$vo['id']])}" class="yesclick">订单详情</a>
+                {/if} 
+            </td>
+        </tr>
+    </table>
+</div>
+{/volist}
+
+
+<div style="text-align: right;margin:20px 5px;height: 45px;">
+    {notempty name="page"}
+        {$page}  
+    {/notempty}
+</div>
+<div style="margin-bottom: 40px;"></div>
+
+<script>
+$(function(){
+    //长度对齐
+    var ddv_width=0;
+    $('table.lit_table tr th.ddv').each(function(){
+        if($(this).width()>ddv_width){
+            ddv_width=$(this).width();
+        }
+    });
+    $('table.lit_table tr th.ddv').css('width',ddv_width);
+    var dcv_width=0;
+    $('table.lit_table tr th.dcv').each(function(){
+        if($(this).width()>dcv_width){
+            dcv_width=$(this).width();
+        }
+    });
+    $('table.lit_table tr th.dcv').css('width',ddv_width);
+});
+</script>    
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

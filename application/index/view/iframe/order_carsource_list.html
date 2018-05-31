@@ -9,11 +9,11 @@
 <script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
 
 <div style="background: #fff;">
-    <div style="background: #f9f9f9;height: 50px;line-height: 50px;display: inline-block; font-size: 14px;font-weight: bold;padding: 0 1%;letter-spacing: 2px;">请选择意向车源</div>
+    <div style="background: #f9f9f9;height: 50px;line-height: 50px;display: inline-block; font-size: 14px;font-weight: bold;padding: 0 1%;letter-spacing: 2px;">请选择成交车源</div>
 </div>
 
 <div class="filter_search" style="padding-top: 10px;margin-bottom: 0;">
-    <form action="{:url('index/iframe/customerCarsourceList')}" name="search_form" target="iframe_small_box">
+    <form action="{:url('index/iframe/orderCarsourceList')}" name="search_form" target="iframe_small_box">
         <div class="blo"><span class="latips">车源号：</span><input type="text" name="sn" value="{$filter.sn}" placeholder="请输入车源号"></div>
         <div class="blo"><span class="latips">车型：</span>
             <select name="brand_id" value="{$filter.brand_id}" style="margin-right: 5px;">
@@ -47,30 +47,30 @@
                     {switch name="order"}
                         {case value="a.id asc"}
                         {php}$filter['order']='a.id desc';{/php}
-                        <a href="{:url('index/iframe/customerCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-caret-up"></i> 
                         </a>
                         {/case}
                         {case value="a.id desc"}
                         {php}$filter['order']='a.id asc';{/php}
-                        <a href="{:url('index/iframe/customerCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-caret-down"></i>
                         </a>
                         {/case}
                         {case value="a.audit_at asc"}
                         {php}$filter['order']='a.id asc';{/php}
-                        <a href="{:url('index/iframe/customerCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>
                         {/case}
                         {case value="a.audit_at desc"}
                         {php}$filter['order']='a.id asc';{/php}
-                        <a href="{:url('index/iframe/customerCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>
                         {/case}
                         {default /}
-                         <a href="{:url('index/iframe/customerCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                         <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>
                     {/switch}
@@ -94,25 +94,25 @@
                     {switch name="order"}
                         {case value="a.id asc"}
                         {php}$filter['order']='a.audit_at desc';{/php}
-                        <a href="{:url('index/iframe/customerCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>
                         {/case}
                         {case value="a.id desc"}
                         {php}$filter['order']='a.audit_at desc';{/php}
-                        <a href="{:url('index/iframe/customerCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>
                         {/case}
                         {case value="a.audit_at asc"}
                         {php}$filter['order']='a.audit_at desc';{/php}
-                        <a href="{:url('index/iframe/customerCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-caret-up"></i> 
                         </a>
                         {/case}
                         {case value="a.audit_at desc"}
                         {php}$filter['order']='a.audit_at asc';{/php}
-                        <a href="{:url('index/iframe/customerCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-caret-down"></i> 
                         </a>
                         {/case}

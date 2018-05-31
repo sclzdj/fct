@@ -39,12 +39,14 @@ class Customer extends Admin
         if($filter['mobile']!==''){
             $map['a.mobile']=['like','%'.$filter['mobile'].'%'];
         }
+        $filter_at['follow_at_start']=$filter['follow_at_start'].' 00:00:00';
+        $filter_at['follow_at_end']=$filter['follow_at_end'].' 23:59:59';
         if($filter['follow_at_start']!=='' && $filter['follow_at_end']!==''){
-            $map['a.follow_at']=['between time',[$filter['follow_start'],$filter['follow_at_end']]];
+            $map['a.follow_at']=['between time',[$filter_at['follow_at_start'],$filter_at['follow_at_end']]];
         }elseif($filter['follow_at_start']!=='' && $filter['follow_at_end']===''){
-            $map['a.follow_at']=['>= time',$filter['follow_at_start']];
+            $map['a.follow_at']=['>= time',$filter_at['follow_at_start']];
         }elseif($filter['follow_at_start']==='' && $filter['follow_at_end']!==''){
-            $map['a.follow_at']=['<= time',$filter['follow_at_end']];
+            $map['a.follow_at']=['<= time',$filter_at['follow_at_end']];
         }
         //车商
         if(ismerchant()){
@@ -53,7 +55,7 @@ class Customer extends Admin
         $order=input('param.order','a.follow_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('customers a')->field('a.id,a.name,a.state,a.source,a.car_source_id,a.defind_model,a.merchant_id,a.mobile,a.follow_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(15);
+        $object=db('customers')->alias('a')->field('a.id,a.name,a.state,a.source,a.car_source_id,a.defind_model,a.merchant_id,a.mobile,a.follow_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(15);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -70,7 +72,7 @@ class Customer extends Admin
 	            if(ismerchant()){
 		            $map['b.id']=ismerchant();
 		        }
-	            $carsource=db('car_sources a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$value['car_source_id'])->find();
+	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$value['car_source_id'])->find();
 	            if($carsource){
 	            	$data[$key]['car_source']=$value['car_source_id'];
 	            }else{
@@ -110,7 +112,7 @@ class Customer extends Admin
           '录入人'=>'string',//text
           '跟进时间'=>'string',//text
         );
-        $data = db('customers a')->field('a.id,a.name,a.state,a.source,a.car_source_id,a.defind_model,a.merchant_id,a.mobile,a.follow_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where(session('user_index_export_map'))->order(session('user_index_export_order'))->select();
+        $data = db('customers')->alias('a')->field('a.id,a.name,a.state,a.source,a.car_source_id,a.defind_model,a.merchant_id,a.mobile,a.follow_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where(session('user_index_export_map'))->order(session('user_index_export_order'))->select();
         $new_data=[];
         //处理数据
         foreach ($data as $key => $value) {
@@ -121,7 +123,7 @@ class Customer extends Admin
 	            if(ismerchant()){
 		            $map['b.id']=ismerchant();
 		        }
-	            $carsource=db('car_sources a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$value['car_source_id'])->find();
+	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$value['car_source_id'])->find();
 	            if($carsource){
 	            	$value['car_source']=$value['car_source_id'];
 	            }else{
@@ -163,7 +165,7 @@ class Customer extends Admin
             ];
             $new_data[]=$pix;
         }
-        $file_name = 'userList-'.date('YmdHis').'-'.mt_rand(1000,9999).'.xlsx';     //下载文件名    
+        $file_name = 'customerList-'.date('YmdHis').'-'.mt_rand(1000,9999).'.xlsx';     //下载文件名    
         $file_dir = "excels/";        //下载文件存放目录  
         do_rmdir($file_dir,false);//先清空文件夹
         $rows = $new_data;
@@ -223,7 +225,7 @@ class Customer extends Admin
 	            if(ismerchant()){
 		            $map['b.id']=ismerchant();
 		        }
-	            $carsource=db('car_sources a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
+	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
 	            if(!$carsource){
 	            	return json_return('F','1000','选择的意向车源已不存在');
 	            }
@@ -273,7 +275,7 @@ class Customer extends Admin
         //渲染模板
         return $this->fetch();
 	}
-	//新建客户
+	//修改
 	public function edit($id=''){  
         $now=time();
         // 保存数据
@@ -322,7 +324,7 @@ class Customer extends Admin
 	            if(ismerchant()){
 		            $map['b.id']=ismerchant();
 		        }
-	            $carsource=db('car_sources a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
+	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
 	            if(!$carsource){
 	            	return json_return('F','1000','选择的意向车源已不存在');
 	            }
@@ -374,7 +376,7 @@ class Customer extends Admin
             }
         }
         //处理数据
-        //
+        $customer['remark_len']=mb_strlen($customer['remark'],'utf8');
         //获取中国省份
         $province=db('regions')->field('id,name')->where(['parent_id'=>'1','level'=>'1'])->order('sort asc')->select();
         $city=db('regions')->field('id,name')->where(['parent_id'=>$customer['province_id'],'level'=>'2'])->order('sort asc')->select();
@@ -406,7 +408,7 @@ class Customer extends Admin
 	            if(ismerchant()){
 		            $map['b.id']=ismerchant();
 		        }
-	            $carsource=db('car_sources a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$customer['car_source_id'])->find();
+	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$customer['car_source_id'])->find();
 	            if($carsource){
 	            	$customer['car_source']=$customer['car_source_id'];
 	            }else{

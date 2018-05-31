@@ -29,14 +29,15 @@
 .add_edit .con ul li span.numtips{display:inline-block;font-size: 14px;color: #666;text-indent: 5px;}
 .add_edit .con ul li span.lacon{display:inline-block;height: 34px;line-height: 34px;max-width: 50%;}
 .add_edit .con ul li span.zui{display:inline-block;font-size: 14px;vertical-align:top;color: #666;height: 34px;line-height: 34px;border: 1px solid #ccc;border-left: none;width: 70px;text-align: center;}
-.add_edit .con ul li span.looktips{display:inline-block;height: 34px;line-height: 34px;max-width: 40%;}
+.add_edit .con ul li span.looktips{display:inline-block;height: 34px;line-height: 34px;max-width: 40%;vertical-align: top;}
+.add_edit .con ul li span.zhi{display:inline-block;height: 34px;line-height: 34px;vertical-align: top;}
 .add_edit .con ul li input[type="text"]{padding:0 5px;width:40%;min-width:240px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;}
 .add_edit .con ul li input[type="radio"]{vertical-align:top;line-height: 34px;display: inline-block;width: 16px;height: 16px;margin-top:9px;margin-right: 3px; }
 .add_edit .con ul li button{padding:0 5px;min-width:80px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;background: #fff;}
 .add_edit .con ul li button:hover{background: #eee;}
-.add_edit .con ul li textarea{padding:0 5px;width:40%;min-width:240px;height: 34px;line-height: 24px; border: 1px solid #ccc;height: 125px;}
-.add_edit .con ul li label{font-weight: normal;font-size: 14px;cursor: pointer;line-height: 34px;margin: 0;}
-.add_edit .con ul li select{padding:0 5px;width:15%;min-width:200px;height: 34px;line-height: 34px; border: 1px solid #ccc;}
+.add_edit .con ul li textarea{padding:0 5px;width:40%;min-width:240px;height: 34px;line-height: 24px; border: 1px solid #ccc;height: 125px;vertical-align: top;}
+.add_edit .con ul li label{font-weight: normal;font-size: 14px;cursor: pointer;line-height: 34px;margin: 0;vertical-align: top;}
+.add_edit .con ul li select{padding:0 5px;width:15%;min-width:200px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align: top;}
 .add_edit .con ul li .addimg{display: inline-block;width: 88px;height: 88px;border:1px solid #c6c6c6;cursor: pointer;}
 .add_edit .con ul li .addimg img{width: 42px;height: 42px;margin:22px;}
 .add_edit .con ul li .imgone{display:inline-block;height: 88px;cursor: pointer;position: relative;margin-right: 40px;}
@@ -68,9 +69,14 @@
 .lit table.lit_table tr th{font-size: 14px;font-weight: normal;padding: 10px;}
 .lit table.lit_table tr td{padding: 10px;}
 .lit table.lit_table tr td a{line-height: 30px;font-size: 14px;}
+.lit table.lit_table tr td a.yesclick{display: block;width: 120px;border: 1px solid #eee;text-align: center;}
+.lit table.lit_table tr td a.yesclick:hover{border: 1px solid #ccc;}
+.lit table.lit_table tr td a.noclick{display: block;width: 120px;border: 1px solid #eee;color: #646464;cursor: default;text-align: center;}
 .lit table.lit_table tr td img{max-width: 120px;max-height: 120px; border: 5px solid #ccc;padding: 3px;float: left;margin-right: 10px;}
 .lit table.lit_table tr td input[type="checkbox"]{width: 20px;height: 20px;cursor: pointer;background: #fff;}
-.lit table.lit_table tr td .core span{display: block;height: 30px;line-height: 30px;font-size: 14px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+.lit table.lit_table tr td .core span{display: block; height: 30px;line-height: 30px;font-size: 14px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+.lit table.lit_table tr td .xiao{text-align: left;}
+.lit table.lit_table tr td .xiao span{display: inline-block;height: 30px;line-height: 30px;font-size: 14px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
 .list_pi_run{text-align: left;margin:20px 5px;height: 45px;float:left;}
 .list_pi_run label{vertical-align:top;margin-top: 13px;height: 34px;line-height: 34px;font-size: 14px;font-weight: normal;margin-right: 15px;margin-left: 30px;cursor: pointer;}
 .list_pi_run label input[type="checkbox"]{width: 20px;height: 20px;background: #fff;vertical-align:middle;margin: 0px;display: inline-block;margin-bottom: 1px;margin-right: 5px;}

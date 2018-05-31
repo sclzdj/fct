@@ -32,6 +32,7 @@
                 <option value="平台转交" {if condition='$filter.source=="平台转交"'}selected="selected"{/if}>平台转交</option>
             </select>
         </div>
+        {if condition='!ismerchant()'}
         <div class="blo"><span class="latips">所属车商：</span>
             <select name="merchant_id">
                 <option value="">全部</option>
@@ -40,6 +41,7 @@
                 {/volist}
             </select>
         </div>
+        {/if}
         <div class="blo"><span class="latips">联系电话：</span><input type="text" name="mobile" value="{$filter.mobile}" placeholder="请输入联系电话"></div>
         <div class="blo"><span class="latips">最后跟进日期：</span><input type="text" name="follow_at_start" value="{$filter.follow_at_start}" class="timepick" readonly="readonly" placeholder="请选择开始日期"><span class="latips">~~</span><input type="text" name="follow_at_end" value="{$filter.follow_at_end}" class="timepick" readonly="readonly" placeholder="请选择结束日期"><a href="javascript:;" onclick="search_form.submit();" class="btn btn-minw btn-primary byt" style="margin-left: 30px;">查&nbsp;询</a></div>
         <input type="hidden" name="order" value="{$order}">
@@ -86,6 +88,10 @@
                         </a>
                         {/case}
                         {default /}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('manage/customer/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
                     {/switch}
                      </span>
                 </th>
@@ -139,6 +145,10 @@
                         </a>
                         {/case}
                         {default /}
+                        {php}$filter['order']='a.follow_at desc';{/php}
+                        <a href="{:url('manage/customer/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
                     {/switch}
                      </span>
                 </th>
@@ -198,10 +208,10 @@
                     <a href="javascript:;" class="deliver" merchant_id="{$vo.merchant_id}" customer_id="{$vo.id}">转交</a>&nbsp;
                 {/if}
                 {if condition='ismeunshow("manage/customer/edit")'}
-                    <a href="{:url('manage/merchant/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
+                    <a href="{:url('manage/customer/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
                 {/if}
                 {if condition='ismeunshow("manage/customer/look")'}
-                    <a href="{:url('manage/merchant/look',['id'=>$vo['id']])}">详情</a>
+                    <a href="{:url('manage/customer/look',['id'=>$vo['id']])}">详情</a>
                 {/if}                            
             </td>
         </tr>

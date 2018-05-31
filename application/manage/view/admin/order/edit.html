@@ -1,0 +1,212 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__ADMIN_JS__/ajaxfileupload.js"></script>
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<form id="edit_form">
+<input type="hidden" name="id" value="{$order.id}">
+<div class="add_edit">
+    <div class="title">订单基本信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="latips">订单号：</span>
+                <span class="lacon">{$order.sn}</span>
+            </li>
+            <li>
+                <span class="latips">成交客户：</span>
+                <span class="lacon">{$order.customer_name}</span>
+            </li>
+
+            <li>
+                <span class="latips">成交车源：</span>
+                <span class="lacon">{$order.car_source}</span>
+            </li>
+            <li>
+                <span class="latips">订单总额：</span>
+                <span class="lacon">{$order.amount}万元</span>
+            </li>
+            <li>
+                <span class="latips">定金金额：</span>
+                <span class="lacon">{$order.earnest}万元</span>
+            </li>
+            <li>
+                <span class="latips">付款时间：</span>
+                <span class="lacon">{$order.paid_at}</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>付款方式：</span>
+                <select name="paid_type">
+                    <option value="">请选择付款方式</option>
+                    <option value="全款" {if condition='$order.paid_type eq "全款"'}selected="selected"{/if}>全款</option>
+                    <option value="按揭" {if condition='$order.paid_type eq "按揭"'}selected="selected"{/if}>按揭</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips">上传合同扫描件：</span>
+                <input type="hidden" name="contract_img" value="{$order.contract_img}" class="contract_img">
+                {if condition='$order.contract_img neq ""'}
+                <div class="imgone">
+                    <a href="javascript:void;">
+                        <img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除">
+                        <img src="{$order.contract_img}" onclick="window.open('{$order.contract_img}');" title="点击查看大图">
+                    </a>
+                    <span class="editimg addoneimg" title="点击更换" ralate="contract_img" suffix='png,jpg,jpeg' msize='31457280'>修改</span>
+                </div>
+                {else/}
+                <div class="addimg addoneimg" title="点击上传" ralate="contract_img" suffix='png,jpg,jpeg' msize='31457280'><img src="__ADMIN_IMG__/add.png"></div>
+                {/if}
+                <span class="bztips">支持扩展名：png,jpg,jpeg，大小不超过30M</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>订单状态：</span>
+                <select name="state">
+                    <option value="">请选择订单状态</option>
+                    <option value="0" {if condition='$order.state eq "0"'}selected="selected"{/if}>已预订</option>
+                    <option value="1" {if condition='$order.state eq "1"'}selected="selected"{/if}>已成交</option>
+                    <option value="-1" {if condition='$order.state eq "-1"'}selected="selected"{/if}>已违约</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>客户状态：</span>
+                <select name="customer_state">
+                    <option value="">请选择客户状态</option>
+                    <option value="0" {if condition='$order.customer_state eq "0"'}selected="selected"{/if}>未到店</option>
+                    <option value="1" {if condition='$order.customer_state eq "1"'}selected="selected"{/if}>已到店</option>
+                    <option value="2" {if condition='$order.customer_state eq "2"'}selected="selected"{/if}>已预订</option>
+                    <option value="3" {if condition='$order.customer_state eq "3"'}selected="selected"{/if}>已成交</option>
+                    <option value="-1" {if condition='$order.customer_state eq "-1"'}selected="selected"{/if}>战败</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips">销售人员：</span>
+                <span class="lacon">{$order.sale_name}</span>
+            </li>
+            <li>
+                <span class="latips">订单备注：</span>
+                <textarea name="remark" maxlength="200" placeholder="请输入订单备注" class="numtext">{$order.remark}</textarea>
+                <span class="numtips">已输入<b>{$order.remark_len}</b>/200个字</span>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="edit_form_submit">确&nbsp;定</a>
+</div>
+
+</form>
+
+<form style="display: none;" id='up_one_form' enctype="multipart/form-data"><input type="file" name="file" id="up_one_form_in" ralate="" suffix="" msize=""></form>
+
+
+<script>
+    $(function(){
+        //文本域字符提示
+        $('textarea.numtext').keyup(function(){
+            var len = $(this).val().length;
+            $(this).parent().find('.numtips b').html(len);
+        });
+        //单图上传
+        $("body").on('click','.addoneimg',function(){
+            var ralate=$(this).attr('ralate');
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            $('#up_one_form_in').attr('ralate',ralate);
+            $('#up_one_form_in').attr('suffix',suffix);
+            $('#up_one_form_in').attr('msize',msize);
+            $('#up_one_form_in').click();
+        });
+        $("body").on('change','#up_one_form_in',function(){
+            var ralate=$(this).attr('ralate');
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            Dolphin.loading();
+            $.ajaxFileUpload({
+                fileElementId: 'up_one_form_in',    //需要上传的文件域的ID，即<input type="file">的ID。
+                url: "{:url('index/file/upload',['type'=>'image','multiple'=>'0'])}", //后台方法的路径
+                type: 'post',   //当要提交自定义参数时，这个参数要设置成post
+                data:{suffix:suffix,msize:msize},
+                dataType: 'json',   //服务器返回的数据类型。可以为xml,script,json,html。如果不填写，jQuery会自动判断。
+                secureuri: false,   //是否启用安全提交，默认为false。
+                async : true,   //是否是异步
+                success: function(data) {   //提交成功后自动执行的处理函数，参数data就是服务器返回的数据。
+                    Dolphin.loading('hide');
+                    $('#up_one_form_in').attr('ralate','');
+                    $('#up_one_form_in').attr('suffix','');
+                    $('#up_one_form_in').attr('msize','');
+                    if (data.code==200) {
+                        $('.'+ralate).val(data.data);
+                        $('.'+ralate).parent().find('.addimg').remove();
+                        $('.'+ralate).parent().find('.imgone').remove();
+                        var html='<div class="imgone"><a href="javascript:;"><img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除"><img src="'+data.data+'" onclick="window.open(\''+data.data+'\');" title="点击查看大图"></a><span class="editimg addoneimg" title="点击更换" ralate="'+ralate+'" suffix="'+suffix+'" msize="'+msize+'">修改</span></div>';
+                        $('.'+ralate).after(html);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error: function(data, status, e) {  //提交失败自动执行的处理函数。
+                    Dolphin.loading('hide');
+                    $('#up_one_form_in').attr('ralate','');
+                    $('#up_one_form_in').attr('suffix','');
+                    $('#up_one_form_in').attr('msize','');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        //单图删除
+        $("body").on('click','.add_edit .con ul li .imgone a img.delimg',function(){
+            var ralate=$(this).parent().parent().find('.editimg').attr('ralate');
+            var suffix=$(this).parent().parent().find('.editimg').attr('suffix');
+            var msize=$(this).parent().parent().find('.editimg').attr('msize');
+            $(this).parent().parent().parent().find('input').val('');
+            $(this).parent().parent().parent().find('input').after('<div class="addimg addoneimg" title="点击上传" ralate="'+ralate+'" suffix="'+suffix+'" msize="'+msize+'"><img src="__ADMIN_IMG__/add.png"></div>');
+            $(this).parent().parent().remove();
+        });
+        //提交
+        $('#edit_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/order/edit")}',
+                data:$('#edit_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/order/edit",["id"=>$order["id"]])}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

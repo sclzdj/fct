@@ -23,12 +23,14 @@ class User extends Admin
         if($filter['mobile']!==''){
         	$map['mobile']=['like','%'.$filter['mobile'].'%'];
         }
+        $filter_at['register_at_start']=$filter['register_at_start'].' 00:00:00';
+        $filter_at['register_at_end']=$filter['register_at_end'].' 23:59:59';
         if($filter['register_at_start']!=='' && $filter['register_at_end']!==''){
-        	$map['register_at']=['between time',[$filter['register_at_start'],$filter['register_at_end']]];
+        	$map['register_at']=['between time',[$filter_at['register_at_start'],$filter_at['register_at_end']]];
         }elseif($filter['register_at_start']!=='' && $filter['register_at_end']===''){
-        	$map['register_at']=['>= time',$filter['register_at_start']];
+        	$map['register_at']=['>= time',$filter_at['register_at_start']];
         }elseif($filter['register_at_start']==='' && $filter['register_at_end']!==''){
-        	$map['register_at']=['<= time',$filter['register_at_end']];
+        	$map['register_at']=['<= time',$filter_at['register_at_end']];
         }
         $order=input('param.order','register_at desc');
         $order=str_replace('+', ' ', $order);

@@ -1,0 +1,255 @@
+{extend name="layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+
+<div style="background: #fff;">
+    <div style="background: #f9f9f9;height: 50px;line-height: 50px;display: inline-block; font-size: 14px;font-weight: bold;padding: 0 1%;letter-spacing: 2px;">请选择成交客户</div>
+</div>
+
+<div class="filter_search" style="padding-top: 10px;margin-bottom: 0;">
+    <form action="{:url('index/iframe/orderCustomerList')}" name="search_form" target="iframe_small_box_1">
+        <div class="blo"><span class="latips">客户名称：</span><input type="text" name="name" value="{$filter.name}" placeholder="请输入客户名称"></div>
+        <div class="blo"><span class="latips">联系电话：</span><input type="text" name="mobile" value="{$filter.mobile}" placeholder="请输入联系电话"><a href="javascript:;" onclick="search_form.submit();" class="btn btn-minw btn-primary byt" style="margin-left: 30px;">查&nbsp;询</a></div>
+        <input type="hidden" name="order" value="{$order}">
+    </form>
+    <div style="clear: both;"></div>
+</div>
+
+<div class="table-responsive" style="margin-top: 5px;">
+    <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
+        <thead>
+            <tr>
+                <th>
+                    ID 
+                    <span>
+                    {switch name="order"}
+                        {case value="a.id asc"}
+                        {php}$filter['order']='a.id desc';{/php}
+                        <a href="{:url('index/iframe/orderCustomerList',$filter)}" target="iframe_small_box_1" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-up"></i> 
+                        </a>
+                        {/case}
+                        {case value="a.id desc"}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('index/iframe/orderCustomerList',$filter)}" target="iframe_small_box_1" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        {/case}
+                        {case value="a.follow_at asc"}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('index/iframe/orderCustomerList',$filter)}" target="iframe_small_box_1" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="a.follow_at desc"}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('index/iframe/orderCustomerList',$filter)}" target="iframe_small_box_1" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {default /}
+                         <a href="{:url('index/iframe/orderCustomerList',$filter)}" target="iframe_small_box_1" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                    {/switch}
+                     </span>
+                </th>
+                <th>
+                    客户名称  
+                </th>
+                <th>
+                    联系电话  
+                </th>
+                <th>
+                    客户状态  
+                </th>
+                <th>
+                    意向产品  
+                </th>
+                <th>
+                    所属车商  
+                </th>
+                <th>
+                    录入人  
+                </th>
+                <th>
+                    最后跟进时间
+                    <span>
+                    {switch name="order"}
+                        {case value="a.id asc"}
+                        {php}$filter['order']='a.follow_at desc';{/php}
+                        <a href="{:url('index/iframe/orderCustomerList',$filter)}" target="iframe_small_box_1" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="a.id desc"}
+                        {php}$filter['order']='a.follow_at desc';{/php}
+                        <a href="{:url('index/iframe/orderCustomerList',$filter)}" target="iframe_small_box_1" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="a.follow_at asc"}
+                        {php}$filter['order']='a.follow_at desc';{/php}
+                        <a href="{:url('index/iframe/orderCustomerList',$filter)}" target="iframe_small_box_1" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-up"></i> 
+                        </a>
+                        {/case}
+                        {case value="a.follow_at desc"}
+                        {php}$filter['order']='a.follow_at asc';{/php}
+                        <a href="{:url('index/iframe/orderCustomerList',$filter)}" target="iframe_small_box_1" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-down"></i> 
+                        </a>
+                        {/case}
+                        {default /}
+                    {/switch}
+                     </span>
+                </th>
+                <th style="text-align:center;">
+                    选择  
+                </th>
+        </thead>
+        <tbody>
+        {volist name="data" id="vo"}
+        <tr>
+            <td>
+                {$vo.id}                                    
+            </td>
+            <td>
+                {$vo.name}                                    
+            </td>
+            <td>
+                {$vo.mobile}                                    
+            </td>
+            <td>
+                {switch name="vo.state"}
+                    {case value="0"}
+                    未到店
+                    {/case}
+                    {case value="1"}
+                    已到店
+                    {/case}
+                    {case value="2"}
+                    已预订
+                    {/case}
+                    {case value="3"}
+                    已成交
+                    {/case}
+                    {case value="-1"}
+                    战败
+                    {/case}
+                    {default /}
+                {/switch}                                         
+            </td>
+            <td>
+                {$vo.car_source}                             
+            </td>
+            <td>
+                {$vo.shop_name}                                 
+            </td>
+            <td>
+                {$vo.admin_name}                                 
+            </td>
+            <td>
+                {$vo.follow_at_str}                                    
+            </td>
+            <td align="center">
+                <input class="select_customer select_option" type="checkbox" value="{$vo.id}" carmod='{$vo.name}'>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+<div style="margin:20px 5px;margin-bottom: 30px;">
+    {notempty name="page"}
+    <div style="text-align: left;height: 45px;float: left;">
+       {$page}  
+    </div>
+    {/notempty}
+    <div style="height: 45px;text-align: right;float: right;">
+        <input type="hidden" name="customer_id" value="">
+        <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="close_frame" style="margin-top: 11px;background: #aaa;border-color:#888;">关&nbsp;闭</a>
+        <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="select_submit" style="margin-top: 11px;">确&nbsp;定</a>
+    </div>
+</div>
+<div style=""></div>
+
+<script type="text/javascript">
+$(function(){
+    var iframe_big_box_1=$(window.parent.document).find('#iframe_big_box_1');
+    var container=$(".content");
+    iframe_big_box_1.find("#iframe_small_box_1").css({
+        'height':(container.height()+100)+'px',
+    });
+    var h = $(window.parent.document).find('body').height();
+    var small_h=iframe_big_box_1.find('#iframe_small_box_1').height();
+    iframe_big_box_1.find("#iframe_small_box_1").css({
+        'marginTop':((h-small_h)/2)+'px',
+    });
+    if(iframe_big_box_1.attr('isshow')=='1'){
+        iframe_big_box_1.show();
+    }else{
+        iframe_big_box_1.hide();
+    }
+    var customer_input=$(window.parent.document).find('input[name="customer_id"]');
+    if(!isNaN(customer_input.val()) && customer_input.val()>0){
+        $('input[type="checkbox"][value="'+customer_input.val()+'"]').prop('checked',true);
+    }
+    //确定
+    $('#select_submit').click(function(){
+        iframe_big_box_1.hide();
+        var customer_input=$(window.parent.document).find('input[name="customer_id"]');
+        var checked=$('.select_customer:checked');
+        if(isNaN(checked.val())){
+            customer_input.val('');
+            customer_input.parent().find('span.lacon').remove();
+            $(window.parent.document).find('#select_customer').html('+选择');
+        }else{
+            customer_input.val(checked.val());
+            customer_input.parent().find('span.lacon').remove();
+            customer_input.after('<span class="lacon" style="margin-right: 10px;">'+checked.attr('carmod')+'</span>');
+            $(window.parent.document).find('#select_customer').html('+重选');
+        }
+        iframe_big_box_1.attr('isshow','0');
+    });
+    //关闭
+    $('#close_frame').click(function(){
+        iframe_big_box_1.hide();
+        var customer_input=$(window.parent.document).find('input[name="customer_id"]');
+        if(customer_input.val()!=''){
+            $('.select_customer').removeAttr('checked');
+            $('input[type="checkbox"][value="'+customer_input.val()+'"]').prop('checked',true);
+        }else{
+            $('.select_customer').removeAttr('checked');
+        }
+        iframe_big_box_1.attr('isshow','0')
+    });
+    //多选框只能单选
+    $('.select_customer').each(function(){
+        $(this).change(function(){
+            if($(this).prop('checked')){
+                $('.select_customer').removeAttr('checked');
+                $(this).prop('checked','checked');
+                $('input[name="customer_id"]').val($(this).val());
+            }else{
+                $('input[name="customer_id"]').val('');
+            }
+        });
+    });
+});
+</script>
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

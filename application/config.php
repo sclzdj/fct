@@ -290,6 +290,12 @@ return [
             'merchant'=>'商户管理',
             'carsource'=>'车源管理',
             'customer'=>'客户管理',
+            'order'=>'订单管理',
+            'sellcar'=>'个人卖车信息管理',
+            'evaluate'=>'估价管理',
+            'feedback'=>'反馈管理',
+            'lendingrate'=>'分期管理',
+            'banner'=>'营销管理',
         ],
     ],
     //aliocc

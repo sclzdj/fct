@@ -1,0 +1,272 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__ADMIN_JS__/ajaxfileupload.js"></script>
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<form id="add_form">
+
+<div class="add_edit">
+    <div class="title">订单基本信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="latips"><span class="required">*</span>成交客户：</span>
+                <input type="hidden" name="customer_id" value="">
+                <button id="select_customer">+选择</button>
+            </li>
+
+            <li>
+                <span class="latips"><span class="required">*</span>成交车源：</span>
+                <input type="hidden" name="car_source_id" value="">
+                <input type="hidden" name="defind_model" value="">
+                <button id="select_source">+选择</button>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>订单总额：</span>
+                <input type="text" name="amount" value="" placeholder="请输入订单总额" style="width: 20%;"><span class="zui">万元</span>
+                <span class="bztips">只允许输入数字与符号.  格式：XXX.XX，两位小数</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>定金金额：</span>
+                <input type="text" name="earnest" value="" placeholder="请输入定金金额" style="width: 20%;"><span class="zui">万元</span>
+                <span class="bztips">只允许输入数字与符号.  格式：XXX.XX，两位小数</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>付款时间：</span>
+                <input type="text" name="paid_at" value="" placeholder="请选择日期" style="width: 11%;min-width: 95px;" class="timepick">
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>付款方式：</span>
+                <select name="paid_type">
+                    <option value="">请选择付款方式</option>
+                    <option value="全款">全款</option>
+                    <option value="按揭">按揭</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips">上传合同扫描件：</span>
+                <input type="hidden" name="contract_img" value="" class="contract_img">
+                <div class="addimg addoneimg" title="点击上传" ralate="contract_img" suffix='png,jpg,jpeg' msize='31457280'><img src="__ADMIN_IMG__/add.png"></div>
+                <span class="bztips">支持扩展名：png,jpg,jpeg，大小不超过30M</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>订单状态：</span>
+                <select name="state">
+                    <option value="">请选择订单状态</option>
+                    <option value="0">已预订</option>
+                    <option value="1">已成交</option>
+                    <option value="-1">已违约</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>客户状态：</span>
+                <select name="customer_state">
+                    <option value="">请选择客户状态</option>
+                    <option value="0">未到店</option>
+                    <option value="1">已到店</option>
+                    <option value="2">已预订</option>
+                    <option value="3">已成交</option>
+                    <option value="-1">战败</option>
+                </select>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>销售人员：</span>
+                <select name="sale_id">
+                    <option value="">请选择销售人员</option>
+                    {volist name="admin_user" id="vo"}
+                    <option value="{$vo.id}">{$vo.username}</option>
+                    {/volist}
+                </select>
+            </li>
+            <li>
+                <span class="latips">订单备注：</span>
+                <textarea name="remark" maxlength="200" placeholder="请输入订单备注" class="numtext"></textarea>
+                <span class="numtips">已输入<b>0</b>/200个字</span>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="add_form_submit">确&nbsp;定</a>
+</div>
+
+</form>
+
+<form style="display: none;" id='up_one_form' enctype="multipart/form-data"><input type="file" name="file" id="up_one_form_in" ralate="" suffix="" msize=""></form>
+
+<style type="text/css">
+    #iframe_big_box,#iframe_big_box_1{display:block;justify-content: center;align-items: center;position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background-color: rgba(0,0,0,0.4); z-index: 9999;visibility:hidden;}
+    #iframe_small_box,#iframe_small_box_1{border: 1px solid #f2f2f2;background-color: #f2f2f2;margin:auto;max-height: 90%;width: 90%; display: block;max-width: 1200px;padding-bottom: 30px;}
+</style>
+<div id="iframe_big_box" isshow='0'>
+    <iframe src="{:url('index/iframe/ordercarsourcelist')}" frameborder="0" id="iframe_small_box" name="iframe_small_box"></iframe>
+</div>
+<div id="iframe_big_box_1" isshow='0'>
+    <iframe src="{:url('index/iframe/ordercustomerlist')}" frameborder="0" id="iframe_small_box_1" name="iframe_small_box_1"></iframe>
+</div>
+
+<script>
+    $(function(){
+        //选择客户
+        $('#select_customer').click(function(){
+            if (!!window.ActiveXObject || "ActiveXObject" in window){
+                $(window.frames["iframe_small_box_1"].document).find(".filter_search a.byt").click();
+            }
+            $('#iframe_big_box_1').attr('isshow','1');
+            $('#iframe_big_box_1').show();
+            return false;
+        });
+        //客户框架加载
+        $('#iframe_small_box_1').load(function(){
+            var container=$(window.frames["iframe_small_box_1"].document).find(".content");
+            $("#iframe_small_box_1").css({
+                'height':(container.height()+145)+'px',
+            });
+            var h = document.documentElement.clientHeight || document.body.clientHeight;
+            var small_h=$('#iframe_small_box_1').height();
+            $("#iframe_small_box_1").css({
+                'marginTop':((h-small_h)/2)+'px',
+            });
+            if($('#iframe_big_box_1').attr('isshow')=='1'){
+                $('#iframe_big_box_1').show();
+            }else{
+                $('#iframe_big_box_1').hide();
+                $('#iframe_big_box_1').css('visibility','visible');
+            }
+        });
+        //选择车源
+        $('#select_source').click(function(){
+            if (!!window.ActiveXObject || "ActiveXObject" in window){
+                $(window.frames["iframe_small_box"].document).find(".filter_search a.byt").click();
+            }
+            $('#iframe_big_box').attr('isshow','1');
+            $('#iframe_big_box').show();
+            return false;
+        });
+        //车源框架加载
+        $('#iframe_small_box').load(function(){
+            var container=$(window.frames["iframe_small_box"].document).find(".content");
+            $("#iframe_small_box").css({
+                'height':(container.height()+145)+'px',
+            });
+            var h = document.documentElement.clientHeight || document.body.clientHeight;
+            var small_h=$('#iframe_small_box').height();
+            $("#iframe_small_box").css({
+                'marginTop':((h-small_h)/2)+'px',
+            });
+            if($('#iframe_big_box').attr('isshow')=='1'){
+                $('#iframe_big_box').show();
+            }else{
+                $('#iframe_big_box').hide();
+                $('#iframe_big_box').css('visibility','visible');
+            }
+        });
+        //文本域字符提示
+        $('textarea.numtext').keyup(function(){
+            var len = $(this).val().length;
+            $(this).parent().find('.numtips b').html(len);
+        });
+        //单图上传
+        $("body").on('click','.addoneimg',function(){
+            var ralate=$(this).attr('ralate');
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            $('#up_one_form_in').attr('ralate',ralate);
+            $('#up_one_form_in').attr('suffix',suffix);
+            $('#up_one_form_in').attr('msize',msize);
+            $('#up_one_form_in').click();
+        });
+        $("body").on('change','#up_one_form_in',function(){
+            var ralate=$(this).attr('ralate');
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            Dolphin.loading();
+            $.ajaxFileUpload({
+                fileElementId: 'up_one_form_in',    //需要上传的文件域的ID，即<input type="file">的ID。
+                url: "{:url('index/file/upload',['type'=>'image','multiple'=>'0'])}", //后台方法的路径
+                type: 'post',   //当要提交自定义参数时，这个参数要设置成post
+                data:{suffix:suffix,msize:msize},
+                dataType: 'json',   //服务器返回的数据类型。可以为xml,script,json,html。如果不填写，jQuery会自动判断。
+                secureuri: false,   //是否启用安全提交，默认为false。
+                async : true,   //是否是异步
+                success: function(data) {   //提交成功后自动执行的处理函数，参数data就是服务器返回的数据。
+                    Dolphin.loading('hide');
+                    $('#up_one_form_in').attr('ralate','');
+                    $('#up_one_form_in').attr('suffix','');
+                    $('#up_one_form_in').attr('msize','');
+                    if (data.code==200) {
+                        $('.'+ralate).val(data.data);
+                        $('.'+ralate).parent().find('.addimg').remove();
+                        $('.'+ralate).parent().find('.imgone').remove();
+                        var html='<div class="imgone"><a href="javascript:;"><img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除"><img src="'+data.data+'" onclick="window.open(\''+data.data+'\');" title="点击查看大图"></a><span class="editimg addoneimg" title="点击更换" ralate="'+ralate+'" suffix="'+suffix+'" msize="'+msize+'">修改</span></div>';
+                        $('.'+ralate).after(html);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error: function(data, status, e) {  //提交失败自动执行的处理函数。
+                    Dolphin.loading('hide');
+                    $('#up_one_form_in').attr('ralate','');
+                    $('#up_one_form_in').attr('suffix','');
+                    $('#up_one_form_in').attr('msize','');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        //单图删除
+        $("body").on('click','.add_edit .con ul li .imgone a img.delimg',function(){
+            var ralate=$(this).parent().parent().find('.editimg').attr('ralate');
+            var suffix=$(this).parent().parent().find('.editimg').attr('suffix');
+            var msize=$(this).parent().parent().find('.editimg').attr('msize');
+            $(this).parent().parent().parent().find('input').val('');
+            $(this).parent().parent().parent().find('input').after('<div class="addimg addoneimg" title="点击上传" ralate="'+ralate+'" suffix="'+suffix+'" msize="'+msize+'"><img src="__ADMIN_IMG__/add.png"></div>');
+            $(this).parent().parent().remove();
+        });
+        //提交
+        $('#add_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/order/add")}',
+                data:$('#add_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/order/add")}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

@@ -1,0 +1,119 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<style>
+.table tr td input.input_rate{padding:0 5px;width:100px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;text-align: center;}
+.table tr td span.zui{display:inline-block;font-size: 14px;vertical-align:top;color: #666;height: 34px;line-height: 34px;border: 1px solid #ccc;border-left: none;width: 50px;text-align: center;}
+</style>
+
+<div class="table-responsive">
+    <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
+        <thead>
+            <tr>
+                <th style="text-align:center;">
+                    序号  
+                </th>
+                <th style="text-align:center;">
+                    贷款期限  
+                </th>
+                <th style="text-align:center;">
+                    贷款利率  
+                </th>
+                {if condition='ismeunshow("manage/lendingrate/edit")'}
+                <th style="text-align:center;">
+                    操作  
+                </th>    
+                {/if}
+        </thead>
+        <tbody>
+        {volist name="data" id="vo"}
+        <tr>
+            <td style="text-align:center;" class='td_id'>
+                {$vo.id}                                    
+            </td>
+            <td style="text-align:center;">
+                {$vo.term}个月                                  
+            </td>
+            <td style="text-align:center;" class="td_rate">
+                <span class="edit_rate"{if condition='ismeunshow("manage/lendingrate/edit")'} title="点击修改" style="cursor: pointer;" rate="{$vo.rate}"{/if}>{$vo.rate}%</span>                               
+            </td>
+            {if condition='ismeunshow("manage/lendingrate/edit")'}
+            <td style="text-align:center;" class="td_btn">
+                <a href="javascript:;" class="edit_rate" rate="{$vo.rate}">修改</a>
+            </td>
+            {/if}
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+
+
+
+<div style="margin-bottom: 40px;"></div>
+
+<script>
+$(function(){
+    
+    {if condition='ismeunshow("manage/lendingrate/edit")'}
+    //点击修改
+    $("body").on('click','.edit_rate',function(){
+        var rate=$(this).attr('rate');
+        var td_rate=$(this).parent().parent().find('td.td_rate');
+        var td_btn=$(this).parent().parent().find('td.td_btn');
+        td_rate.html('<input type="text" value="'+rate+'" class="input_rate"><span class="zui">%</span>');
+        td_btn.html('<a href="javascript:;" class="submit_rate">确定</a>&nbsp;<a href="javascript:;" class="close_rate" rate="'+rate+'">取消</a>');
+    });
+    //确定修改
+    $("body").on('click','a.submit_rate',function(){
+        var id=$(this).parent().parent().find('td.td_id').html();
+        var rate=$(this).parent().parent().find('td.td_rate input.input_rate').val();
+        var _this=$(this);
+        Dolphin.loading();
+        $.ajax({
+            type:'POST',
+            url:'{:url("manage/lendingrate/edit")}',
+            data:{'id':id,'rate':rate},
+            dataType:'JSON',
+            success:function(data){
+                Dolphin.loading('hide');
+                if (data.code==200) {
+                    Dolphin.notify(data.msg, 'success');
+                    _this.parent().parent().find('td.td_rate').html('<span class="edit_rate" title="点击修改" style="cursor: pointer;" rate="'+rate+'">'+rate+'%</span>');
+                    _this.parent().parent().find('td.td_btn').html('<a href="javascript:;" class="edit_rate" rate="'+rate+'">修改</a>');
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            },
+            error:function(xhr,status,error){
+                Dolphin.loading('hide');
+                Dolphin.notify('服务器错误~', 'danger');
+            }
+        });
+    });
+    //取消修改
+    $("body").on('click','a.close_rate',function(){
+        var rate=$(this).attr('rate');
+        $(this).parent().parent().find('td.td_rate').html('<span class="edit_rate" title="点击修改" style="cursor: pointer;" rate="'+rate+'">'+rate+'%</span>');
+        $(this).parent().parent().find('td.td_btn').html('<a href="javascript:;" class="edit_rate" rate="'+rate+'">修改</a>');
+    });
+    {/if}
+});
+</script>    
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

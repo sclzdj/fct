@@ -79,7 +79,7 @@
             <li>
                 <span class="latips">客户简介：</span>
                 <textarea name="remark" maxlength="200" placeholder="请输入客户简介" class="numtext">{$customer.remark}</textarea>
-                <span class="numtips">已输入<b>0</b>/200个字</span>
+                <span class="numtips">已输入<b>{$customer.remark_len}</b>/200个字</span>
             </li>
         </ul>
         <div style="clear: both;"></div>
@@ -106,18 +106,18 @@
     $(function(){
         //选择车源
         $('#select_source').click(function(){
-            $('#iframe_big_box').attr('isshow','1');
-            $('#iframe_big_box').show();
             if (!!window.ActiveXObject || "ActiveXObject" in window){
                 $(window.frames["iframe_small_box"].document).find(".filter_search a.byt").click();
             }
+            $('#iframe_big_box').attr('isshow','1');
+            $('#iframe_big_box').show();
             return false;
         });
         //框架加载
         $('#iframe_small_box').load(function(){
             var container=$(window.frames["iframe_small_box"].document).find(".content");
             $("#iframe_small_box").css({
-                'height':(container.height()+100)+'px',
+                'height':(container.height()+145)+'px',
             });
             var h = document.documentElement.clientHeight || document.body.clientHeight;
             var small_h=$('#iframe_small_box').height();

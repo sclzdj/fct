@@ -48,12 +48,14 @@ class Carsource extends Admin
         if($filter['merchant_sn']!==''){
             $map['c.sn']=['like','%'.$filter['merchant_sn'].'%'];
         }
+        $filter_at['audit_at_start']=$filter['audit_at_start'].' 00:00:00';
+        $filter_at['audit_at_end']=$filter['audit_at_end'].' 23:59:59';
         if($filter['audit_at_start']!=='' && $filter['audit_at_end']!==''){
-            $map['a.audit_at']=['between time',[$filter['audit_start'],$filter['audit_at_end']]];
+            $map['a.audit_at']=['between time',[$filter_at['audit_at_start'],$filter_at['audit_at_end']]];
         }elseif($filter['audit_at_start']!=='' && $filter['audit_at_end']===''){
-            $map['a.audit_at']=['>= time',$filter['audit_at_start']];
+            $map['a.audit_at']=['>= time',$filter_at['audit_at_start']];
         }elseif($filter['audit_at_start']==='' && $filter['audit_at_end']!==''){
-            $map['a.audit_at']=['<= time',$filter['audit_at_end']];
+            $map['a.audit_at']=['<= time',$filter_at['audit_at_end']];
         }
         if($filter['stock_state']!==''){
             $map['a.stock_state']=$filter['stock_state'];
@@ -65,7 +67,7 @@ class Carsource extends Admin
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources a')->field('a.id,a.sn,a.driving_img,a.brand_id,a.serie_id,a.model_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.sn,a.driving_img,a.brand_id,a.serie_id,a.model_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -74,7 +76,7 @@ class Carsource extends Admin
         foreach ($data as $key => $value) {
             $data[$key]['created_at_str']=date('Y-m-d H:i',$value['created_at']);
             $data[$key]['audit_at_str']=date('Y-m-d H:i',$value['audit_at']);
-            $data[$key]['price']=number_format($value['price'],2,'.','');
+            $data[$key]['price']=number_format($value['price']/100,2,'.','');
             $data[$key]['main_img']=explode(',',$value['imgs'])[0];
             $data[$key]['reservoir_age']=ceil((time()-$value['audit_at'])/(24*60*60));
             $data[$key]['first_plate_year']=explode('-',$value['first_plate_at'])[0];
@@ -416,8 +418,8 @@ class Carsource extends Admin
         //处理数据
         $car_source['created_at_str']=date('Y-m-d H:i',$car_source['created_at']);
         $car_source['audit_at_str']=date('Y-m-d H:i',$car_source['audit_at']);
-        $car_source['price']=number_format($car_source['price'],2,'.','');
-        $car_source['guid_price']=number_format($car_source['guid_price'],2,'.','');
+        $car_source['price']=number_format($car_source['price']/100,2,'.','');
+        $car_source['guid_price']=number_format($car_source['guid_price']/100,2,'.','');
         $car_source['option_ids']=explode(',', $car_source['option_ids']);
         $car_source['install_config_len']=mb_strlen($car_source['install_config'],'utf8');
         $car_source['car_condition_len']=mb_strlen($car_source['car_condition'],'utf8');
@@ -458,8 +460,8 @@ class Carsource extends Admin
             $car_source['region_text']=region_text([$car_source['plate_province_id'],$car_source['plate_city_id']]);
             $car_source['created_at_str']=date('Y-m-d H:i',$car_source['created_at']);
             $car_source['audit_at_str']=date('Y-m-d H:i',$car_source['audit_at']);
-            $car_source['price']=number_format($car_source['price'],2,'.','');
-            $car_source['guid_price']=number_format($car_source['guid_price'],2,'.','');
+            $car_source['price']=number_format($car_source['price']/100,2,'.','');
+            $car_source['guid_price']=number_format($car_source['guid_price']/100,2,'.','');
             $car_source['option']=db('check_report_options')->field('id,name,parent_id')->where('level','in','1,2,3')->where('id','in',$car_source['option_ids'])->order('sort asc')->select();
             $car_source['option']=get_arr_tree($car_source['option']);
             $car_source['admin_name']=(string)db('admin_user')->where('id',$car_source['runner_id'])->value('username');

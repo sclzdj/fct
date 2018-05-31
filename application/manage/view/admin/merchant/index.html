@@ -65,6 +65,10 @@
                         </a>
                         {/case}
                         {default /}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('manage/merchant/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
                     {/switch}
                      </span>
                 </th>
@@ -109,6 +113,10 @@
                         </a>
                         {/case}
                         {default /}
+                        {php}$filter['order']='a.created_at desc';{/php}
+                        <a href="{:url('manage/merchant/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
                     {/switch}
                      </span>
                 </th>

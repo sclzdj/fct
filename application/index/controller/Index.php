@@ -63,8 +63,8 @@ class Index extends Home
     	echo "ok";
     }
     public function test(){
-        echo '<form action="'.url('index/file/upload',['type'=>'image','multiple'=>'0']).'" method="post" enctype="multipart/form-data"><input type="file" name="file"><input type="submit" value="提交"></form>';
-        echo '<form action="'.url('index/file/upload',['type'=>'image','multiple'=>'1']).'" method="post" enctype="multipart/form-data"><input type="file" name="file[]" multiple="multiple"><input type="submit" value="提交"></form>';
+        //echo '<form action="'.url('index/file/upload',['type'=>'image','multiple'=>'0']).'" method="post" enctype="multipart/form-data"><input type="file" name="file"><input type="submit" value="提交"></form>';
+        //echo '<form action="'.url('index/file/upload',['type'=>'image','multiple'=>'1']).'" method="post" enctype="multipart/form-data"><input type="file" name="file[]" multiple="multiple"><input type="submit" value="提交"></form>';
     }
 }
  
