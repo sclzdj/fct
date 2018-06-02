@@ -1,0 +1,159 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+
+<div class="filter_search">
+    <form action="{:url('manage/adminrole/index')}" name="search_form">
+        <div class="blo"><span class="latips">角色名称：</span><input type="text" name="name" value="{$filter.name}" placeholder="请输入角色名称"><a href="javascript:;" onclick="search_form.submit();" class="btn btn-minw btn-primary byt" style="margin-left: 30px;">查&nbsp;询</a></div>
+        
+        <input type="hidden" name="order" value="{$order}">
+    </form>
+    <div class="blo">
+        {if condition='ismeunshow("manage/adminrole/add")'}
+        <a href="{:url('manage/adminrole/add')}" class="btn btn-minw btn-primary rbt">添&nbsp;加</a>
+        {/if}
+    </div>
+    <div style="clear: both;"></div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
+        <thead>
+            <tr>
+                <th>
+                    ID 
+                    <span>
+                    {switch name="order"}
+                        {case value="id asc"}
+                        {php}$filter['order']='id desc';{/php}
+                        <a href="{:url('manage/adminrole/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-up"></i> 
+                        </a>
+                        {/case}
+                        {case value="id desc"}
+                        {php}$filter['order']='id asc';{/php}
+                        <a href="{:url('manage/adminrole/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        {/case}
+                        {case value="create_time asc"}
+                        {php}$filter['order']='id asc';{/php}
+                        <a href="{:url('manage/adminrole/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="create_time desc"}
+                        {php}$filter['order']='id asc';{/php}
+                        <a href="{:url('manage/adminrole/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {default /}
+                        {php}$filter['order']='id asc';{/php}
+                        <a href="{:url('manage/adminrole/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                    {/switch}
+                     </span>
+                </th>
+                <th>
+                    角色名称  
+                </th>
+                <th>
+                    创建时间
+                    <span>
+                    {switch name="order"}
+                        {case value="id asc"}
+                        {php}$filter['order']='create_time desc';{/php}
+                        <a href="{:url('manage/adminrole/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="id desc"}
+                        {php}$filter['order']='create_time desc';{/php}
+                        <a href="{:url('manage/adminrole/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="create_time asc"}
+                        {php}$filter['order']='create_time desc';{/php}
+                        <a href="{:url('manage/adminrole/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-up"></i> 
+                        </a>
+                        {/case}
+                        {case value="create_time desc"}
+                        {php}$filter['order']='create_time asc';{/php}
+                        <a href="{:url('manage/adminrole/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-down"></i> 
+                        </a>
+                        {/case}
+                        {default /}
+                        {php}$filter['order']='create_time desc';{/php}
+                        <a href="{:url('manage/adminrole/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                    {/switch}
+                     </span>
+                </th>
+                <th style="text-align: center;">
+                    操作
+                </th>
+        </thead>
+        <tbody>
+        {volist name="data" id="vo"}
+        <tr>
+            <td>
+                {$vo.id}                                    
+            </td>
+            <td>
+                {$vo.name}                                    
+            </td>
+            <td>
+                {$vo.create_time_str}                                    
+            </td>
+            <td>
+                {if condition='$vo.id eq 1 || $vo.id eq 2 || $vo.id eq 3'}
+                    <div style="color: #ccc;text-align: center;">不可操作</div>  
+                {else/}
+                    {if condition='ismeunshow("manage/adminrole/look")'}
+                        <a href="{:url('manage/adminrole/look',['id'=>$vo['id']])}">详情</a>&nbsp;
+                    {/if}
+                    {if condition='ismeunshow("manage/adminrole/edit")'}
+                        <a href="{:url('manage/adminrole/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
+                    {/if}
+                    {if condition='ismeunshow("manage/adminrole/delete")'}
+                        <a href="{:url('manage/adminrole/delete',['id'=>$vo['id']])}">删除</a>&nbsp;
+                    {/if}
+                {/if}
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+
+
+<div style="text-align: right;margin:20px 5px;height: 45px;">
+    {notempty name="page"}
+        {$page}  
+    {/notempty}
+</div>
+<div style="margin-bottom: 40px;"></div>
+    
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

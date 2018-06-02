@@ -1,0 +1,110 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__ADMIN_JS__/ajaxfileupload.js"></script>
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<form id="edit_form">
+<input type="hidden" name="id" value="{$admin_user.id}">
+
+<div class="add_edit">
+    <div class="title">账号信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="latips"><span class="required">*</span>登录名：</span>
+                <input type="text" name="username" value="{$admin_user.username}" placeholder="请输入登录名">
+                <span class="bztips">允许数字、大小写字母及@符号（邮箱时）的3-20个字符</span>
+            </li>
+            <li>
+                <span class="latips">登录密码：</span>
+                <input type="password" name="password0" value="" placeholder="请输入登录密码，留空则不修改">
+                <span class="bztips">允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成</span>
+            </li>
+            <li>
+                <span class="latips">确认登录密码：</span>
+                <input type="password" name="password" value="" placeholder="请再次输入登录密码">
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>姓名：</span>
+                <input type="text" name="nickname" value="{$admin_user.nickname}" placeholder="请输入姓名">
+                <span class="bztips">只允许输入汉字，限制2-8个字符</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>职位：</span>
+                <input type="text" name="job" value="{$admin_user.job}" placeholder="请输入职位">
+                <span class="bztips">限制4-8个字符</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>手机号：</span>
+                <input type="text" name="mobile" value="{$admin_user.mobile}" placeholder="请输入手机号">
+                <span class="bztips">只允许输入11位数字</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>角色：</span>
+                <select name="role">
+                    <option value="">请选择</option>
+                    {volist name='roles' id='vo'}
+                    <option value="{$vo.id}" {if condition='$admin_user.role=$vo.id'}selected="selected"{/if}>{$vo.name}</option>
+                    {/volist}
+                </select>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="edit_form_submit">确&nbsp;定</a>
+</div>
+
+</form>
+
+
+<script>
+    $(function(){
+        //提交
+        $('#edit_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/adminuser/edit")}',
+                data:$('#edit_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/adminuser/edit",["id"=>$admin_user["id"]])}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

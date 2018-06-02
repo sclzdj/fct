@@ -187,7 +187,7 @@ class Merchant extends Admin
             if($data['corporation_name']===''){
                 return json_return('F','1000','法人必填');
             }
-            if(!preg_match('/^[.]{4,8}$/',$data['corporation_name'])) {
+            if(!preg_match('/^.{4,8}$/',$data['corporation_name'])) {
                 return json_return('F','1000','法人字符限制4-8个字符');
             }
             if($data['mobile']===''){
@@ -211,7 +211,7 @@ class Merchant extends Admin
             if($data['businesser_name']===''){
                 return json_return('F','1000','业务负责人姓名必填');
             }
-            if(!preg_match('/^[.]{4,8}$/',$data['businesser_name'])) {
+            if(!preg_match('/^.{4,8}$/',$data['businesser_name'])) {
                 return json_return('F','1000','业务负责人姓名字符限制4-8个字符');
             }
             if($data['businesser_tel_1']===''){
@@ -248,7 +248,7 @@ class Merchant extends Admin
             if($data['financer_name']===''){
                 return json_return('F','1000','财务负责人姓名必填');
             }
-            if(!preg_match('/^[.]{4,8}$/',$data['financer_name'])) {
+            if(!preg_match('/^.{4,8}$/',$data['financer_name'])) {
                 return json_return('F','1000','财务负责人姓名字符限制4-8个字符');
             }
             if($data['financer_tel_1']===''){
@@ -346,7 +346,6 @@ class Merchant extends Admin
             if ($insert_id>0) {
                 $admin_add=[
                     'username'=>$data['admin_name'],
-                    'nickname'=>$data['admin_name'],
                     'password'=>$data['admin_password'],
                     'role'=>'2',
                     'create_time'=>$now,
@@ -455,7 +454,7 @@ class Merchant extends Admin
             if($data['corporation_name']===''){
                 return json_return('F','1000','法人必填');
             }
-            if(!preg_match('/^[.]{4,8}$/',$data['corporation_name'])) {
+            if(!preg_match('/^.{4,8}$/',$data['corporation_name'])) {
                 return json_return('F','1000','法人字符限制4-8个字符');
             }
             if($data['mobile']===''){
@@ -479,7 +478,7 @@ class Merchant extends Admin
             if($data['businesser_name']===''){
                 return json_return('F','1000','业务负责人姓名必填');
             }
-            if(!preg_match('/^[.]{4,8}$/',$data['businesser_name'])) {
+            if(!preg_match('/^.{4,8}$/',$data['businesser_name'])) {
                 return json_return('F','1000','业务负责人姓名字符限制4-8个字符');
             }
             if($data['businesser_tel_1']===''){
@@ -516,7 +515,7 @@ class Merchant extends Admin
             if($data['financer_name']===''){
                 return json_return('F','1000','财务负责人姓名必填');
             }
-            if(!preg_match('/^[.]{4,8}$/',$data['financer_name'])) {
+            if(!preg_match('/^.{4,8}$/',$data['financer_name'])) {
                 return json_return('F','1000','财务负责人姓名字符限制4-8个字符');
             }
             if($data['financer_tel_1']===''){
@@ -611,7 +610,7 @@ class Merchant extends Admin
             $rt=db('merchants')->where('id',$data['id'])->update($update);
             if ($rt!==false) {
                 $merchant['admin_name']=(string)db('admin_user')->where('id',$merchant['admin_id'])->value('username');
-                $up=['id'=>$merchant['admin_id'],'username'=>$data['admin_name'],'nickname'=>$data['admin_name'],'update_time'=>$now];
+                $up=['id'=>$merchant['admin_id'],'username'=>$data['admin_name'],'update_time'=>$now];
                 if($data['admin_password']!==''){
                     $up['password']=$data['admin_password'];
                 }
