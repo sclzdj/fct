@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2018-05-31 22:36:50
+Date: 2018-06-02 17:36:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -311,7 +311,7 @@ CREATE TABLE `fc_admin_log` (
   KEY `action_ip_ix` (`action_ip`),
   KEY `action_id_ix` (`action_id`),
   KEY `user_id_ix` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='行为日志表';
+) ENGINE=MyISAM AUTO_INCREMENT=115 DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='行为日志表';
 
 -- ----------------------------
 -- Records of fc_admin_log
@@ -390,6 +390,46 @@ INSERT INTO `fc_admin_log` VALUES ('71', '30', '1', '0', 'admin_menu', '287', '�
 INSERT INTO `fc_admin_log` VALUES ('72', '31', '1', '0', 'admin_menu', '287', '超级管理员 编辑了节点：节点ID(287)', '1', '1527771894');
 INSERT INTO `fc_admin_log` VALUES ('73', '8', '1', '0', 'admin_role', '3', '超级管理员 编辑了角色：管理员', '1', '1527776383');
 INSERT INTO `fc_admin_log` VALUES ('74', '8', '1', '0', 'admin_role', '3', '超级管理员 编辑了角色：管理员', '1', '1527777341');
+INSERT INTO `fc_admin_log` VALUES ('75', '30', '1', '0', 'admin_menu', '288', '超级管理员 添加了节点：所属模块(manage),所属节点ID(277),节点标题(今日好车推荐),节点链接(manage/todayrecomment/index)', '1', '1527835272');
+INSERT INTO `fc_admin_log` VALUES ('76', '30', '1', '0', 'admin_menu', '289', '超级管理员 添加了节点：所属模块(manage),所属节点ID(288),节点标题(添加),节点链接(manage/todayrecomment/add)', '1', '1527835295');
+INSERT INTO `fc_admin_log` VALUES ('77', '30', '1', '0', 'admin_menu', '290', '超级管理员 添加了节点：所属模块(manage),所属节点ID(277),节点标题(猜你喜欢),节点链接(manage/guesslike/index)', '1', '1527835332');
+INSERT INTO `fc_admin_log` VALUES ('78', '30', '1', '0', 'admin_menu', '291', '超级管理员 添加了节点：所属模块(manage),所属节点ID(290),节点标题(添加),节点链接(manage/guesslike/add)', '1', '1527835352');
+INSERT INTO `fc_admin_log` VALUES ('79', '31', '1', '0', 'admin_menu', '284', '超级管理员 编辑了节点：节点ID(284)', '1', '1527836265');
+INSERT INTO `fc_admin_log` VALUES ('80', '30', '1', '0', 'admin_menu', '292', '超级管理员 添加了节点：所属模块(manage),所属节点ID(288),节点标题(移除),节点链接(manage/todayrecomment/delete)', '1', '1527838496');
+INSERT INTO `fc_admin_log` VALUES ('81', '30', '1', '0', 'admin_menu', '293', '超级管理员 添加了节点：所属模块(manage),所属节点ID(288),节点标题(移动),节点链接(manage/todayrecomment/move)', '1', '1527838514');
+INSERT INTO `fc_admin_log` VALUES ('82', '30', '1', '0', 'admin_menu', '294', '超级管理员 添加了节点：所属模块(manage),所属节点ID(290),节点标题(移除),节点链接(manage/guesslike/delete)', '1', '1527841540');
+INSERT INTO `fc_admin_log` VALUES ('83', '30', '1', '0', 'admin_menu', '295', '超级管理员 添加了节点：所属模块(manage),所属节点ID(290),节点标题(移动),节点链接(manage/guesslike/move)', '1', '1527841573');
+INSERT INTO `fc_admin_log` VALUES ('84', '30', '1', '0', 'admin_menu', '296', '超级管理员 添加了节点：所属模块(manage),所属节点ID(277),节点标题(文章列表),节点链接(manage/article/index)', '1', '1527842565');
+INSERT INTO `fc_admin_log` VALUES ('85', '30', '1', '0', 'admin_menu', '297', '超级管理员 添加了节点：所属模块(manage),所属节点ID(296),节点标题(添加),节点链接(manage/acticle/add)', '1', '1527842641');
+INSERT INTO `fc_admin_log` VALUES ('86', '30', '1', '0', 'admin_menu', '298', '超级管理员 添加了节点：所属模块(manage),所属节点ID(296),节点标题(修改),节点链接(manage/acticle/edit)', '1', '1527842677');
+INSERT INTO `fc_admin_log` VALUES ('87', '31', '1', '0', 'admin_menu', '297', '超级管理员 编辑了节点：节点ID(297)', '1', '1527842692');
+INSERT INTO `fc_admin_log` VALUES ('88', '31', '1', '0', 'admin_menu', '298', '超级管理员 编辑了节点：节点ID(298)', '1', '1527842703');
+INSERT INTO `fc_admin_log` VALUES ('89', '30', '1', '0', 'admin_menu', '299', '超级管理员 添加了节点：所属模块(manage),所属节点ID(296),节点标题(详情),节点链接(manage/article/look)', '1', '1527842732');
+INSERT INTO `fc_admin_log` VALUES ('90', '30', '1', '0', 'admin_menu', '300', '超级管理员 添加了节点：所属模块(manage),所属节点ID(296),节点标题(上架),节点链接(manage/article/group)', '1', '1527842751');
+INSERT INTO `fc_admin_log` VALUES ('91', '30', '1', '0', 'admin_menu', '301', '超级管理员 添加了节点：所属模块(manage),所属节点ID(296),节点标题(下架),节点链接(manage/article/lower)', '1', '1527842779');
+INSERT INTO `fc_admin_log` VALUES ('92', '31', '1', '0', 'admin_menu', '300', '超级管理员 编辑了节点：节点ID(300)', '1', '1527842791');
+INSERT INTO `fc_admin_log` VALUES ('93', '8', '1', '0', 'admin_role', '3', '超级管理员 编辑了角色：管理员', '1', '1527858584');
+INSERT INTO `fc_admin_log` VALUES ('94', '30', '1', '0', 'admin_menu', '302', '超级管理员 添加了节点：所属模块(manage),所属节点ID(236),节点标题(系统管理),节点链接()', '1', '1527924177');
+INSERT INTO `fc_admin_log` VALUES ('95', '30', '1', '0', 'admin_menu', '303', '超级管理员 添加了节点：所属模块(manage),所属节点ID(302),节点标题(日志列表),节点链接(manage/log/index)', '1', '1527924244');
+INSERT INTO `fc_admin_log` VALUES ('96', '30', '1', '0', 'admin_menu', '304', '超级管理员 添加了节点：所属模块(manage),所属节点ID(302),节点标题(个人设置),节点链接(manage/index/ueset)', '1', '1527924365');
+INSERT INTO `fc_admin_log` VALUES ('97', '31', '1', '0', 'admin_menu', '239', '超级管理员 编辑了节点：节点ID(239)', '1', '1527924394');
+INSERT INTO `fc_admin_log` VALUES ('98', '31', '1', '0', 'admin_menu', '304', '超级管理员 编辑了节点：节点ID(304)', '1', '1527924564');
+INSERT INTO `fc_admin_log` VALUES ('99', '31', '1', '0', 'admin_menu', '304', '超级管理员 编辑了节点：节点ID(304)', '1', '1527926277');
+INSERT INTO `fc_admin_log` VALUES ('100', '8', '1', '0', 'admin_role', '3', '超级管理员 编辑了角色：管理员', '1', '1527928605');
+INSERT INTO `fc_admin_log` VALUES ('101', '30', '1', '0', 'admin_menu', '305', '超级管理员 添加了节点：所属模块(manage),所属节点ID(302),节点标题(角色列表),节点链接(manage/adminrole/index)', '1', '1527931503');
+INSERT INTO `fc_admin_log` VALUES ('102', '30', '1', '0', 'admin_menu', '306', '超级管理员 添加了节点：所属模块(manage),所属节点ID(303),节点标题(账号列表),节点链接(manage/adminuser/index)', '1', '1527931536');
+INSERT INTO `fc_admin_log` VALUES ('103', '31', '1', '0', 'admin_menu', '305', '超级管理员 编辑了节点：节点ID(305)', '1', '1527931555');
+INSERT INTO `fc_admin_log` VALUES ('104', '30', '1', '0', 'admin_menu', '307', '超级管理员 添加了节点：所属模块(manage),所属节点ID(306),节点标题(添加),节点链接(manage/adminuser/add)', '1', '1527931613');
+INSERT INTO `fc_admin_log` VALUES ('105', '30', '1', '0', 'admin_menu', '308', '超级管理员 添加了节点：所属模块(manage),所属节点ID(306),节点标题(修改),节点链接(manage/adminuser/edit)', '1', '1527931632');
+INSERT INTO `fc_admin_log` VALUES ('106', '30', '1', '0', 'admin_menu', '309', '超级管理员 添加了节点：所属模块(manage),所属节点ID(306),节点标题(删除),节点链接(manage/adminuser/delete)', '1', '1527931647');
+INSERT INTO `fc_admin_log` VALUES ('107', '30', '1', '0', 'admin_menu', '310', '超级管理员 添加了节点：所属模块(manage),所属节点ID(306),节点标题(开通),节点链接(manage/adminuser/enable)', '1', '1527931702');
+INSERT INTO `fc_admin_log` VALUES ('108', '30', '1', '0', 'admin_menu', '311', '超级管理员 添加了节点：所属模块(manage),所属节点ID(306),节点标题(冻结),节点链接(manage/adminuser/disable)', '1', '1527931719');
+INSERT INTO `fc_admin_log` VALUES ('109', '30', '1', '0', 'admin_menu', '312', '超级管理员 添加了节点：所属模块(manage),所属节点ID(305),节点标题(添加),节点链接(manage/adminrole/add)', '1', '1527931749');
+INSERT INTO `fc_admin_log` VALUES ('110', '30', '1', '0', 'admin_menu', '313', '超级管理员 添加了节点：所属模块(manage),所属节点ID(305),节点标题(修改),节点链接(manage/adminrole/edit)', '1', '1527931767');
+INSERT INTO `fc_admin_log` VALUES ('111', '30', '1', '0', 'admin_menu', '314', '超级管理员 添加了节点：所属模块(manage),所属节点ID(305),节点标题(详情),节点链接(manage/adminrole/look)', '1', '1527931805');
+INSERT INTO `fc_admin_log` VALUES ('112', '30', '1', '0', 'admin_menu', '315', '超级管理员 添加了节点：所属模块(manage),所属节点ID(305),节点标题(删除),节点链接(manage/adminrole/delete)', '1', '1527931822');
+INSERT INTO `fc_admin_log` VALUES ('113', '8', '1', '0', 'admin_role', '2', '超级管理员 编辑了角色：商户', '1', '1527931983');
+INSERT INTO `fc_admin_log` VALUES ('114', '8', '1', '0', 'admin_role', '2', '超级管理员 编辑了角色：商户', '1', '1527931993');
 
 -- ----------------------------
 -- Table structure for fc_admin_menu
@@ -412,7 +452,7 @@ CREATE TABLE `fc_admin_menu` (
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   `params` varchar(255) NOT NULL DEFAULT '' COMMENT '参数',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=288 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=MyISAM AUTO_INCREMENT=316 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
 -- Records of fc_admin_menu
@@ -532,57 +572,85 @@ INSERT INTO `fc_admin_menu` VALUES ('233', '225', 'admin', '更新图标', '', '
 INSERT INTO `fc_admin_menu` VALUES ('234', '20', 'user', '快速编辑', '', 'module_admin', 'user/index/quickedit', '_self', '0', '1526028258', '1526028258', '100', '0', '1', '');
 INSERT INTO `fc_admin_menu` VALUES ('235', '67', 'user', '快速编辑', '', 'module_admin', 'user/role/quickedit', '_self', '0', '1526028282', '1526028282', '100', '0', '1', '');
 INSERT INTO `fc_admin_menu` VALUES ('236', '0', 'manage', '好车', 'fa fa-fw fa-cab', 'module_admin', 'manage/index/index', '_self', '0', '1526974986', '1526974986', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('237', '236', 'manage', '用户管理', 'fa fa-fw fa-user', 'module_admin', '', '_self', '0', '1526975057', '1527332689', '2', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('238', '237', 'manage', '用户列表', 'fa fa-fw fa-list', 'module_admin', 'manage/user/index', '_self', '0', '1526975105', '1527332689', '1', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('239', '236', 'manage', '管理首页', 'fa fa-fw fa-home', 'module_admin', 'manage/index/index', '_self', '0', '1526975297', '1527332689', '1', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('240', '238', 'manage', '导出', '', 'module_admin', 'manage/user/export', '_self', '0', '1527000768', '1527332689', '1', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('241', '236', 'manage', '商户管理', 'fa fa-fw fa-user-secret', 'module_admin', '', '_self', '0', '1527068680', '1527332689', '3', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('242', '241', 'manage', '商户开立', 'fa fa-fw fa-list', 'module_admin', 'manage/merchant/add', '_self', '0', '1527068744', '1527332689', '2', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('243', '241', 'manage', '商户列表', 'fa fa-fw fa-list', 'module_admin', 'manage/merchant/index', '_self', '0', '1527068773', '1527332689', '1', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('244', '243', 'manage', '导出', '', 'module_admin', 'manage/merchant/export', '_self', '0', '1527068802', '1527332689', '1', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('245', '243', 'manage', '开通', '', 'module_admin', 'manage/merchant/enable', '_self', '0', '1527086514', '1527332689', '2', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('246', '243', 'manage', '冻结', '', 'module_admin', 'manage/merchant/disable', '_self', '0', '1527086562', '1527332689', '3', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('247', '243', 'manage', '修改', '', 'module_admin', 'manage/merchant/edit', '_self', '0', '1527087052', '1527332689', '4', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('248', '243', 'manage', '详情', '', 'module_admin', 'manage/merchant/look', '_self', '0', '1527087066', '1527332689', '5', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('249', '236', 'manage', '车源管理', 'fa fa-fw fa-car', 'module_admin', '', '_self', '0', '1527239468', '1527332689', '4', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('250', '249', 'manage', '发布车源', 'fa fa-fw fa-list', 'module_admin', 'manage/carsource/add', '_self', '0', '1527239493', '1527332689', '2', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('251', '249', 'manage', '车源列表', 'fa fa-fw fa-list', 'module_admin', 'manage/carsource/index', '_self', '0', '1527332683', '1527332689', '1', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('252', '251', 'manage', '修改', '', 'module_admin', 'manage/carsource/edit', '_self', '0', '1527332711', '1527332711', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('253', '251', 'manage', '详情', '', 'module_admin', 'manage/carsource/look', '_self', '0', '1527338850', '1527338850', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('254', '251', 'manage', '审核通过', '', 'module_admin', 'manage/carsource/enable', '_self', '0', '1527356177', '1527356177', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('255', '251', 'manage', '拒绝', '', 'module_admin', 'manage/carsource/disable', '_self', '0', '1527356199', '1527356199', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('256', '251', 'manage', '上架', '', 'module_admin', 'manage/carsource/upstock', '_self', '0', '1527356219', '1527356219', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('257', '251', 'manage', '下架', '', 'module_admin', 'manage/carsource/downstock', '_self', '0', '1527356236', '1527356236', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('258', '251', 'manage', '退库', '', 'module_admin', 'manage/carsource/outstock', '_self', '0', '1527356260', '1527356260', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('259', '251', 'manage', '打印价签', '', 'module_admin', 'manage/carsource/printig', '_self', '0', '1527356307', '1527356307', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('260', '236', 'manage', '客户管理', 'fa fa-fw fa-user-o', 'module_admin', '', '_self', '0', '1527492673', '1527492673', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('261', '260', 'manage', '客户列表', 'fa fa-fw fa-list', 'module_admin', 'manage/customer/index', '_self', '0', '1527492743', '1527492743', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('262', '260', 'manage', '新建客户', 'fa fa-fw fa-list', 'module_admin', 'manage/customer/add', '_self', '0', '1527492766', '1527492766', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('263', '261', 'manage', '修改', '', 'module_admin', 'manage/customer/edit', '_self', '0', '1527520545', '1527520545', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('264', '261', 'manage', '详情', '', 'module_admin', 'manage/customer/look', '_self', '0', '1527522909', '1527522909', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('265', '261', 'manage', '转交', '', 'module_admin', 'manage/customer/deliver', '_self', '0', '1527526696', '1527526696', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('266', '261', 'manage', '导出', '', 'module_admin', 'manage/customer/export', '_self', '0', '1527526735', '1527526735', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('267', '236', 'manage', '订单管理', 'glyphicon glyphicon-list-alt', 'module_admin', '', '_self', '0', '1527596806', '1527596806', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('268', '267', 'manage', '订单列表', 'fa fa-fw fa-list', 'module_admin', 'manage/order/index', '_self', '0', '1527596838', '1527596838', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('269', '267', 'manage', '创建订单', 'fa fa-fw fa-list', 'module_admin', 'manage/order/add', '_self', '0', '1527596864', '1527596864', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('270', '268', 'manage', '修改', '', 'module_admin', 'manage/order/edit', '_self', '0', '1527596893', '1527596893', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('271', '268', 'manage', '详情', '', 'module_admin', 'manage/order/look', '_self', '0', '1527596910', '1527596910', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('272', '236', 'manage', '个人卖车信息管理', 'fa fa-fw fa-sellsy', 'module_admin', '', '_self', '0', '1527750395', '1527750395', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('273', '272', 'manage', '个人卖车信息列表', 'fa fa-fw fa-list', 'module_admin', 'manage/sellcar/index', '_self', '0', '1527750448', '1527750448', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('274', '273', 'manage', '详情', '', 'module_admin', 'manage/sellcar/look', '_self', '0', '1527750493', '1527750493', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('275', '236', 'manage', '估价管理', 'fa fa-fw fa-money', 'module_admin', '', '_self', '0', '1527750621', '1527750621', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('276', '275', 'manage', '估价列表', 'fa fa-fw fa-list', 'module_admin', 'manage/evaluate/index', '_self', '0', '1527750704', '1527750704', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('277', '236', 'manage', '营销管理', 'fa fa-fw fa-stack-overflow', 'module_admin', '', '_self', '0', '1527750885', '1527750885', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('278', '236', 'manage', '反馈管理', 'fa fa-fw fa-commenting-o', 'module_admin', '', '_self', '0', '1527750946', '1527750946', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('279', '278', 'manage', '反馈列表', 'fa fa-fw fa-list', 'module_admin', 'manage/feedback/index', '_self', '0', '1527750973', '1527750973', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('280', '236', 'manage', '分期管理', 'fa fa-fw fa-ioxhost', 'module_admin', '', '_self', '0', '1527751076', '1527751076', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('281', '280', 'manage', '贷款利率', 'fa fa-fw fa-list', 'module_admin', 'manage/lendingrate/index', '_self', '0', '1527751144', '1527758669', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('282', '281', 'manage', '修改', '', 'module_admin', 'manage/lendingrate/edit', '_self', '0', '1527751173', '1527758679', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('283', '277', 'manage', 'Banner列表', 'fa fa-fw fa-list', 'module_admin', 'manage/banner/index', '_self', '0', '1527770514', '1527770514', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('284', '277', 'manage', '添加Banner', 'fa fa-fw fa-list', 'module_admin', 'manage/banner/add', '_self', '0', '1527770550', '1527770550', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('285', '283', 'manage', '修改', '', 'module_admin', 'manage/banner/edit', '_self', '0', '1527770595', '1527770595', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('286', '283', 'manage', '删除', '', 'module_admin', 'manage/banner/delete', '_self', '0', '1527770619', '1527770619', '100', '0', '1', '');
-INSERT INTO `fc_admin_menu` VALUES ('287', '283', 'manage', '移动', '', 'module_admin', 'manage/banner/move', '_self', '0', '1527771879', '1527771894', '100', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('237', '236', 'manage', '用户管理', 'fa fa-fw fa-user', 'module_admin', '', '_self', '0', '1526975057', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('238', '237', 'manage', '用户列表', 'fa fa-fw fa-list', 'module_admin', 'manage/user/index', '_self', '0', '1526975105', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('239', '236', 'manage', '首页', 'fa fa-fw fa-home', 'module_admin', 'manage/index/index', '_self', '0', '1526975297', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('240', '238', 'manage', '导出', '', 'module_admin', 'manage/user/export', '_self', '0', '1527000768', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('241', '236', 'manage', '商户管理', 'fa fa-fw fa-user-secret', 'module_admin', '', '_self', '0', '1527068680', '1527931569', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('242', '241', 'manage', '商户开立', 'fa fa-fw fa-list', 'module_admin', 'manage/merchant/add', '_self', '0', '1527068744', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('243', '241', 'manage', '商户列表', 'fa fa-fw fa-list', 'module_admin', 'manage/merchant/index', '_self', '0', '1527068773', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('244', '243', 'manage', '导出', '', 'module_admin', 'manage/merchant/export', '_self', '0', '1527068802', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('245', '243', 'manage', '开通', '', 'module_admin', 'manage/merchant/enable', '_self', '0', '1527086514', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('246', '243', 'manage', '冻结', '', 'module_admin', 'manage/merchant/disable', '_self', '0', '1527086562', '1527931569', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('247', '243', 'manage', '修改', '', 'module_admin', 'manage/merchant/edit', '_self', '0', '1527087052', '1527931569', '4', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('248', '243', 'manage', '详情', '', 'module_admin', 'manage/merchant/look', '_self', '0', '1527087066', '1527931569', '5', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('249', '236', 'manage', '车源管理', 'fa fa-fw fa-car', 'module_admin', '', '_self', '0', '1527239468', '1527931569', '4', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('250', '249', 'manage', '发布车源', 'fa fa-fw fa-list', 'module_admin', 'manage/carsource/add', '_self', '0', '1527239493', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('251', '249', 'manage', '车源列表', 'fa fa-fw fa-list', 'module_admin', 'manage/carsource/index', '_self', '0', '1527332683', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('252', '251', 'manage', '修改', '', 'module_admin', 'manage/carsource/edit', '_self', '0', '1527332711', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('253', '251', 'manage', '详情', '', 'module_admin', 'manage/carsource/look', '_self', '0', '1527338850', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('254', '251', 'manage', '审核通过', '', 'module_admin', 'manage/carsource/enable', '_self', '0', '1527356177', '1527931569', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('255', '251', 'manage', '拒绝', '', 'module_admin', 'manage/carsource/disable', '_self', '0', '1527356199', '1527931569', '4', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('256', '251', 'manage', '上架', '', 'module_admin', 'manage/carsource/upstock', '_self', '0', '1527356219', '1527931569', '5', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('257', '251', 'manage', '下架', '', 'module_admin', 'manage/carsource/downstock', '_self', '0', '1527356236', '1527931569', '6', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('258', '251', 'manage', '退库', '', 'module_admin', 'manage/carsource/outstock', '_self', '0', '1527356260', '1527931569', '7', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('259', '251', 'manage', '打印价签', '', 'module_admin', 'manage/carsource/printig', '_self', '0', '1527356307', '1527931569', '8', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('260', '236', 'manage', '客户管理', 'fa fa-fw fa-user-o', 'module_admin', '', '_self', '0', '1527492673', '1527931569', '5', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('261', '260', 'manage', '客户列表', 'fa fa-fw fa-list', 'module_admin', 'manage/customer/index', '_self', '0', '1527492743', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('262', '260', 'manage', '新建客户', 'fa fa-fw fa-list', 'module_admin', 'manage/customer/add', '_self', '0', '1527492766', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('263', '261', 'manage', '修改', '', 'module_admin', 'manage/customer/edit', '_self', '0', '1527520545', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('264', '261', 'manage', '详情', '', 'module_admin', 'manage/customer/look', '_self', '0', '1527522909', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('265', '261', 'manage', '转交', '', 'module_admin', 'manage/customer/deliver', '_self', '0', '1527526696', '1527931569', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('266', '261', 'manage', '导出', '', 'module_admin', 'manage/customer/export', '_self', '0', '1527526735', '1527931569', '4', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('267', '236', 'manage', '订单管理', 'glyphicon glyphicon-list-alt', 'module_admin', '', '_self', '0', '1527596806', '1527931569', '6', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('268', '267', 'manage', '订单列表', 'fa fa-fw fa-list', 'module_admin', 'manage/order/index', '_self', '0', '1527596838', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('269', '267', 'manage', '创建订单', 'fa fa-fw fa-list', 'module_admin', 'manage/order/add', '_self', '0', '1527596864', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('270', '268', 'manage', '修改', '', 'module_admin', 'manage/order/edit', '_self', '0', '1527596893', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('271', '268', 'manage', '详情', '', 'module_admin', 'manage/order/look', '_self', '0', '1527596910', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('272', '236', 'manage', '个人卖车信息管理', 'fa fa-fw fa-sellsy', 'module_admin', '', '_self', '0', '1527750395', '1527931569', '7', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('273', '272', 'manage', '个人卖车信息列表', 'fa fa-fw fa-list', 'module_admin', 'manage/sellcar/index', '_self', '0', '1527750448', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('274', '273', 'manage', '详情', '', 'module_admin', 'manage/sellcar/look', '_self', '0', '1527750493', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('275', '236', 'manage', '估价管理', 'fa fa-fw fa-money', 'module_admin', '', '_self', '0', '1527750621', '1527931569', '8', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('276', '275', 'manage', '估价列表', 'fa fa-fw fa-list', 'module_admin', 'manage/evaluate/index', '_self', '0', '1527750704', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('277', '236', 'manage', '营销管理', 'fa fa-fw fa-stack-overflow', 'module_admin', '', '_self', '0', '1527750885', '1527931569', '9', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('278', '236', 'manage', '反馈管理', 'fa fa-fw fa-commenting-o', 'module_admin', '', '_self', '0', '1527750946', '1527931569', '10', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('279', '278', 'manage', '反馈列表', 'fa fa-fw fa-list', 'module_admin', 'manage/feedback/index', '_self', '0', '1527750973', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('280', '236', 'manage', '分期管理', 'fa fa-fw fa-ioxhost', 'module_admin', '', '_self', '0', '1527751076', '1527931569', '11', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('281', '280', 'manage', '贷款利率', 'fa fa-fw fa-list', 'module_admin', 'manage/lendingrate/index', '_self', '0', '1527751144', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('282', '281', 'manage', '修改', '', 'module_admin', 'manage/lendingrate/edit', '_self', '0', '1527751173', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('283', '277', 'manage', 'Banner列表', 'fa fa-fw fa-list', 'module_admin', 'manage/banner/index', '_self', '0', '1527770514', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('284', '283', 'manage', '添加', '', 'module_admin', 'manage/banner/add', '_self', '0', '1527770550', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('285', '283', 'manage', '修改', '', 'module_admin', 'manage/banner/edit', '_self', '0', '1527770595', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('286', '283', 'manage', '删除', '', 'module_admin', 'manage/banner/delete', '_self', '0', '1527770619', '1527931569', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('287', '283', 'manage', '移动', '', 'module_admin', 'manage/banner/move', '_self', '0', '1527771879', '1527931569', '4', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('288', '277', 'manage', '今日好车推荐', 'fa fa-fw fa-list', 'module_admin', 'manage/todayrecomment/index', '_self', '0', '1527835272', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('289', '288', 'manage', '添加', '', 'module_admin', 'manage/todayrecomment/add', '_self', '0', '1527835295', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('290', '277', 'manage', '猜你喜欢', 'fa fa-fw fa-list', 'module_admin', 'manage/guesslike/index', '_self', '0', '1527835333', '1527931569', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('291', '290', 'manage', '添加', '', 'module_admin', 'manage/guesslike/add', '_self', '0', '1527835353', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('292', '288', 'manage', '移除', '', 'module_admin', 'manage/todayrecomment/delete', '_self', '0', '1527838496', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('293', '288', 'manage', '移动', '', 'module_admin', 'manage/todayrecomment/move', '_self', '0', '1527838515', '1527931569', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('294', '290', 'manage', '移除', '', 'module_admin', 'manage/guesslike/delete', '_self', '0', '1527841541', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('295', '290', 'manage', '移动', '', 'module_admin', 'manage/guesslike/move', '_self', '0', '1527841573', '1527931569', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('296', '277', 'manage', '文章列表', 'fa fa-fw fa-list', 'module_admin', 'manage/article/index', '_self', '0', '1527842565', '1527931569', '4', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('297', '296', 'manage', '添加', '', 'module_admin', 'manage/article/add', '_self', '0', '1527842641', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('298', '296', 'manage', '修改', '', 'module_admin', 'manage/article/edit', '_self', '0', '1527842677', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('299', '296', 'manage', '详情', '', 'module_admin', 'manage/article/look', '_self', '0', '1527842732', '1527931569', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('300', '296', 'manage', '上架', '', 'module_admin', 'manage/article/ground', '_self', '0', '1527842751', '1527931569', '4', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('301', '296', 'manage', '下架', '', 'module_admin', 'manage/article/lower', '_self', '0', '1527842779', '1527931569', '5', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('302', '236', 'manage', '系统管理', 'fa fa-fw fa-assistive-listening-systems', 'module_admin', '', '_self', '0', '1527924177', '1527931569', '12', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('303', '302', 'manage', '日志列表', 'fa fa-fw fa-list', 'module_admin', 'manage/log/index', '_self', '0', '1527924244', '1527931569', '4', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('304', '302', 'manage', '修改密码', 'fa fa-fw fa-list', 'module_admin', 'manage/info/setpassword', '_self', '0', '1527924365', '1527931569', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('305', '302', 'manage', '角色列表', 'fa fa-fw fa-list', 'module_admin', 'manage/adminrole/index', '_self', '0', '1527931503', '1527931569', '1', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('306', '302', 'manage', '账号列表', 'fa fa-fw fa-list', 'module_admin', 'manage/adminuser/index', '_self', '0', '1527931536', '1527931569', '2', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('307', '306', 'manage', '添加', '', 'module_admin', 'manage/adminuser/add', '_self', '0', '1527931613', '1527931613', '100', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('308', '306', 'manage', '修改', '', 'module_admin', 'manage/adminuser/edit', '_self', '0', '1527931633', '1527931633', '100', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('309', '306', 'manage', '删除', '', 'module_admin', 'manage/adminuser/delete', '_self', '0', '1527931647', '1527931647', '100', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('310', '306', 'manage', '开通', '', 'module_admin', 'manage/adminuser/enable', '_self', '0', '1527931702', '1527931702', '100', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('311', '306', 'manage', '冻结', '', 'module_admin', 'manage/adminuser/disable', '_self', '0', '1527931719', '1527931719', '100', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('312', '305', 'manage', '添加', '', 'module_admin', 'manage/adminrole/add', '_self', '0', '1527931749', '1527931749', '100', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('313', '305', 'manage', '修改', '', 'module_admin', 'manage/adminrole/edit', '_self', '0', '1527931767', '1527931767', '100', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('314', '305', 'manage', '详情', '', 'module_admin', 'manage/adminrole/look', '_self', '0', '1527931805', '1527931805', '100', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('315', '305', 'manage', '删除', '', 'module_admin', 'manage/adminrole/delete', '_self', '0', '1527931822', '1527931822', '100', '0', '1', '');
 
 -- ----------------------------
 -- Table structure for fc_admin_message
@@ -711,8 +779,8 @@ CREATE TABLE `fc_admin_role` (
 -- Records of fc_admin_role
 -- ----------------------------
 INSERT INTO `fc_admin_role` VALUES ('1', '0', '超级管理员', '系统默认创建的角色，拥有最高权限', '', '0', '1476270000', '1468117612', '1', '1', '0', '0');
-INSERT INTO `fc_admin_role` VALUES ('2', '0', '商户', '车商', '[\"1\",\"2\",\"3\",\"212\",\"236\",\"249\",\"250\",\"251\",\"252\",\"253\",\"256\",\"257\",\"258\",\"259\",\"260\",\"261\",\"262\",\"263\",\"264\",\"266\"]', '100', '1527074536', '1527589676', '1', '1', '236', '0');
-INSERT INTO `fc_admin_role` VALUES ('3', '0', '管理员', '', '[\"1\",\"2\",\"3\",\"212\",\"236\",\"237\",\"238\",\"239\",\"240\",\"241\",\"242\",\"243\",\"244\",\"245\",\"246\",\"247\",\"248\",\"249\",\"250\",\"251\",\"252\",\"253\",\"254\",\"255\",\"256\",\"257\",\"258\",\"259\",\"260\",\"261\",\"262\",\"263\",\"264\",\"265\",\"266\",\"267\",\"268\",\"269\",\"270\",\"271\",\"277\",\"283\",\"284\",\"285\",\"286\",\"287\"]', '100', '1527076385', '1527777341', '1', '1', '236', '0');
+INSERT INTO `fc_admin_role` VALUES ('2', '0', '商户', '', '[\"252\",\"253\",\"256\",\"257\",\"258\",\"259\",\"251\",\"250\",\"249\",\"263\",\"264\",\"266\",\"261\",\"262\",\"260\",\"270\",\"271\",\"268\",\"269\",\"267\",\"236\"]', '100', '1527074536', '1527931993', '1', '1', '236', '0');
+INSERT INTO `fc_admin_role` VALUES ('3', '0', '管理员', '', '[\"236\",\"237\",\"238\",\"239\",\"240\",\"241\",\"242\",\"243\",\"244\",\"245\",\"246\",\"247\",\"248\",\"249\",\"250\",\"251\",\"252\",\"253\",\"254\",\"255\",\"256\",\"257\",\"258\",\"259\",\"260\",\"261\",\"262\",\"263\",\"264\",\"265\",\"266\",\"267\",\"268\",\"269\",\"270\",\"271\",\"272\",\"273\",\"274\",\"275\",\"276\",\"277\",\"278\",\"279\",\"280\",\"281\",\"282\",\"283\",\"284\",\"285\",\"286\",\"287\",\"288\",\"289\",\"290\",\"291\",\"292\",\"293\",\"294\",\"295\",\"296\",\"297\",\"298\",\"299\",\"300\",\"301\",\"302\",\"303\",\"304\"]', '100', '1527076385', '1527928605', '1', '1', '236', '0');
 
 -- ----------------------------
 -- Table structure for fc_admin_user
@@ -731,6 +799,7 @@ CREATE TABLE `fc_admin_user` (
   `money` decimal(11,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '余额',
   `score` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
   `role` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '角色ID',
+  `job` varchar(100) NOT NULL DEFAULT '' COMMENT '职位',
   `group` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '部门id',
   `signup_ip` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '注册ip',
   `create_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
@@ -745,10 +814,35 @@ CREATE TABLE `fc_admin_user` (
 -- ----------------------------
 -- Records of fc_admin_user
 -- ----------------------------
-INSERT INTO `fc_admin_user` VALUES ('1', 'admin', '超级管理员', '$2y$10$N6wHeObAZFx.H9DL1jwenujVi/t97v7aNFMUA0GDxuiobMxVwPpEi', '', '0', '', '0', '0', '0.00', '0', '1', '0', '0', '1476065410', '1527776436', '1527776436', '0', '100', '1');
-INSERT INTO `fc_admin_user` VALUES ('2', 'finecar', '第一好车', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '', '0', '0', '0.00', '0', '3', '0', '0', '1527076428', '1527776400', '1527776400', '0', '100', '1');
-INSERT INTO `fc_admin_user` VALUES ('7', 'dujun12342', 'dujun12342', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '', '0', '0', '0.00', '0', '2', '0', '0', '1527078997', '1527176013', '0', '0', '100', '1');
-INSERT INTO `fc_admin_user` VALUES ('6', 'dujun123456', 'dujun123', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '', '0', '0', '0.00', '0', '2', '0', '0', '1527078997', '1527364802', '1527364802', '0', '100', '1');
+INSERT INTO `fc_admin_user` VALUES ('1', 'admin', '超级管理员', '$2y$10$FGSZd7CiIT5SBsVykQuOYugBRBu.WwVY11hN9RdeLGi5JzQm4Yl0C', '', '0', '', '0', '0', '0.00', '0', '1', '', '0', '0', '1476065410', '1527928999', '1527928999', '0', '100', '1');
+INSERT INTO `fc_admin_user` VALUES ('2', 'finecar', '第一好车', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '', '0', '0', '0.00', '0', '3', '', '0', '0', '1527076428', '1527928919', '1527928919', '0', '100', '1');
+INSERT INTO `fc_admin_user` VALUES ('7', 'dujun12342', 'dujun12342', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '', '0', '0', '0.00', '0', '2', '', '0', '0', '1527078997', '1527176013', '0', '0', '100', '1');
+INSERT INTO `fc_admin_user` VALUES ('6', 'dujun123456', 'dujun123', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '', '0', '0', '0.00', '0', '2', '', '0', '0', '1527078997', '1527364802', '1527364802', '0', '100', '1');
+
+-- ----------------------------
+-- Table structure for fc_articles
+-- ----------------------------
+DROP TABLE IF EXISTS `fc_articles`;
+CREATE TABLE `fc_articles` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `writer` varchar(100) NOT NULL DEFAULT '' COMMENT '作者',
+  `ground_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '自动上架日期',
+  `lower_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '自动下架日期',
+  `content` longtext NOT NULL COMMENT '内容',
+  `state` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0下架 1上架  ',
+  `runner_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '操作者id',
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建日期',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='文章';
+
+-- ----------------------------
+-- Records of fc_articles
+-- ----------------------------
+INSERT INTO `fc_articles` VALUES ('1', '碎石路', '杜某某', '1527782400', '1527868799', '<p>费鲁齐欧·兰博基尼（一作“费鲁吉欧·兰博基尼”）曾是一个生活在意大利北部的艾米利亚-罗马涅大区费拉拉省的青年。在二战期间是一名意大利皇家空军的机械师，在那之后他进入一个家基于二战军事设施建造的商业拖拉机厂。在20世纪50年代中期，兰博基尼的拖拉机厂，即兰博基尼拖拉机有限公司，已成为全国最大的农业设备制造商之一。同时他还拥有一个成功的燃气热水器和空调生产商。</p><p><br/></p><p><br/></p><p><br/></p><p><br/></p><p><br/></p><p><br/></p><p style=\"text-align:center\"><img src=\"http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201806012058263eAmlzr5E2pphaKs6f1Hzu0MM9.jpg\" title=\"201806012058263eAmlzr5E2pphaKs6f1Hzu0MM9.jpg\" alt=\"avatar.jpg\"/></p><p><br/></p><p><br/></p><p><br/></p><p><br/></p><p><br/></p><p><br/></p><p>1958年，他购买了第一辆法拉利汽车，一台250GT，之后又买了一些。费鲁齐欧·兰博基尼很喜欢法拉利汽车，但是他认为，对于普通的道路来说，法拉利汽车显得十分粗狂和嘈杂，显然更适合赛道。当费鲁齐欧·兰博基尼的法拉利汽车离合器出现问题后，他发现法拉利所使用的汽车离合器竟然和兰博基尼拖拉机所使用的离合器一模一样。费鲁齐欧·兰博基尼去找法拉利要求其更换一个质量更好的离合器却遭到了拒绝。法拉利说，费鲁齐欧·兰博基尼只是一个拖拉机制造商，因此对于运动跑车他一无所知。于是兰博基尼觉得建立一个汽车制造工厂来实现他对于运动跑车的完美追求。</p><p><br/></p>', '0', '1', '1527853728');
+INSERT INTO `fc_articles` VALUES ('2', '碎石路', '杜某某', '1527782400', '1527955199', '<p><img src=\"http://bestcar1.oss-cn-hangzhou.aliyuncs.com/2018060119451081mm8pfQyzDfTWJTbyYWqHn0n1.jpg\" title=\"2018060119451081mm8pfQyzDfTWJTbyYWqHn0n1.jpg\" alt=\"avatar.jpg\"/><img src=\"http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180601194534kqiR9Jjix5RFZJDMNO9o1zJJGe.jpg\" title=\"20180601194534kqiR9Jjix5RFZJDMNO9o1zJJGe.jpg\" alt=\"delimg.jpg\"/>好吧</p>', '0', '0', '0');
+INSERT INTO `fc_articles` VALUES ('3', '碎石路', '杜某某', '1527782400', '1527868799', '<p><img src=\"http://bestcar1.oss-cn-hangzhou.aliyuncs.com/2018060119451081mm8pfQyzDfTWJTbyYWqHn0n1.jpg\" title=\"2018060119451081mm8pfQyzDfTWJTbyYWqHn0n1.jpg\" alt=\"avatar.jpg\"/><img src=\"http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180601194534kqiR9Jjix5RFZJDMNO9o1zJJGe.jpg\" title=\"20180601194534kqiR9Jjix5RFZJDMNO9o1zJJGe.jpg\" alt=\"delimg.jpg\"/>不行吗</p>', '1', '0', '0');
+INSERT INTO `fc_articles` VALUES ('4', '碎石路', '杜某某', '1527782400', '1527868799', '<p><img src=\"http://bestcar1.oss-cn-hangzhou.aliyuncs.com/2018060119451081mm8pfQyzDfTWJTbyYWqHn0n1.jpg\" title=\"2018060119451081mm8pfQyzDfTWJTbyYWqHn0n1.jpg\" alt=\"avatar.jpg\"/><img src=\"http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180601194534kqiR9Jjix5RFZJDMNO9o1zJJGe.jpg\" title=\"20180601194534kqiR9Jjix5RFZJDMNO9o1zJJGe.jpg\" alt=\"delimg.jpg\"/>哪里</p>', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for fc_banners
@@ -761,7 +855,7 @@ CREATE TABLE `fc_banners` (
   `brand` varchar(1000) NOT NULL DEFAULT '' COMMENT '对应品牌',
   `remark` varchar(1000) NOT NULL DEFAULT '' COMMENT '描述',
   `position` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '位置 0首页banner位',
-  `sort` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `sort` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '排序 前台取数据排序规则(ORDEY BY sort asc,created desc）',
   `runner_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '操作者ID',
   `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
@@ -770,14 +864,13 @@ CREATE TABLE `fc_banners` (
 -- ----------------------------
 -- Records of fc_banners
 -- ----------------------------
-INSERT INTO `fc_banners` VALUES ('1', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531204720V628alXYE6rPUV1Q7aMrfvFRB1.jpg', '中国华为', '华为华为华为华为华为华为', '0', '3', '1', '1527770856');
-INSERT INTO `fc_banners` VALUES ('2', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧', '0', '4', '1', '1527770891');
-INSERT INTO `fc_banners` VALUES ('3', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531204720V628alXYE6rPUV1Q7aMrfvFRB1.jpg', '中国华为', '华为华为华为华为华为华为1', '0', '1', '1', '1527770856');
+INSERT INTO `fc_banners` VALUES ('1', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531204720V628alXYE6rPUV1Q7aMrfvFRB1.jpg', '中国华为', '华为华为华为华为华为华为', '0', '1', '1', '1527770856');
+INSERT INTO `fc_banners` VALUES ('2', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧', '0', '3', '1', '1527770891');
+INSERT INTO `fc_banners` VALUES ('3', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531204720V628alXYE6rPUV1Q7aMrfvFRB1.jpg', '中国华为', '华为华为华为华为华为华为1', '0', '3', '1', '1527770856');
 INSERT INTO `fc_banners` VALUES ('4', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧1', '0', '1', '1', '1527770891');
-INSERT INTO `fc_banners` VALUES ('5', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531204720V628alXYE6rPUV1Q7aMrfvFRB1.jpg', '中国华为', '华为华为华为华为华为华为2', '0', '5', '1', '1527770856');
-INSERT INTO `fc_banners` VALUES ('6', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧2', '0', '3', '1', '1527770891');
+INSERT INTO `fc_banners` VALUES ('6', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧2', '0', '2', '1', '1527770891');
 INSERT INTO `fc_banners` VALUES ('7', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531222202PVc33zQcy1iMoLNHDGG3dTMooF.png', '中国华为', '华为华为华为华为华为华为3', '0', '4', '1', '1527776523');
-INSERT INTO `fc_banners` VALUES ('8', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧4', '0', '5', '1', '1527770891');
+INSERT INTO `fc_banners` VALUES ('8', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧4', '0', '4', '1', '1527770891');
 INSERT INTO `fc_banners` VALUES ('11', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531222557CgsJXbGDNeX9tGCSzrESJush7q.png', 'safsafa', 'fqwqfefw', '0', '2', '1', '1527776763');
 
 -- ----------------------------
@@ -1129,6 +1222,28 @@ INSERT INTO `fc_feedbacks` VALUES ('1', '1', '不好不好不好不好不好不�
 INSERT INTO `fc_feedbacks` VALUES ('2', '1', '不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好', '1527078997', '1527078997');
 
 -- ----------------------------
+-- Table structure for fc_guess_likes
+-- ----------------------------
+DROP TABLE IF EXISTS `fc_guess_likes`;
+CREATE TABLE `fc_guess_likes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `car_source_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '车源id',
+  `sort` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '排序 前台取数据排序规则(ORDEY BY sort asc,created desc）',
+  `runner_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '操作者ID',
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `car_source_id` (`car_source_id`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='猜你喜欢';
+
+-- ----------------------------
+-- Records of fc_guess_likes
+-- ----------------------------
+INSERT INTO `fc_guess_likes` VALUES ('1', '4', '3', '1', '1527841909');
+INSERT INTO `fc_guess_likes` VALUES ('2', '15', '2', '1', '1527841917');
+INSERT INTO `fc_guess_likes` VALUES ('4', '1', '1', '1', '1527841952');
+INSERT INTO `fc_guess_likes` VALUES ('5', '2', '4', '1', '1527841962');
+
+-- ----------------------------
 -- Table structure for fc_lending_rates
 -- ----------------------------
 DROP TABLE IF EXISTS `fc_lending_rates`;
@@ -1158,7 +1273,7 @@ CREATE TABLE `fc_logs` (
   `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
   PRIMARY KEY (`id`),
   KEY `runner_id` (`runner_id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=142 DEFAULT CHARSET=utf8 COMMENT='日志';
+) ENGINE=MyISAM AUTO_INCREMENT=196 DEFAULT CHARSET=utf8 COMMENT='日志';
 
 -- ----------------------------
 -- Records of fc_logs
@@ -1304,6 +1419,60 @@ INSERT INTO `fc_logs` VALUES ('138', '营销管理', '下移Banner', '1', '15277
 INSERT INTO `fc_logs` VALUES ('139', '营销管理', '上移Banner', '1', '1527776545');
 INSERT INTO `fc_logs` VALUES ('140', '营销管理', '添加Banner', '1', '1527776763');
 INSERT INTO `fc_logs` VALUES ('141', '营销管理', '下移Banner', '1', '1527776818');
+INSERT INTO `fc_logs` VALUES ('142', '营销管理', '下移Banner', '2', '1527778039');
+INSERT INTO `fc_logs` VALUES ('143', '营销管理', '下移Banner', '2', '1527778043');
+INSERT INTO `fc_logs` VALUES ('144', '营销管理', '下移Banner', '2', '1527778047');
+INSERT INTO `fc_logs` VALUES ('145', '营销管理', '下移Banner', '2', '1527778050');
+INSERT INTO `fc_logs` VALUES ('146', '营销管理', '删除Banner', '1', '1527832861');
+INSERT INTO `fc_logs` VALUES ('147', '营销管理', '上移Banner', '1', '1527836632');
+INSERT INTO `fc_logs` VALUES ('148', '营销管理', '下移Banner', '1', '1527836672');
+INSERT INTO `fc_logs` VALUES ('149', '营销管理', '下移Banner', '1', '1527838839');
+INSERT INTO `fc_logs` VALUES ('150', '营销管理', '上移Banner', '1', '1527838842');
+INSERT INTO `fc_logs` VALUES ('151', '营销管理', '移除今日好车推荐', '1', '1527838852');
+INSERT INTO `fc_logs` VALUES ('152', '营销管理', '下移Banner', '1', '1527838953');
+INSERT INTO `fc_logs` VALUES ('153', '营销管理', '下移今日好车推荐', '1', '1527838978');
+INSERT INTO `fc_logs` VALUES ('154', '营销管理', '添加今日好车推荐', '1', '1527840931');
+INSERT INTO `fc_logs` VALUES ('155', '营销管理', '下移今日好车推荐', '1', '1527841072');
+INSERT INTO `fc_logs` VALUES ('156', '营销管理', '上移今日好车推荐', '1', '1527841075');
+INSERT INTO `fc_logs` VALUES ('157', '营销管理', '上移今日好车推荐', '1', '1527841077');
+INSERT INTO `fc_logs` VALUES ('158', '营销管理', '添加今日好车推荐', '1', '1527841339');
+INSERT INTO `fc_logs` VALUES ('159', '营销管理', '上移今日好车推荐', '1', '1527841492');
+INSERT INTO `fc_logs` VALUES ('160', '营销管理', '添加猜你喜欢', '1', '1527841909');
+INSERT INTO `fc_logs` VALUES ('161', '营销管理', '添加猜你喜欢', '1', '1527841917');
+INSERT INTO `fc_logs` VALUES ('162', '营销管理', '上移猜你喜欢', '1', '1527841921');
+INSERT INTO `fc_logs` VALUES ('163', '营销管理', '下移猜你喜欢', '1', '1527841924');
+INSERT INTO `fc_logs` VALUES ('164', '营销管理', '添加猜你喜欢', '1', '1527841937');
+INSERT INTO `fc_logs` VALUES ('165', '营销管理', '添加猜你喜欢', '1', '1527841952');
+INSERT INTO `fc_logs` VALUES ('166', '营销管理', '添加猜你喜欢', '1', '1527841962');
+INSERT INTO `fc_logs` VALUES ('167', '营销管理', '移除猜你喜欢', '1', '1527841982');
+INSERT INTO `fc_logs` VALUES ('168', '营销管理', '上移猜你喜欢', '1', '1527841986');
+INSERT INTO `fc_logs` VALUES ('169', '营销管理', '下移猜你喜欢', '1', '1527841989');
+INSERT INTO `fc_logs` VALUES ('170', '营销管理', '下移猜你喜欢', '1', '1527841992');
+INSERT INTO `fc_logs` VALUES ('171', '营销管理', '添加文章', '1', '1527853728');
+INSERT INTO `fc_logs` VALUES ('172', '营销管理', '修改文章', '1', '1527856926');
+INSERT INTO `fc_logs` VALUES ('173', '营销管理', '修改文章', '1', '1527856941');
+INSERT INTO `fc_logs` VALUES ('174', '营销管理', '修改文章', '1', '1527856968');
+INSERT INTO `fc_logs` VALUES ('175', '营销管理', '修改文章', '1', '1527856995');
+INSERT INTO `fc_logs` VALUES ('176', '营销管理', '修改文章', '1', '1527857001');
+INSERT INTO `fc_logs` VALUES ('177', '营销管理', '下架文章', '1', '1527857833');
+INSERT INTO `fc_logs` VALUES ('178', '营销管理', '上架文章', '1', '1527857837');
+INSERT INTO `fc_logs` VALUES ('179', '营销管理', '上架文章', '1', '1527857840');
+INSERT INTO `fc_logs` VALUES ('180', '营销管理', '下架文章', '1', '1527857844');
+INSERT INTO `fc_logs` VALUES ('181', '营销管理', '修改文章', '1', '1527857914');
+INSERT INTO `fc_logs` VALUES ('182', '营销管理', '下移Banner', '1', '1527858643');
+INSERT INTO `fc_logs` VALUES ('183', '营销管理', '上移Banner', '1', '1527858648');
+INSERT INTO `fc_logs` VALUES ('184', '营销管理', '上移Banner', '1', '1527858657');
+INSERT INTO `fc_logs` VALUES ('185', '登录管理', '登录', '1', '1527926001');
+INSERT INTO `fc_logs` VALUES ('186', '系统管理', '修改密码', '1', '1527927770');
+INSERT INTO `fc_logs` VALUES ('187', '系统管理', '修改密码', '1', '1527927788');
+INSERT INTO `fc_logs` VALUES ('188', '系统管理', '修改密码', '1', '1527927885');
+INSERT INTO `fc_logs` VALUES ('189', '登录管理', '登录', '1', '1527927894');
+INSERT INTO `fc_logs` VALUES ('190', '系统管理', '修改密码', '1', '1527928005');
+INSERT INTO `fc_logs` VALUES ('191', '登录管理', '登录', '1', '1527928017');
+INSERT INTO `fc_logs` VALUES ('192', '登录管理', '登录', '2', '1527928531');
+INSERT INTO `fc_logs` VALUES ('193', '登录管理', '登录', '1', '1527928554');
+INSERT INTO `fc_logs` VALUES ('194', '登录管理', '登录', '2', '1527928919');
+INSERT INTO `fc_logs` VALUES ('195', '登录管理', '登录', '1', '1527928999');
 
 -- ----------------------------
 -- Table structure for fc_merchants
@@ -1404,7 +1573,7 @@ CREATE TABLE `fc_oss_files` (
   `url` varchar(1000) NOT NULL DEFAULT '' COMMENT '文件地址',
   `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='oss文件';
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='oss文件';
 
 -- ----------------------------
 -- Records of fc_oss_files
@@ -1425,6 +1594,9 @@ INSERT INTO `fc_oss_files` VALUES ('13', 'bestcar1', '201805312056164WhtKEBLb3Fb
 INSERT INTO `fc_oss_files` VALUES ('14', 'bestcar1', '20180531205702Rb6kaJeiwpad0rCCBFlBDKMbd3.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531205702Rb6kaJeiwpad0rCCBFlBDKMbd3.png', '1527771422');
 INSERT INTO `fc_oss_files` VALUES ('15', 'bestcar1', '20180531222202PVc33zQcy1iMoLNHDGG3dTMooF.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531222202PVc33zQcy1iMoLNHDGG3dTMooF.png', '1527776522');
 INSERT INTO `fc_oss_files` VALUES ('16', 'bestcar1', '20180531222557CgsJXbGDNeX9tGCSzrESJush7q.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531222557CgsJXbGDNeX9tGCSzrESJush7q.png', '1527776757');
+INSERT INTO `fc_oss_files` VALUES ('17', 'bestcar1', '2018060119451081mm8pfQyzDfTWJTbyYWqHn0n1.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/2018060119451081mm8pfQyzDfTWJTbyYWqHn0n1.jpg', '1527853510');
+INSERT INTO `fc_oss_files` VALUES ('18', 'bestcar1', '20180601194534kqiR9Jjix5RFZJDMNO9o1zJJGe.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180601194534kqiR9Jjix5RFZJDMNO9o1zJJGe.jpg', '1527853534');
+INSERT INTO `fc_oss_files` VALUES ('19', 'bestcar1', '201806012058263eAmlzr5E2pphaKs6f1Hzu0MM9.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201806012058263eAmlzr5E2pphaKs6f1Hzu0MM9.jpg', '1527857906');
 
 -- ----------------------------
 -- Table structure for fc_regions
@@ -4901,6 +5073,28 @@ INSERT INTO `fc_sellcars` VALUES ('1', '18353621562', '19', '266', '2232', '0', 
 INSERT INTO `fc_sellcars` VALUES ('2', '18353622262', '19', '266', '2232', '0', '0', '0', '2.2', '1.2', '1527078997', 'https://a.suiship.com/cQ2V52718BfXdybYIFBWKBW3SRpxuSJ8SR8W08ZkFv9YkHQnA40KH4zoSQjwbLto.jpg?imageView2/2/w/500,https://a.suiship.com/NKc1tglN0WphL91aPr7PQLNWV7WRON4XWm8mAxJkRwqmhO9jG52POkPwXn7PIa3c.jpg?imageView2/2/w/500', '1527078997', '1527078997');
 INSERT INTO `fc_sellcars` VALUES ('3', '18353621562', '19', '266', '2232', '0', '0', '0', '2.2', '1.5', '1527078997', 'https://a.suiship.com/cQ2V52718BfXdybYIFBWKBW3SRpxuSJ8SR8W08ZkFv9YkHQnA40KH4zoSQjwbLto.jpg?imageView2/2/w/500,https://a.suiship.com/NKc1tglN0WphL91aPr7PQLNWV7WRON4XWm8mAxJkRwqmhO9jG52POkPwXn7PIa3c.jpg?imageView2/2/w/500', '1527078997', '1527078997');
 INSERT INTO `fc_sellcars` VALUES ('4', '18353622262', '19', '266', '2232', '0', '0', '0', '2.2', '5.6', '1527078997', 'https://a.suiship.com/cQ2V52718BfXdybYIFBWKBW3SRpxuSJ8SR8W08ZkFv9YkHQnA40KH4zoSQjwbLto.jpg?imageView2/2/w/500,https://a.suiship.com/NKc1tglN0WphL91aPr7PQLNWV7WRON4XWm8mAxJkRwqmhO9jG52POkPwXn7PIa3c.jpg?imageView2/2/w/500', '1527078997', '1527078997');
+
+-- ----------------------------
+-- Table structure for fc_today_recomments
+-- ----------------------------
+DROP TABLE IF EXISTS `fc_today_recomments`;
+CREATE TABLE `fc_today_recomments` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `car_source_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '车源id',
+  `sort` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '排序 前台取数据排序规则(ORDEY BY sort asc,created desc）',
+  `runner_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '操作者ID',
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `car_source_id` (`car_source_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='今日好车推荐';
+
+-- ----------------------------
+-- Records of fc_today_recomments
+-- ----------------------------
+INSERT INTO `fc_today_recomments` VALUES ('1', '1', '3', '1', '1527770891');
+INSERT INTO `fc_today_recomments` VALUES ('2', '2', '4', '1', '1527770891');
+INSERT INTO `fc_today_recomments` VALUES ('3', '6', '2', '1', '1527840931');
+INSERT INTO `fc_today_recomments` VALUES ('4', '4', '1', '1', '1527841339');
 
 -- ----------------------------
 -- Table structure for fc_users

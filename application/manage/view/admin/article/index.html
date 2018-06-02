@@ -1,0 +1,216 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+
+<div class="filter_search">
+    <form action="{:url('manage/article/index')}" name="search_form">
+        <div class="blo"><span class="latips">标题：</span><input type="text" name="title" value="{$filter.title}" placeholder="请输入标题"></div>
+        <div class="blo"><span class="latips">发布日期：</span><input type="text" name="ground_at_start" value="{$filter.ground_at_start}" class="timepick" readonly="readonly" placeholder="请选择开始日期"><span class="latips">~~</span><input type="text" name="ground_at_end" value="{$filter.ground_at_end}" class="timepick" readonly="readonly" placeholder="请选择结束日期"><a href="javascript:;" onclick="search_form.submit();" class="btn btn-minw btn-primary byt" style="margin-left: 30px;">查&nbsp;询</a></div>
+        <input type="hidden" name="order" value="{$order}">
+    </form>
+    <div class="blo">
+        {if condition='ismeunshow("manage/article/add")'}
+        <a href="{:url('manage/article/add')}" class="btn btn-minw btn-primary rbt">添加文章</a>
+        {/if}
+    </div>
+    <div style="clear: both;"></div>
+</div>
+
+
+<div class="table-responsive">
+    <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
+        <thead>
+            <tr>
+                <th>
+                    ID 
+                    <span>
+                    {switch name="order"}
+                        {case value="id asc"}
+                        {php}$filter['order']='id desc';{/php}
+                        <a href="{:url('manage/article/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-up"></i> 
+                        </a>
+                        {/case}
+                        {case value="id desc"}
+                        {php}$filter['order']='id asc';{/php}
+                        <a href="{:url('manage/article/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        {/case}
+                        {case value="ground_at asc"}
+                        {php}$filter['order']='id asc';{/php}
+                        <a href="{:url('manage/article/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="ground_at desc"}
+                        {php}$filter['order']='id asc';{/php}
+                        <a href="{:url('manage/article/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {default /}
+                        {php}$filter['order']='id asc';{/php}
+                        <a href="{:url('manage/article/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                    {/switch}
+                     </span>
+                </th>
+                <th>
+                    文章标题  
+                </th>
+                <th>
+                    作者  
+                </th>
+                <th>
+                    发布日期
+                    <span>
+                    {switch name="order"}
+                        {case value="id asc"}
+                        {php}$filter['order']='ground_at desc';{/php}
+                        <a href="{:url('manage/article/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="id desc"}
+                        {php}$filter['order']='ground_at desc';{/php}
+                        <a href="{:url('manage/article/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="ground_at asc"}
+                        {php}$filter['order']='ground_at desc';{/php}
+                        <a href="{:url('manage/article/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-up"></i> 
+                        </a>
+                        {/case}
+                        {case value="ground_at desc"}
+                        {php}$filter['order']='ground_at asc';{/php}
+                        <a href="{:url('manage/article/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-down"></i> 
+                        </a>
+                        {/case}
+                        {default /}
+                        {php}$filter['order']='ground_at desc';{/php}
+                        <a href="{:url('manage/article/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                    {/switch}
+                     </span>
+                </th>
+                <th>
+                    下架日期  
+                </th>
+                <th>
+                    状态  
+                </th>
+                <th>
+                    操作
+                </th>
+        </thead>
+        <tbody>
+        {volist name="data" id="vo"}
+        <tr>
+            <td>
+                {$vo.id}                                    
+            </td>
+            <td>
+                {$vo.title}                                    
+            </td>
+            <td>
+                {$vo.writer}                                    
+            </td>
+            <td>
+                {$vo.ground_at_str}                                    
+            </td>
+            <td>
+                {$vo.lower_at_str}                                    
+            </td>
+            <td>
+                {if condition='$vo.state'}已上架{else/}已下架{/if}                                    
+            </td>
+            <td>
+                {if condition='$vo.state'}
+                    {if condition='ismeunshow("manage/article/lower")'}
+                        <a href="javascript:;" state="0" class="ground_lower" article_id="{$vo.id}">下架</a>&nbsp;
+                    {/if}
+                {else/}
+                    {if condition='ismeunshow("manage/article/ground")'}
+                        <a href="javascript:;" state="1" class="ground_lower" article_id="{$vo.id}">上架</a>&nbsp;
+                    {/if}
+                {/if}
+                {if condition='ismeunshow("manage/article/edit")'}
+                    <a href="{:url('manage/article/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
+                {/if}
+                {if condition='ismeunshow("manage/article/look")'}
+                    <a href="{:url('manage/article/look',['id'=>$vo['id']])}">详情</a>&nbsp;
+                {/if}                  
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+
+
+<div style="text-align: right;margin:20px 5px;height: 45px;">
+    {notempty name="page"}
+        {$page}  
+    {/notempty}
+</div>
+<div style="margin-bottom: 40px;"></div>
+    
+<script>
+$(function(){
+    //上下架
+    $("body").on('click','a.ground_lower',function(){
+        var article_id=parseInt($(this).attr('article_id'));
+        var state=parseInt($(this).attr('state'));
+        var url="";
+        if(state){
+            url="{:url('manage/article/ground')}";
+        }else{
+            url="{:url('manage/article/lower')}";
+        }
+        Dolphin.loading();
+        $.ajax({
+            type:'post',
+            url:url,
+            data:{'id':article_id},
+            dataType:'JSON',
+            success:function(data){
+                Dolphin.loading('hide');
+                if (data.code==200) {
+                    Dolphin.notify(data.msg, 'success');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            },
+            error:function(xhr,status,error){
+                Dolphin.loading('hide');
+                Dolphin.notify('服务器错误~', 'danger');
+            }
+        });
+    });
+});
+</script>
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

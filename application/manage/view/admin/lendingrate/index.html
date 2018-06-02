@@ -16,20 +16,18 @@
     <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
         <thead>
             <tr>
-                <th style="text-align:center;">
+                <th style="text-align:center;" width="25%">
                     序号  
                 </th>
-                <th style="text-align:center;">
+                <th style="text-align:center;" width="25%">
                     贷款期限  
                 </th>
-                <th style="text-align:center;">
+                <th style="text-align:center;" width="25%">
                     贷款利率  
                 </th>
-                {if condition='ismeunshow("manage/lendingrate/edit")'}
-                <th style="text-align:center;">
+                <th style="text-align:center;" width="25%">
                     操作  
-                </th>    
-                {/if}
+                </th>  
         </thead>
         <tbody>
         {volist name="data" id="vo"}
@@ -43,11 +41,11 @@
             <td style="text-align:center;" class="td_rate">
                 <span class="edit_rate"{if condition='ismeunshow("manage/lendingrate/edit")'} title="点击修改" style="cursor: pointer;" rate="{$vo.rate}"{/if}>{$vo.rate}%</span>                               
             </td>
-            {if condition='ismeunshow("manage/lendingrate/edit")'}
             <td style="text-align:center;" class="td_btn">
-                <a href="javascript:;" class="edit_rate" rate="{$vo.rate}">修改</a>
+                {if condition='ismeunshow("manage/lendingrate/edit")'}
+                <a href="javascript:;" class="edit_rate" rate="{$vo.rate}">修改</a> 
+                {/if}
             </td>
-            {/if}
         </tr>
         {/volist}
         </tbody>

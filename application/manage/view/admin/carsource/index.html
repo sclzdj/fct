@@ -50,15 +50,15 @@
     <div style="clear: both;"></div>
 </div>
 {volist name="data" id="vo"}
-<div class="lit">
+<div class="lit" {if condition='$key neq 0'}style="padding-top: 0;"{/if}>
     <table class="lit_table">
         <tr>
             <th></th>
             <th style="padding-left: 0;">{$vo.audit_at_str}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;车源号：{$vo.sn}</th>
-            <th style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;text-align: center;">库存状态</th>
-            <th style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;text-align: center;">审核状态</th>
-            <th style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;text-align: center;">库龄</th>
-            <th style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;border-right: 1px solid #ccc;text-align: center;width: 170px;">操作</th>
+            <th style="{if condition='$key eq 0'}border-left: 1px solid #ccc;border-top: 1px solid #ccc;{/if}text-align: center;" class="ddv1">{if condition='$key eq 0'}库存状态{/if}</th>
+            <th style="{if condition='$key eq 0'}border-left: 1px solid #ccc;border-top: 1px solid #ccc;{/if}text-align: center;" class="ddv2">{if condition='$key eq 0'}审核状态{/if}</th>
+            <th style="{if condition='$key eq 0'}border-left: 1px solid #ccc;border-top: 1px solid #ccc;{/if}text-align: center;" class="ddv3">{if condition='$key eq 0'}库龄{/if}</th>
+            <th style="{if condition='$key eq 0'}border-left: 1px solid #ccc;border-top: 1px solid #ccc;border-right: 1px solid #ccc;{/if}text-align: center;width: 170px;">{if condition='$key eq 0'}操作{/if}</th>
         </tr>
         <tr>
             <td align="center" style="width: 60px;"><input type="checkbox" value="{$vo.id}" class="one_check"></td>
@@ -265,6 +265,31 @@
                 $('.one_check').removeAttr('checked');
             }
         });
+        //长度对齐
+        var ddv1_width=0;
+        $('table.lit_table tr th.ddv1').each(function(){
+            if($(this).width()>ddv1_width){
+                ddv1_width=$(this).width();
+            }
+        });
+        if(ddv1_width>220) ddv1_width=220;
+        $('table.lit_table tr th.ddv1').css('width',ddv1_width);
+        var ddv2_width=0;
+        $('table.lit_table tr th.ddv2').each(function(){
+            if($(this).width()>ddv2_width){
+                ddv2_width=$(this).width();
+            }
+        });
+        if(ddv2_width>220) ddv2_width=220;
+        $('table.lit_table tr th.ddv2').css('width',ddv2_width);
+        var ddv3_width=0;
+        $('table.lit_table tr th.ddv3').each(function(){
+            if($(this).width()>ddv3_width){
+                ddv3_width=$(this).width();
+            }
+        });
+        if(ddv3_width>220) ddv3_width=220;
+        $('table.lit_table tr th.ddv3').css('width',ddv3_width);
     });
 </script>
 

@@ -270,16 +270,27 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li class="dropdown-header">{:session('user_auth.username')} ({:session('user_auth.role_name')})</li>
+                        {if condition='ismeunshow("manage/info/setpassword")'}
+                        <li>
+                            <a tabindex="-1" href="{:url('manage/info/setpassword')}">
+                                <i class="si si-wrench pull-right"></i>修改密码
+                            </a>
+                        </li>
+                        {/if}
+                        {if condition='ismeunshow("admin/index/profile")'}
                         <li>
                             <a tabindex="-1" href="{:url('admin/index/profile')}">
                                 <i class="si si-settings pull-right"></i>个人设置
                             </a>
                         </li>
-                        <!-- <li>
+                        {/if}
+                        {if condition='ismeunshow("admin/message/index")'}
+                        <li>
                             <a tabindex="-1" href="{:url('admin/message/index')}">
                                 <i class="si si-envelope-open pull-right"></i><span class="badge badge-primary pull-right">{$_message|default=0}</span>消息中心
                             </a>
-                        </li> -->
+                        </li>
+                        {/if}
                         <li class="divider"></li>
                         <li>
                             <a tabindex="-1" href="{:url('user/publics/signout')}">
@@ -289,22 +300,27 @@
                     </ul>
                 </div>
             </li>
+            {if condition='ismeunshow("admin/index/wipeCache")'}
             <li>
                 <a class="btn btn-default ajax-get" href="{:url('admin/index/wipeCache')}" data-toggle="tooltip" data-placement="bottom" data-original-title="清空缓存">
                     <i class="fa fa-trash"></i>
                 </a>
             </li>
-            <!-- <li>
-                <a class="btn btn-default" href="{:rtrim(home_url('/'), '/')}" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="打开前台">
+            {/if}
+            {if condition='config("finecar.www_url")!=""'}
+            <li>
+                <a class="btn btn-default" href="{:config('finecar.www_url')}" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="打开前台">
                     <i class="fa fa-external-link-square"></i>
                 </a>
             </li>
+            {/if}
             <li>
-                Layout API, functionality initialized in App() -> uiLayoutApi()
+                <!-- Layout API, functionality initialized in App() -> uiLayoutApi()
                 <button class="btn btn-default" data-toggle="layout" data-action="side_overlay_toggle" title="侧边栏" type="button">
                     <i class="fa fa-tasks"></i>
-                </button>
-            </li> -->
+                </button> -->
+            </li>
+            <li></li>
         </ul>
         <!-- END Header Navigation Right -->
 

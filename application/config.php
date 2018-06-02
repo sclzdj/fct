@@ -281,10 +281,14 @@ return [
 
     //finecar模块
     'finecar'=> [
-        'host_url'=> 'http://localhost/finecar',
+        'host_url'=> 'http://localhost/finecar',//系统域名
+        'www_url'=> '',//前台域名
     ],
     //模块名称
     'module_us'=>[
+        'user'=>[
+            'publics'=>'登录管理',
+        ],
         'manage'=>[
             'user'=>'用户管理',
             'merchant'=>'商户管理',
@@ -296,6 +300,14 @@ return [
             'feedback'=>'反馈管理',
             'lendingrate'=>'分期管理',
             'banner'=>'营销管理',
+            'todayrecomment'=>'营销管理',
+            'guesslike'=>'营销管理',
+            'article'=>'营销管理',
+            'info'=>'系统管理',
+            'log'=>'系统管理',
+            'adminuser'=>'系统管理',
+            'adminrole'=>'系统管理',
+            'adminmenu'=>'系统管理',
         ],
     ],
     //aliocc

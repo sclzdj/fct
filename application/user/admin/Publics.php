@@ -64,6 +64,7 @@ class Publics extends Common
             if ($uid) {
                 // 记录行为
                 action_log('user_signin', 'admin_user', $uid, $uid);
+                record_log(request()->module(),request()->controller(),'登录');
                 $this->jumpUrl();
             } else {
                 $this->error($UserModel->getError());

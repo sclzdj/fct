@@ -8,6 +8,15 @@
 <link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
 <script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
 
+
+<div style="height: 60px; line-height: 60px;margin-bottom: 20px;background: #fff;padding:0 20px;">
+    <span style="color: #888;">注：小程序端至少添加3个、至多5个；PC端不限制！</span>
+    {if condition='ismeunshow("manage/banner/add")'}
+    <a href="{:url('manage/banner/add')}" class="btn btn-minw btn-primary rbt" style="float: right;margin-top: 13px;margin-right: 1%;">添&nbsp;加</a>
+    {/if}
+</div>
+
+
 <div class="add_edit">
     <div class="tab">
         <ul>
@@ -22,23 +31,19 @@
             <table class="lit_table">
                 {if condition='$key eq 0'}
                 <tr>
-                    <th style="padding-left: 0;"></th>
+                    <th style="padding-left: 0;min-width: 350px;"></th>
                     <th style="text-align: center;" class="ddv1">展示终端</th>
                     <th style="text-align: center;" class="ddv2">位置</th>
                     <th style="text-align: center;" class="ddv3">操作</th>
-                    {if condition='ismeunshow("manage/banner/move")'}
                     <th style="text-align: center;" class="ddv4">移动</th>
-                    {/if}
                 </tr>
                 {else/}
                 <tr>
-                    <th style="padding-left: 0;height: 0px;"></th>
+                    <th style="padding-left: 0;height: 0px;min-width: 350px;"></th>
                     <th style="text-align: center;height: 0px;" class="ddv1"></th>
                     <th style="text-align: center;height: 0px;" class="ddv2"></th>
                     <th style="text-align: center;height: 0px;" class="ddv3"></th>
-                    {if condition='ismeunshow("manage/banner/move")'}
                     <th style="text-align: center;height: 0px;" class="ddv4"></th>
-                    {/if}
                 </tr>
                 {/if}
                 <tr>
@@ -69,28 +74,28 @@
                         {default /}
                     {/switch}
                     </td>
-                    <td align="center" style="min-width:100px;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;{if condition='!ismeunshow("manage/banner/move")'}border-right: 1px solid #ccc;{/if}">
+                    <td align="center" style="min-width:100px;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
                         {if condition='ismeunshow("manage/banner/edit")'}
                             <a href="{:url('manage/banner/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
                         {/if}
-                        {if condition='ismeunshow("manage/banner/look")'}
-                            <a href="{:url('manage/banner/delete',['id'=>$vo['id']])}">删除</a>
+                        {if condition='ismeunshow("manage/banner/delete")'}
+                            <a href="javascript:;" class="delete_banner" banner_id="{$vo.id}">删除</a>
                         {/if} 
                     </td>
-                    {if condition='ismeunshow("manage/banner/move")'}
                     <td align="center" style="min-width:100px;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">
-                        {if condition='$key neq 0'}
-                            {if condition='ismeunshow("manage/banner/move")'}
-                            <a href="javascript:;" class="move_banner" type="1" pos='{$key}'>上移</a>&nbsp;
-                            {/if} 
-                        {/if}
-                        {if condition='$key neq (count($data)-1)'}
-                            {if condition='ismeunshow("manage/banner/move")'}
-                            <a href="javascript:;" class="move_banner" type="0" pos='{$key}'>下移</a>&nbsp; 
+                        {if condition='ismeunshow("manage/banner/move")'}
+                            {if condition='$key neq 0'}
+                                {if condition='ismeunshow("manage/banner/move")'}
+                                <a href="javascript:;" class="move_banner" type="1" pos='{$key}'>上移</a>&nbsp;
+                                {/if} 
+                            {/if}
+                            {if condition='$key neq (count($data)-1)'}
+                                {if condition='ismeunshow("manage/banner/move")'}
+                                <a href="javascript:;" class="move_banner" type="0" pos='{$key}'>下移</a>&nbsp; 
+                                {/if}
                             {/if}
                         {/if}
                     </td>
-                    {/if}
                 </tr>
             </table>
         </div>
@@ -102,6 +107,35 @@
     
 <script type="text/javascript">
 $(function(){
+    //删除
+    $("body").on('click','a.delete_banner',function(){
+        if(!confirm("确定删除？")){
+            return false;
+        }
+        var banner_id=parseInt($(this).attr('banner_id'));
+        Dolphin.loading();
+        $.ajax({
+            type:'post',
+            url:'{:url("manage/banner/delete")}',
+            data:{'id':banner_id},
+            dataType:'JSON',
+            success:function(data){
+                Dolphin.loading('hide');
+                if (data.code==200) {
+                    Dolphin.notify(data.msg, 'success');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            },
+            error:function(xhr,status,error){
+                Dolphin.loading('hide');
+                Dolphin.notify('服务器错误~', 'danger');
+            }
+        });
+    });
     //移动
     $("body").on('click','a.move_banner',function(){
         var type=parseInt($(this).attr('type'));
@@ -152,28 +186,33 @@ $(function(){
             ddv1_width=$(this).width();
         }
     });
-    $('table.lit_table tr th.ddv1').css('width',ddv1_width);
+    if(ddv1_width>220) ddv1_width=220;
     var ddv2_width=0;
     $('table.lit_table tr th.ddv2').each(function(){
         if($(this).width()>ddv2_width){
             ddv2_width=$(this).width();
         }
     });
-    $('table.lit_table tr th.ddv2').css('width',ddv2_width);
+    if(ddv2_width>220) ddv2_width=220;
     var ddv3_width=0;
     $('table.lit_table tr th.ddv3').each(function(){
         if($(this).width()>ddv3_width){
             ddv3_width=$(this).width();
         }
     });
-    $('table.lit_table tr th.ddv3').css('width',ddv3_width);
+    if(ddv3_width>220) ddv3_width=220;
     var ddv4_width=0;
     $('table.lit_table tr th.ddv4').each(function(){
         if($(this).width()>ddv4_width){
             ddv4_width=$(this).width();
         }
     });
-    $('table.lit_table tr th.ddv4').css('width',ddv4_width);
+    if(ddv4_width>220) ddv4_width=220;
+    var ddv_width=(ddv1_width+ddv2_width+ddv3_width+ddv4_width)/4;
+    $('table.lit_table tr th.ddv1').css('width',ddv_width);
+    $('table.lit_table tr th.ddv2').css('width',ddv_width);
+    $('table.lit_table tr th.ddv3').css('width',ddv_width);
+    $('table.lit_table tr th.ddv4').css('width',ddv_width);
 });
 </script>
 

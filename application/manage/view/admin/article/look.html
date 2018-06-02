@@ -1,0 +1,33 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+
+
+<div  class="add_edit" style="padding: 20px 2%;">
+    <h5 style="text-align: center;line-height: 30px;margin: 10px auto;color: #000;font-size: 18px;letter-spacing: 2px;">{$article.title}</h5>
+    <div style="text-align: center;line-height: 30px;margin: 10px auto;color: #999;font-size: 14px;letter-spacing: 1px;">{$article.writer}&nbsp;&nbsp;&nbsp;&nbsp;{$article.ground_at}</div>
+    <div style="margin: 10px auto;">{$article.content}</div>
+</div>
+    
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:window.history.go(-1);" class="btn btn-minw btn-primary rbt">返&nbsp;回</a>
+</div>
+
+
+<div style="margin-bottom: 40px;"></div>
+    
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

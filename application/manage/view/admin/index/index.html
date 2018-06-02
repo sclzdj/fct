@@ -1,0 +1,84 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+
+<style>
+.index_li{width: 50%;float: left;text-align: center;vertical-align: middle;}
+.index_li .border{display: inline-block;border: 1px solid #f1f1f1;padding: 40px;}
+.index_li img{width: 130px;height: 130px;display: inline-block;vertical-align: middle;margin-right: 30px;}
+.index_li .index_xiao{display: inline-block;vertical-align: middle;}
+.index_li .index_xiao span.tips{font-size: 18px;display: inline-block;text-align: center;line-height: 65px;vertical-align: middle;}
+.index_li .index_xiao span.num{font-size: 22px;display: inline-block;text-align: center;line-height: 65px;vertical-align: middle;}
+</style>
+
+<div  class="add_edit" style="padding: 50px 2%;">
+    <div class="index_li" style="margin-bottom: 100px;">
+	    <div class="border">
+	    	<img src="__ADMIN_IMG__/finecar/u320.png">
+	    	<div class="index_xiao">
+	    		<span class="tips">用户总数</span><br>
+	    		<span class="num">{$user_count}</span>
+	    	</div>
+	  	</div>
+    </div>
+    <div class="index_li" style="margin-bottom: 100px;">
+	    <div class="border">
+	    	<img src="__ADMIN_IMG__/finecar/u324.png">
+	    	<div class="index_xiao">
+	    		<span class="tips">商户总数</span><br>
+	    		<span class="num">{$merchant_count}</span>
+	    	</div>
+	  	</div>
+    </div>
+    <div class="index_li">
+	    <div class="border">
+	    	<img src="__ADMIN_IMG__/finecar/u328.png">
+	    	<div class="index_xiao">
+	    		<span class="tips">车源总数</span><br>
+	    		<span class="num">{$car_source_count}</span>
+	    	</div>
+	  	</div>
+    </div>
+    <div class="index_li">
+	    <div class="border">
+	    	<img src="__ADMIN_IMG__/finecar/u332.png">
+	    	<div class="index_xiao">
+	    		<span class="tips">订单总数</span><br>
+	    		<span class="num">{$order_count}</span>
+	    	</div>
+	  	</div>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+    
+
+<div style="margin-bottom: 40px;"></div>
+
+<script>
+	$(function(){
+		//长度对齐
+		var span_width=0;
+		$('.index_li .index_xiao span').each(function(){
+			if($(this).width()>span_width){
+				span_width=$(this).width();
+			}
+		});
+		$('.index_li .index_xiao span').css('width',span_width);
+	});
+</script>
+    
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

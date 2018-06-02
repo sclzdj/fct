@@ -17,6 +17,7 @@ use OSS\OssClient;
 
 class File extends Home
 {
+    //后台上传文件
     public function upload()
     {
         $oss_upload_file_clear_run=(int)db('configs')->where('name','oss_upload_file_clear_run')->value('value');
@@ -126,6 +127,39 @@ class File extends Home
             }else{
                 return json_return('F','500','上传失败');
             }
+        }
+    }
+    //百度编辑器上传文件
+    public function ueditorUpload()
+    {
+        $oss_upload_file_clear_run=(int)db('configs')->where('name','oss_upload_file_clear_run')->value('value');
+        if($oss_upload_file_clear_run){
+            echo json_encode(["state"=>"系统正在清除OSS无效文件，请稍后上传！"]);die;
+        }
+        $return=[];
+        $file = request()->file('file');  //获取到上传的文件
+        $now=time();
+        $info=$file->getInfo();
+        $return['original']=$info['name'];
+        $name_arr=explode('.', $info['name']);
+        $fix=$name_arr[count($name_arr)-1];
+        $return['type']='.'.$fix;
+        $return['size']=$info['size'];
+        $alioss = config('alioss'); //获取oss的配置
+        //实例化对象 将配置传入
+        $ossClient = new OssClient($alioss['KeyId'], $alioss['KeySecret'], $alioss['Endpoint']);  
+        //生成文件名 之后连接上后缀
+        $fileName = date('YmdHis', $now) . random(26) . '.' . $fix;
+        $return['title']=$fileName;
+        //执行阿里云上传 
+        $result=$ossClient->uploadFile($alioss['Bucket'], $fileName, $info['tmp_name']);
+        if(isset($result['info']['url'])){
+            db('oss_files')->insertGetId(['bucket'=>$alioss['Bucket'],'object'=>$fileName,'url'=>$result['info']['url'],'created_at'=>$now]);
+            $return['url']=$result['info']['url'];
+            $return['state']='SUCCESS';
+            echo json_encode($return);die;
+        }else{
+            echo json_encode(["state"=>"上传失败"]);die;
         }
     }
 }

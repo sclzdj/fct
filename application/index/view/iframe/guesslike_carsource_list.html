@@ -1,0 +1,250 @@
+{extend name="layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+
+<div style="background: #fff;">
+    <div style="background: #f9f9f9;height: 50px;line-height: 50px;display: inline-block; font-size: 14px;font-weight: bold;padding: 0 1%;letter-spacing: 2px;">请选择车源</div>
+</div>
+
+<div class="filter_search" style="padding-top: 10px;margin-bottom: 0;">
+    <form action="{:url('index/iframe/orderCarsourceList')}" name="search_form" target="iframe_small_box">
+        <div class="blo"><span class="latips">车源号：</span><input type="text" name="sn" value="{$filter.sn}" placeholder="请输入车源号"></div>
+        <div class="blo"><span class="latips">车型：</span>
+            <select name="brand_id" value="{$filter.brand_id}" style="margin-right: 5px;">
+                <option value="">全部品牌</option>
+            </select>
+            <select name="serie_id" value="{$filter.serie_id}" style="margin-right: 5px;">
+                <option value="">全部车系</option>
+            </select>
+            <select name="model_id" value="{$filter.model_id}">
+                <option value="">全部车型</option>
+            </select>
+        </div>
+        {if condition='!ismerchant()'}
+        <div class="blo"><span class="latips">店铺名称：</span><input type="text" name="shop_name" value="{$filter.shop_name}" placeholder="请输入店铺名称"></div>
+        {/if}
+        <input type="hidden" name="order" value="{$order}">
+        <div class="blo">
+            <a href="javascript:;" onclick="search_form.submit();" class="btn btn-minw btn-primary byt">查&nbsp;询</a>
+        </div>
+    </form>
+    <div style="clear: both;"></div>
+</div>
+
+<div class="table-responsive" style="margin-top: 5px;">
+    <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
+        <thead>
+            <tr>
+                <th>
+                    ID 
+                    <span>
+                    {switch name="order"}
+                        {case value="a.id asc"}
+                        {php}$filter['order']='a.id desc';{/php}
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-up"></i> 
+                        </a>
+                        {/case}
+                        {case value="a.id desc"}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        {/case}
+                        {case value="a.audit_at asc"}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="a.audit_at desc"}
+                        {php}$filter['order']='a.id asc';{/php}
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {default /}
+                         <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                    {/switch}
+                     </span>
+                </th>
+                <th>
+                    车源号  
+                </th>
+                <th>
+                    店铺名称  
+                </th>
+                <th>
+                    车型  
+                </th>
+                <th>
+                    价格  
+                </th>
+                <th>
+                    发布时间
+                    <span>
+                    {switch name="order"}
+                        {case value="a.id asc"}
+                        {php}$filter['order']='a.audit_at desc';{/php}
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="a.id desc"}
+                        {php}$filter['order']='a.audit_at desc';{/php}
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-sort text-muted"></i>
+                        </a>
+                        {/case}
+                        {case value="a.audit_at asc"}
+                        {php}$filter['order']='a.audit_at desc';{/php}
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-up"></i> 
+                        </a>
+                        {/case}
+                        {case value="a.audit_at desc"}
+                        {php}$filter['order']='a.audit_at asc';{/php}
+                        <a href="{:url('index/iframe/orderCarsourceList',$filter)}" target="iframe_small_box" data-toggle="tooltip" data-original-title="排序">
+                            <i class="fa fa-caret-down"></i> 
+                        </a>
+                        {/case}
+                        {default /}
+                    {/switch}
+                     </span>
+                </th>
+                <th>
+                    详情  
+                </th>
+                <th style="text-align:center;">
+                    选择  
+                </th>
+        </thead>
+        <tbody>
+        {volist name="data" id="vo"}
+        <tr>
+            <td>
+                {$vo.id}                                    
+            </td>
+            <td>
+                {$vo.sn}                                    
+            </td>
+            <td>
+                {$vo.shop_name}                                    
+            </td>
+            <td>
+                {$vo.brand_id}.{$vo.serie_id}.{$vo.model_id}                                
+            </td>
+            <td>
+                {$vo.price}万元                                    
+            </td>
+            <td>
+                {$vo.audit_at_str}                                    
+            </td>
+            <td>
+                {if condition='ismeunshow("manage/carsource/look")'}
+                    <a href="{:url('manage/carsource/look',['id'=>$vo['id']])}" target="_blank">详情</a>
+                {/if} 
+            </td>
+            <td align="center">
+                <input class="select_car_source select_option" type="checkbox" value="{$vo.id}" carmod='{$vo.brand_id}.{$vo.serie_id}.{$vo.model_id}'>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+<div style="margin:20px 5px;margin-bottom: 30px;">
+    {notempty name="page"}
+    <div style="text-align: left;height: 45px;float: left;">
+       {$page}  
+    </div>
+    {/notempty}
+    <div style="height: 45px;text-align: right;float: right;">
+        <input type="hidden" name="car_source_id" value="">
+        <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="close_frame" style="margin-top: 11px;background: #aaa;border-color:#888;">关&nbsp;闭</a>
+        <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="select_submit" style="margin-top: 11px;">确&nbsp;定</a>
+    </div>
+</div>
+<div style=""></div>
+
+<script type="text/javascript">
+$(function(){
+    var iframe_big_box=$(window.parent.document).find('#iframe_big_box');
+    var container=$(".content");
+    iframe_big_box.find("#iframe_small_box").css({
+        'height':(container.height()+100)+'px',
+    });
+    var h = $(window.parent.document).find('body').height();
+    var small_h=iframe_big_box.find('#iframe_small_box').height();
+    iframe_big_box.find("#iframe_small_box").css({
+        'marginTop':((h-small_h)/2)+'px',
+    });
+    if(iframe_big_box.attr('isshow')=='1'){
+        iframe_big_box.show();
+    }else{
+        iframe_big_box.hide();
+    }
+    var car_source_input=$(window.parent.document).find('input[name="car_source_id"]');
+    if(!isNaN(car_source_input.val()) && car_source_input.val()>0){
+        $('input[type="checkbox"][value="'+car_source_input.val()+'"]').prop('checked',true);
+    }
+    //确定
+    $('#select_submit').click(function(){
+        iframe_big_box.hide();
+        var car_source_input=$(window.parent.document).find('input[name="car_source_id"]');
+        var checked=$('.select_car_source:checked');
+        if(isNaN(checked.val())){
+            car_source_input.val('');
+            car_source_input.parent().find('span.lacon').remove();
+            $(window.parent.document).find('#select_source').html('+选择');
+        }else{
+            car_source_input.val(checked.val());
+            car_source_input.parent().find('span.lacon').remove();
+            car_source_input.after('<span class="lacon" style="margin-right: 10px;">'+checked.attr('carmod')+'</span>');
+            $(window.parent.document).find('#select_source').html('+重选');
+        }
+        iframe_big_box.attr('isshow','0');
+    });
+    //关闭
+    $('#close_frame').click(function(){
+        iframe_big_box.hide();
+        var car_source_input=$(window.parent.document).find('input[name="car_source_id"]');
+        if(car_source_input.val()!=''){
+            $('.select_car_source').removeAttr('checked');
+            $('input[type="checkbox"][value="'+car_source_input.val()+'"]').prop('checked',true);
+        }else{
+            $('.select_car_source').removeAttr('checked');
+        }
+        iframe_big_box.attr('isshow','0')
+    });
+    //多选框只能单选
+    $('.select_car_source').each(function(){
+        $(this).change(function(){
+            if($(this).prop('checked')){
+                $('.select_car_source').removeAttr('checked');
+                $(this).prop('checked','checked');
+                $('input[name="car_source_id"]').val($(this).val());
+            }else{
+                $('input[name="car_source_id"]').val('');
+            }
+        });
+    });
+});
+</script>
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

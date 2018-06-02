@@ -1,0 +1,241 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+{if condition='ismeunshow("manage/todayrecomment/add")'}
+<style>
+.fister_add{height: 60px; line-height: 60px;margin-bottom: 20px;background: #fff;padding:0 20px;}
+.fister_add button{padding:0 5px;min-width:80px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;background: #fff;display: inline-block;margin-top: 13px;}
+.fister_add button:hover{background: #eee;}
+</style>
+<div class="fister_add">
+    <span>添加今日好车推荐：</span>
+    <input type="hidden" name="car_source_id" value="">
+    <button id="select_source">+选择</button>
+    <a href="javascript:;" class="submit btn btn-minw btn-primary rbt" style="margin-top: 13px;margin-right: 1%;vertical-align:top;">确&nbsp;定</a>
+</div>
+{/if}
+
+
+{volist name="data" id="vo"}
+<div class="lit" {if condition='$key neq 0'}style="padding-top: 0;"{/if}>
+    <table class="lit_table">
+        <tr>
+            <th style="padding-left: 0;">{$vo.audit_at_str}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;车源号：{$vo.sn}</th>
+            <th style="text-align: center;" class="ddv1">{if condition='$key eq 0'}操作{/if}</th>
+            <th style="text-align: center;" class="ddv2">{if condition='$key eq 0'}移动{/if}</th>
+        </tr>
+        <tr>
+            <td style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-left: 1px solid #ccc;">
+                <div style="float: left;min-height: 120px;"><img src="{$vo.main_img}"></div>
+                <div class="core">
+                    <span>阿斯顿马丁  V8 Vantage  2013款 4.0T</span>
+                    <span>{$vo.first_plate_year}年/{$vo.mileage}公里&nbsp;&nbsp;{$vo.region_one_text}</span>
+                    <span>{$vo.price}万</span>
+                    <span>{$vo.shop_name}</span>
+                </div>
+            </td>
+            <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
+                {if condition='ismeunshow("manage/carsource/look")'}
+                    <a href="{:url('manage/carsource/look',['id'=>$vo['car_source_id']])}">详情</a>&nbsp;
+                {/if}
+                {if condition='ismeunshow("manage/todayrecomment/delete")'}
+                    <a href="javascript:;" class="delete_todayrecomment" todayrecomment_id="{$vo.id}">移除</a>
+                {/if} 
+            </td>
+            <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">
+                <input type="hidden" value="{$vo.id}" class="all_ids" pos='{$key}'>
+                {if condition='ismeunshow("manage/todayrecomment/move")'}
+                    {if condition='$key neq 0'}
+                        {if condition='ismeunshow("manage/todayrecomment/move")'}
+                        <a href="javascript:;" class="move_todayrecomment" type="1" pos='{$key}'>上移</a>&nbsp;
+                        {/if} 
+                    {/if}
+                    {if condition='$key neq (count($data)-1)'}
+                        {if condition='ismeunshow("manage/todayrecomment/move")'}
+                        <a href="javascript:;" class="move_todayrecomment" type="0" pos='{$key}'>下移</a>&nbsp; 
+                        {/if}
+                    {/if}
+                {/if}
+            </td>
+        </tr>
+    </table>
+</div>
+{/volist}
+
+<div style="margin-bottom: 40px;"></div>
+
+<style type="text/css">
+    #iframe_big_box{display:block;justify-content: center;align-items: center;position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background-color: rgba(0,0,0,0.4); z-index: 9999;visibility:hidden;}
+    #iframe_small_box{border: 1px solid #f2f2f2;background-color: #f2f2f2;margin:auto;max-height: 90%;width: 90%; display: block;max-width: 1200px;padding-bottom: 30px;}
+</style>
+<div id="iframe_big_box" isshow='0'>
+    <iframe src="{:url('index/iframe/todayrecommentcarsourcelist')}" frameborder="0" id="iframe_small_box" name="iframe_small_box"></iframe>
+</div>
+    
+<script type="text/javascript">
+$(function(){
+    //选择车源
+    $('#select_source').click(function(){
+        if (!!window.ActiveXObject || "ActiveXObject" in window){
+            $(window.frames["iframe_small_box"].document).find(".filter_search a.byt").click();
+        }
+        $('#iframe_big_box').attr('isshow','1');
+        $('#iframe_big_box').show();
+        return false;
+    });
+    //框架加载
+    $('#iframe_small_box').load(function(){
+        var container=$(window.frames["iframe_small_box"].document).find(".content");
+        $("#iframe_small_box").css({
+            'height':(container.height()+145)+'px',
+        });
+        var h = document.documentElement.clientHeight || document.body.clientHeight;
+        var small_h=$('#iframe_small_box').height();
+        $("#iframe_small_box").css({
+            'marginTop':((h-small_h)/2)+'px',
+        });
+        if($('#iframe_big_box').attr('isshow')=='1'){
+            $('#iframe_big_box').show();
+        }else{
+            $('#iframe_big_box').hide();
+            $('#iframe_big_box').css('visibility','visible');
+        }
+    });
+    //确定添加车源
+    $("body").on('click','.fister_add a.submit',function(){
+        var car_source_id=$('.fister_add input[name="car_source_id"]').val();
+        if(car_source_id==''){
+            Dolphin.notify('请选择车源', 'danger');
+            return false;
+        }
+        if(!confirm('确定添加？')) return false;
+        Dolphin.loading();
+        $.ajax({
+            type:'post',
+            url:'{:url("manage/todayrecomment/add")}',
+            data:{'car_source_id':car_source_id},
+            dataType:'JSON',
+            success:function(data){
+                Dolphin.loading('hide');
+                if (data.code==200) {
+                    Dolphin.notify(data.msg, 'success');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            },
+            error:function(xhr,status,error){
+                Dolphin.loading('hide');
+                Dolphin.notify('服务器错误~', 'danger');
+            }
+        });
+    });
+    //移除
+    $("body").on('click','a.delete_todayrecomment',function(){
+        if(!confirm("确定移除？")){
+            return false;
+        }
+        var todayrecomment_id=parseInt($(this).attr('todayrecomment_id'));
+        Dolphin.loading();
+        $.ajax({
+            type:'post',
+            url:'{:url("manage/todayrecomment/delete")}',
+            data:{'id':todayrecomment_id},
+            dataType:'JSON',
+            success:function(data){
+                Dolphin.loading('hide');
+                if (data.code==200) {
+                    Dolphin.notify(data.msg, 'success');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            },
+            error:function(xhr,status,error){
+                Dolphin.loading('hide');
+                Dolphin.notify('服务器错误~', 'danger');
+            }
+        });
+    });
+    //移动
+    $("body").on('click','a.move_todayrecomment',function(){
+        var type=parseInt($(this).attr('type'));
+        var bz_pos=parseInt($(this).attr('pos'));
+        var ids=[];
+        $('input.all_ids').each(function(){
+            var pos=parseInt($(this).attr('pos'));
+            ids[pos]=$(this).val();
+        });
+        var bz='';
+        if (type) {
+            bz=ids[bz_pos];
+            ids[bz_pos]=ids[bz_pos-1];
+            ids[bz_pos-1]=bz;
+        }else{
+            bz=ids[bz_pos];
+            ids[bz_pos]=ids[bz_pos+1];
+            ids[bz_pos+1]=bz;
+        }
+        ids=ids.join(',');
+        Dolphin.loading();
+        $.ajax({
+            type:'post',
+            url:'{:url("manage/todayrecomment/move")}',
+            data:{type:type,'id':ids},
+            dataType:'JSON',
+            success:function(data){
+                Dolphin.loading('hide');
+                if (data.code==200) {
+                    Dolphin.notify(data.msg, 'success');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 800);
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            },
+            error:function(xhr,status,error){
+                Dolphin.loading('hide');
+                Dolphin.notify('服务器错误~', 'danger');
+            }
+        });
+    });
+    //长度对齐
+    var ddv1_width=0;
+    $('table.lit_table tr th.ddv1').each(function(){
+        if($(this).width()>ddv1_width){
+            ddv1_width=$(this).width();
+        }
+    });
+    if(ddv1_width>220) ddv1_width=220;
+    $('table.lit_table tr th.ddv1').css('width',ddv1_width);
+    var ddv2_width=0;
+    $('table.lit_table tr th.ddv2').each(function(){
+        if($(this).width()>ddv2_width){
+            ddv2_width=$(this).width();
+        }
+    });
+    if(ddv2_width>220) ddv2_width=220;
+    $('table.lit_table tr th.ddv2').css('width',ddv2_width);
+});
+</script>
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

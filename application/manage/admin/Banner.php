@@ -37,6 +37,12 @@ class Banner extends Admin
             if($data['terminal']===''){
                 return json_return('F','1000','展示端必选');
             }
+            if($data['terminal']=='0'){
+                $count=db('banners')->where(['terminal'=>'0'])->count('id');
+                if($count>=5){
+                    return json_return('F','1000','小程序端最多上传5张Banner图');
+                }
+            }
             if($data['img']===''){
                 return json_return('F','1000','图片必传');
             }

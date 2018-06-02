@@ -11,10 +11,18 @@ use app\common\builder\ZBuilder;
 class Index extends Admin
 {
 	public function index(){  
-        return ZBuilder::make('table')
-            ->setPageTitle('') // 设置页面标题
-            ->setPageTips('') // 设置页面提示信息
-            ->hideCheckbox() //隐藏第一列多选框
-            ->fetch();
+        $user_count=db('users')->count('id');
+        $merchant_count=db('merchants')->count('id');
+        $car_source_count=db('car_sources')->count('id');
+        $order_count=db('orders')->count('id');
+        //模板赋值
+        $this->assign([
+        	'user_count'=>number_format($user_count,0,'.',','),
+        	'merchant_count'=>number_format($merchant_count,0,'.',','),
+        	'car_source_count'=>number_format($car_source_count,0,'.',','),
+        	'order_count'=>number_format($order_count,0,'.',','),
+        ]);
+        //渲染模板
+        return $this->fetch();
 	}
 }
