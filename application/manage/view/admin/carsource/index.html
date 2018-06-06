@@ -265,6 +265,31 @@
                 $('.one_check').removeAttr('checked');
             }
         });
+        $('.one_check').click(function(){
+            var checked = $(this).prop("checked");
+            var pix=true;
+            if(checked){
+                $('.one_check').each(function(){
+                    if(!$(this).prop("checked")){
+                        pix=false;
+                        return false;
+                    }
+                });
+                if(pix){
+                    $('#all_check').prop('checked',true);
+                }
+            }else{
+                $('.one_check').each(function(){
+                    if($(this).prop("checked")){
+                        pix=false;
+                        return false;
+                    }
+                });
+                if(!pix){
+                    $('#all_check').removeAttr('checked');
+                }
+            }
+         });
         //长度对齐
         var ddv1_width=0;
         $('table.lit_table tr th.ddv1').each(function(){

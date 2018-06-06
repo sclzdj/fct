@@ -707,4 +707,63 @@ class Merchant extends Admin
             return json_return('F','500','请求错误');
         }
     }
+    //权限设置
+    public function setauth(){
+        $now=time(); 
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            //检查有无越限
+            $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
+            $menu_auth=json_decode($menu_auth,true);
+            $new_menu_auth=[];
+            //检查是否丢失上级
+            foreach ($data['menu_auth'] as $k => $v) {
+                $menu=db('admin_menu')->where('id',$v)->find();
+                if($menu){
+                    $new_menu_auth[]=$v;
+                    $pids=get_menu_pids($v);
+                    $pids=explode(',',$pids);
+                    if($pids){
+                        foreach ($pids as $_k => $_v) {
+                            if(is_numeric($_v)){
+                                $new_menu_auth[]=$_v;
+                            }
+                        }
+                    }
+                }
+            }
+            $new_menu_auth=array_unique($new_menu_auth);
+            $new_menu_auth=array_values($new_menu_auth);
+            $new_menu_auth=json_encode($new_menu_auth);
+            //入库
+            $update=[];
+            $update['menu_auth']=$new_menu_auth;
+            $rt=db('admin_role')->where('id','2')->update($update);
+            if($rt!==false){
+                if($rt>0){
+                    record_log(request()->module(),request()->controller(),'权限设置');
+                }
+                return json_return('T','200','权限设置成功');
+            }else{
+                return json_return('F','500','权限设置失败');
+            }
+        } 
+        //查出所有权限
+        $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
+        $menu_auth=json_decode($menu_auth,true);
+        $admin_menu=db('admin_menu')->field('id,title,pid,url_value')->where('id','in',$menu_auth)->order('sort asc')->select();
+        $admin_menu=cateSort($admin_menu,0,0,'pid');
+        //查出商户权限
+        $admin_role=db('admin_role')->field('menu_auth')->where('id','2')->find();
+        //处理数据
+        $admin_role['menu_auth']=json_decode($admin_role['menu_auth'],true);
+        //模板赋值
+        $this->assign([
+            'admin_menu'=>$admin_menu,
+            'menu_auth'=>$menu_auth,
+            'admin_role'=>$admin_role,
+        ]);
+        //渲染模板
+        return $this->fetch();
+    }
 }

@@ -1,0 +1,333 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__ADMIN_JS__/ajaxfileupload.js"></script>
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<style>
+.auth_btn_all{display: inline-block;vertical-align: middle;text-align: center;padding: 10px 10px;}
+.auth_btn_all .auth_btn{display: inline-block;width: 90px;height: 30px;line-height: 30px; background: #5c90d2;color: #fff;text-align: center;border-radius: 5px;vertical-align: middle;cursor: pointer;}
+.menu_box{width:40%;min-width:420px;}
+.menu_auth{display: inline-block;border: 1px solid #ccc;padding: 10px 10px;vertical-align: middle;width: 100%;}
+.menu_auth .menu_auth_li{height: 30px;line-height: 30px;padding: 0 10px;vertical-align: middle;}
+.menu_auth .menu_auth_li img{height: 18px; width: 18px;line-height: 30px;display: inline-block;cursor: pointer;vertical-align: middle;}
+.menu_auth .menu_auth_li label{cursor: pointer; display: inline-block;vertical-align: middle;height: 30px;line-height: 30px;}
+.menu_auth .menu_auth_li input[type="checkbox"]{height: 18px;width: 18px;line-height: 30px;display: inline-block;vertical-align: middle;margin:0;}
+.menu_auth .menu_auth_li span.menu_title{height: 30px;line-height: 30px;display: inline-block;vertical-align: middle;}
+.menu_auth .menu_auth_li i.url_value{height: 30px;line-height: 30px;font-size: 12px;color: #999; display: inline-block;vertical-align: middle;}
+</style>
+<form id="edit_form">
+<input type="hidden" name="id" value="{$admin_role.id}">
+
+<div class="add_edit">
+    <div class="title">角色信息：</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="latips"><span class="required">*</span>角色名称：</span>
+                <input type="text" name="name" value="{$admin_role.name}" placeholder="请输入角色名称" style="min-width: 420px;">
+                <span class="bztips">长度不超过20个字</span>
+            </li>
+            <li>
+                <span class="latips">选择权限：</span>
+                <div style="display: inline-block;" class="menu_box">
+                <div class="auth_btn_all">
+                    <div class="auth_btn auth_btn_down">全部展开</div>
+                    <div class="auth_btn auth_btn_up">全部收起</div>
+                </div>
+                <br>
+                <div class="menu_auth">
+                    {volist name='admin_menu' id='vo'}
+                    {php}
+                        $padle=($vo['level']-1)*20+10;
+                        $pix=true;
+                        if($menu_auth===false){
+                            $menus=db('admin_menu')->field('id,title,pid')->where('pid',$vo['id'])->order('sort asc')->select();
+                            if(!$menus){
+                                $pix=false;
+                            }
+                        }else{
+                            $menus=db('admin_menu')->field('id,title,pid')->where('id','in',$menu_auth)->where('pid',$vo['id'])->order('sort asc')->select();
+                            if(!$menus){
+                                $pix=false;
+                            }
+                        }
+                    {/php}
+                    <div class="menu_auth_li" style="padding-left: {$padle}px;" level='{$vo.level}'>
+                        {if condition='$pix'}
+                        <img src="__ADMIN_IMG__/finecar/golle-down.png" class="menu_down" title="点击收起">
+                        {else/}
+                        <img src="__ADMIN_IMG__/finecar/golle-none.png">
+                        {/if}
+                        <label>
+                            <input type="checkbox" name="menu_auth[]" value="{$vo.id}" {if condition='in_array($vo.id,$admin_role.menu_auth)'}checked="checked"{/if}>
+                            <span class="menu_title">{$vo.title}</span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<i class="url_value">{$vo.url_value}</i>
+                        </label>
+                    </div>
+                    {/volist}
+                </div>
+                </div>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="edit_form_submit">确&nbsp;定</a>
+</div>
+
+</form>
+
+
+<script>
+    $(function(){
+        //下级全选或取消全选
+        $('body').on('change','.menu_auth .menu_auth_li input[type="checkbox"]',function(){
+            var checked = $(this).prop("checked");
+            var level=$(this).parent().parent().attr('level');
+            var _this=$(this);
+            var lev=0;
+            if(checked){
+                _this.parent().parent().nextAll('.menu_auth_li').each(function(){
+                    lev=$(this).attr('level');
+                    if(lev<=level){
+                        return false;
+                    }else{
+                        $(this).find('input[type="checkbox"]').prop('checked',true);
+                    }
+                });
+                if(level>1){
+                    var pix3=true;
+                    var pix2=true;
+                    var pix1=true;
+                    _this.parent().parent().prevAll('.menu_auth_li').each(function(){
+                        var lev=$(this).attr('level');
+                        if(level==4){
+                            if(lev==3){
+                                if(pix3){
+                                    $(this).find('input[type="checkbox"]').prop('checked',true);
+                                }
+                                pix3=false;
+                            }else if(lev==2){
+                                if(pix2){
+                                    $(this).find('input[type="checkbox"]').prop('checked',true);
+                                }
+                                pix2=false;
+                            }else if(lev==1){
+                                if(pix1){
+                                    $(this).find('input[type="checkbox"]').prop('checked',true);
+                                }
+                                pix1=false;
+                                return false;
+                            }
+                        }else if(level==3){
+                            if(lev==2){
+                                if(pix2){
+                                    $(this).find('input[type="checkbox"]').prop('checked',true);
+                                }
+                                pix2=false;
+                            }else if(lev==1){
+                                if(pix1){
+                                    $(this).find('input[type="checkbox"]').prop('checked',true);
+                                }
+                                pix1=false;
+                                return false;
+                            }
+                        }else if(level==2){
+                            if(lev==1){
+                                if(pix1){
+                                    $(this).find('input[type="checkbox"]').prop('checked',true);
+                                }
+                                pix1=false;
+                                return false;
+                            }
+                        }
+                    });
+                 } 
+            }else{
+                _this.parent().parent().nextAll('.menu_auth_li').each(function(){
+                    lev=$(this).attr('level');
+                    if(lev<=level){
+                        return false;
+                    }else{
+                        $(this).find('input[type="checkbox"]').removeAttr('checked');
+                    }
+                });
+                if(level==2){
+                    var _this1=0;
+                    var pix1=false;
+                    if(!pix1){
+                        _this.parent().parent().prevAll('.menu_auth_li').each(function(){
+                            var lev=$(this).attr('level');
+                            if(lev==1){
+                                _this1=$(this);
+                                return false;
+                            }
+                        });
+                    }
+                    _this1.nextAll('.menu_auth_li').each(function(){
+                        lev=$(this).attr('level');
+                        if(lev<=1){
+                            return false;
+                        }
+                        if($(this).find('input[type="checkbox"]').prop("checked")){
+                            pix1=true;
+                        }
+                    });
+                    if(!pix1){
+                        _this1.find('input[type="checkbox"]').removeAttr('checked');
+                    }
+                }else if(level==3){
+                    var _this2=0;
+                    var pix2=false;
+                    var _this1=0;
+                    var pix1=false;
+                    var this_pix=true;
+                    if(!pix2){
+                        _this.parent().parent().prevAll('.menu_auth_li').each(function(){
+                            var lev=$(this).attr('level');
+                            if(lev==2){
+                                if(this_pix){
+                                    _this2=$(this);
+                                    this_pix=false;
+                                }
+                            }else if(lev==1){
+                                _this1=$(this);
+                                return false;
+                            }
+                        });
+                    }
+                    _this2.nextAll('.menu_auth_li').each(function(){
+                        lev=$(this).attr('level');
+                        if(lev<=2){
+                            return false;
+                        }
+                        if($(this).find('input[type="checkbox"]').prop("checked")){
+                            pix2=true;
+                        }
+                    });
+                    if(!pix2){
+                        _this2.find('input[type="checkbox"]').removeAttr('checked');
+                    }
+                    _this1.nextAll('.menu_auth_li').each(function(){
+                        lev=$(this).attr('level');
+                        if(lev<=1){
+                            return false;
+                        }
+                        if($(this).find('input[type="checkbox"]').prop("checked")){
+                            pix1=true;
+                        }
+                    });
+                    if(!pix1){
+                        _this1.find('input[type="checkbox"]').removeAttr('checked');
+                    }
+                }
+            }
+        });        
+        //全部收起
+        $('body').on('click','.auth_btn_all .auth_btn_up',function(){
+            $('.menu_auth .menu_auth_li').each(function(){
+                var img_menu_down=$(this).find('img.menu_down');
+                img_menu_down.prop('src','__ADMIN_IMG__/finecar/golle-right.png');
+                img_menu_down.addClass('menu_up');
+                img_menu_down.removeClass('menu_down');
+                var level=parseInt($(this).attr('level'));
+                if(level>1){
+                    $(this).hide();
+                }
+            });
+            $('.menu_auth').css('width',(menu_auth_width+22)+'px');
+        });
+        //全部展开
+        $('body').on('click','.auth_btn_all .auth_btn_down',function(){
+            $('.menu_auth .menu_auth_li').each(function(){
+                var img_menu_up=$(this).find('img.menu_up');
+                img_menu_up.prop('src','__ADMIN_IMG__/finecar/golle-down.png');
+                img_menu_up.addClass('menu_down');
+                img_menu_up.removeClass('menu_up');
+                var level=parseInt($(this).attr('level'));
+                if(level>1){
+                    $(this).show();
+                }
+            });
+        });
+        //收起
+        $('body').on('click','.menu_auth .menu_auth_li img.menu_down',function(){
+            var level=$(this).parent().attr('level');
+            var _this=$(this);
+            _this.parent().nextAll('.menu_auth_li').each(function(){
+                var le=$(this).attr('level');
+                if(level>=le){
+                    return false;
+                }else{
+                    $(this).hide();
+                }
+            });
+            _this.prop('src','__ADMIN_IMG__/finecar/golle-right.png');
+            _this.addClass('menu_up');
+            _this.removeClass('menu_down');
+        });
+        //展开
+        $('body').on('click','.menu_auth .menu_auth_li img.menu_up',function(){
+            var level=$(this).parent().attr('level');
+            var _this=$(this);
+            _this.parent().nextAll('.menu_auth_li').each(function(){
+                var le=$(this).attr('level');
+                if(level>=le){
+                    return false;
+                }else{
+                    $(this).find('img.menu_up').prop('src','__ADMIN_IMG__/finecar/golle-down.png').addClass('menu_down').removeClass('menu_up');
+                    $(this).show();
+                }
+            });
+            _this.prop('src','__ADMIN_IMG__/finecar/golle-down.png');
+            _this.addClass('menu_down');
+            _this.removeClass('menu_up');
+        });
+        //提交
+        $('#edit_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/adminrole/edit")}',
+                data:$('#edit_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/adminrole/edit",["id"=>$admin_role["id"]])}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

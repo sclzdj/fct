@@ -52,52 +52,95 @@ class Adminrole extends Admin
 		$now=time(); 
 		if ($this->request->isPost()) {
             $data = $this->request->post();
-            if($data['title']===''){
-                return json_return('F','1000','文章标题必填');
+            if($data['name']===''){
+                return json_return('F','1000','角色名称必填');
             }
-            if(mb_strlen($data['title'],'utf8')>40) {
-                return json_return('F','1000','文章标题最多40个字');
+            if(mb_strlen($data['name'],'utf8')>20) {
+                return json_return('F','1000','角色名称最多20个字');
             }
-            if($data['writer']===''){
-                return json_return('F','1000','作者必填');
-            }
-            if(mb_strlen($data['writer'],'utf8')>40) {
-                return json_return('F','1000','作者最多8个字');
-            }
-            if($data['ground_at']===''){
-                $data['ground_at']=$now;
+            $ismerchant=ismerchant();
+            //检查有无越限
+            if($ismerchant){
+                $menu_auth=db('admin_role')->where('id','2')->value('menu_auth');
+                $menu_auth=json_decode($menu_auth,true);
+                $default_module='236';
+            }elseif(!isSupper()){
+                $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
+                $menu_auth=json_decode($menu_auth,true);
+                $default_module='236';
             }else{
-                $data['ground_at']=strtotime($data['ground_at'].' 00:00:00');
+                $menu_auth=[];
+                $admin_menu=db('admin_menu')->field('id')->select();
+                foreach ($admin_menu as $k => $v) {
+                    $menu_auth[]=$v['id'];
+                }
+                $default_module='0';
             }
-            if($data['lower_at']===''){
-                return json_return('F','1000','下架日期必选');
-            }
-            $data['lower_at']=strtotime($data['lower_at'].' 23:59:59');
-            if($data['ground_at']-$data['lower_at']>=0){
-                return json_return('F','1000','下架日期必需大于上架日期');
-            }
-            if(strip_tags($_POST['content'])!==''){
-                if(mb_strlen(strip_tags($_POST['content']),'utf8')>3000) {
-                    return json_return('F','1000','正文最多3000个字');
+            foreach ($data['menu_auth'] as $k => $v) {
+                if(!in_array($v, $menu_auth)){
+                    unset($data['menu_auth'][$k]);
                 }
             }
+            $data['menu_auth']=array_values($data['menu_auth']);
+            $new_menu_auth=[];
+            //检查是否丢失上级
+            foreach ($data['menu_auth'] as $k => $v) {
+                $menu=db('admin_menu')->where('id',$v)->find();
+                if($menu){
+                    $new_menu_auth[]=$v;
+                    $pids=get_menu_pids($v);
+                    $pids=explode(',',$pids);
+                    if($pids){
+                        foreach ($pids as $_k => $_v) {
+                            if(is_numeric($_v)){
+                                $new_menu_auth[]=$_v;
+                            }
+                        }
+                    }
+                }
+            }
+            $new_menu_auth=array_unique($new_menu_auth);
+            $new_menu_auth=array_values($new_menu_auth);
+            $new_menu_auth=json_encode($new_menu_auth);
+            //入库
             $insert=[];
-            $insert['title']=$data['title'];
-            $insert['writer']=$data['writer'];
-            $insert['ground_at']=$data['ground_at'];
-            $insert['lower_at']=$data['lower_at'];
-            $insert['content']=$_POST['content'];
-            $insert['state']='1';
-            $insert['runner_id']=UID;
-            $insert['created_at']=$now;
-            $insert_id=db('articles')->insertGetId($insert);
+            $insert['name']=$data['name'];
+            $insert['menu_auth']=$new_menu_auth;
+            $insert['sort']='100';
+            $insert['status']='1';
+            $insert['access']='1';
+            $insert['default_module']=$default_module;
+            $insert['update_time']=$now;
+            $insert['create_time']=$now;
+            $insert['merchant_id']=(int)$ismerchant;
+            $insert_id=db('admin_role')->insertGetId($insert);
             if($insert_id>0){
-                record_log(request()->module(),request()->controller(),'添加文章');
+                record_log(request()->module(),request()->controller(),'添加角色');
                 return json_return('T','200','添加成功');
             }else{
                 return json_return('F','500','添加失败');
             }
         } 
+        //查出权限
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            $menu_auth=db('admin_role')->where('id','2')->value('menu_auth');
+            $menu_auth=json_decode($menu_auth,true);
+            $admin_menu=db('admin_menu')->field('id,title,pid,url_value')->where('id','in',$menu_auth)->order('sort asc')->select();
+        }elseif(!isSupper()){
+            $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
+            $menu_auth=json_decode($menu_auth,true);
+            $admin_menu=db('admin_menu')->field('id,title,pid,url_value')->where('id','in',$menu_auth)->order('sort asc')->select();
+        }else{
+            $menu_auth=false;
+            $admin_menu=db('admin_menu')->field('id,title,pid,url_value')->order('sort asc')->select();
+        }
+        $admin_menu=cateSort($admin_menu,0,0,'pid');
+        //模板赋值
+        $this->assign([
+            'admin_menu'=>$admin_menu,
+            'menu_auth'=>$menu_auth,
+        ]);
         //渲染模板
         return $this->fetch();
 	}
@@ -106,82 +149,174 @@ class Adminrole extends Admin
         $now=time(); 
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            $article=db('articles')->find($data['id']);
-            if(!$article){
+            $ismerchant=ismerchant();
+            $admin_role=db('admin_role')->find($data['id']);
+            if(!$admin_role){
                 return json_return('F','500','请求错误');
             }
-            if($data['title']===''){
-                return json_return('F','1000','文章标题必填');
-            }
-            if(mb_strlen($data['title'],'utf8')>40) {
-                return json_return('F','1000','文章标题最多40个字');
-            }
-            if($data['writer']===''){
-                return json_return('F','1000','作者必填');
-            }
-            if(mb_strlen($data['writer'],'utf8')>40) {
-                return json_return('F','1000','作者最多8个字');
-            }
-            if($data['ground_at']===''){
-                return json_return('F','1000','上架日期必选');
-            }
-            $data['ground_at']=strtotime($data['ground_at'].' 00:00:00');
-            if($data['lower_at']===''){
-                return json_return('F','1000','下架日期必选');
-            }
-            $data['lower_at']=strtotime($data['lower_at'].' 23:59:59');
-            if($data['ground_at']-$data['lower_at']>=0){
-                return json_return('F','1000','下架日期必需大于上架日期');
-            }
-            if(strip_tags($_POST['content'])!==''){
-                if(mb_strlen(strip_tags($_POST['content']),'utf8')>3000) {
-                    return json_return('F','1000','正文最多3000个字');
+            if(ismerchant()){
+                if($admin_role['merchant_id']!=ismerchant()){
+                    return json_return('F','500','请求错误');
                 }
             }
+            if($data['name']===''){
+                return json_return('F','1000','角色名称必填');
+            }
+            if(mb_strlen($data['name'],'utf8')>20) {
+                return json_return('F','1000','角色名称最多20个字');
+            }
+            //检查有无越限
+            if($ismerchant){
+                $menu_auth=db('admin_role')->where('id','2')->value('menu_auth');
+                $menu_auth=json_decode($menu_auth,true);
+            }elseif(!isSupper()){
+                $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
+                $menu_auth=json_decode($menu_auth,true);
+            }else{
+                $menu_auth=[];
+                $admin_menu=db('admin_menu')->field('id')->select();
+                foreach ($admin_menu as $k => $v) {
+                    $menu_auth[]=$v['id'];
+                }
+            }
+            foreach ($data['menu_auth'] as $k => $v) {
+                if(!in_array($v, $menu_auth)){
+                    unset($data['menu_auth'][$k]);
+                }
+            }
+            $data['menu_auth']=array_values($data['menu_auth']);
+            $new_menu_auth=[];
+            //检查是否丢失上级
+            foreach ($data['menu_auth'] as $k => $v) {
+                $menu=db('admin_menu')->where('id',$v)->find();
+                if($menu){
+                    $new_menu_auth[]=$v;
+                    $pids=get_menu_pids($v);
+                    $pids=explode(',',$pids);
+                    if($pids){
+                        foreach ($pids as $_k => $_v) {
+                            if(is_numeric($_v)){
+                                $new_menu_auth[]=$_v;
+                            }
+                        }
+                    }
+                }
+            }
+            $new_menu_auth=array_unique($new_menu_auth);
+            $new_menu_auth=array_values($new_menu_auth);
+            $new_menu_auth=json_encode($new_menu_auth);
+            //入库
             $update=[];
-            $update['title']=$data['title'];
-            $update['writer']=$data['writer'];
-            $update['ground_at']=$data['ground_at'];
-            $update['lower_at']=$data['lower_at'];
-            $update['content']=$_POST['content'];
-            $rt=db('articles')->where('id',$data['id'])->update($update);
+            $update['name']=$data['name'];
+            $update['menu_auth']=$new_menu_auth;
+            $rt=db('admin_role')->where('id',$data['id'])->update($update);
             if($rt!==false){
-                if($rt>0) record_log(request()->module(),request()->controller(),'修改文章');
+                if($rt>0){
+                    record_log(request()->module(),request()->controller(),'修改角色');
+                }
                 return json_return('T','200','修改成功');
             }else{
                 return json_return('F','500','修改失败');
             }
         } 
-        $article=db('articles')->where('id',$id)->find();
-        if($article){
-            $article['created_at_str']=date('Y-m-d H:i',$article['created_at']);
-            $article['ground_at']=date('Y-m-d',$article['ground_at']);
-            $article['lower_at']=date('Y-m-d',$article['lower_at']);
-            //模板赋值
-            $this->assign([
-                'article'=>$article,
-            ]);
-            //渲染模板
-            return $this->fetch();
-        }else{
-            return $this->error('请求错误');
+        $ismerchant=ismerchant();
+        $admin_role=db('admin_role')->find($id);
+        if(!$admin_role){
+            return json_return('F','500','请求错误');
         }
+        if(ismerchant()){
+            if($admin_role['merchant_id']!=ismerchant()){
+                return json_return('F','500','请求错误');
+            }
+        }
+        //查出权限
+        if($ismerchant){
+            $menu_auth=db('admin_role')->where('id','2')->value('menu_auth');
+            $menu_auth=json_decode($menu_auth,true);
+            $admin_menu=db('admin_menu')->field('id,title,pid,url_value')->where('id','in',$menu_auth)->order('sort asc')->select();
+        }elseif(!isSupper()){
+            $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
+            $menu_auth=json_decode($menu_auth,true);
+            $admin_menu=db('admin_menu')->field('id,title,pid,url_value')->where('id','in',$menu_auth)->order('sort asc')->select();
+        }else{
+            $menu_auth=false;
+            $admin_menu=db('admin_menu')->field('id,title,pid,url_value')->order('sort asc')->select();
+        }
+        $admin_menu=cateSort($admin_menu,0,0,'pid');
+        //处理数据
+        $admin_role['menu_auth']=json_decode($admin_role['menu_auth'],true);
+        //模板赋值
+        $this->assign([
+            'admin_menu'=>$admin_menu,
+            'menu_auth'=>$menu_auth,
+            'admin_role'=>$admin_role,
+        ]);
+        //渲染模板
+        return $this->fetch();
     }
     //详情
     public function look($id=''){
-        $article=db('articles')->where('id',$id)->find();
-        if($article){
-            $article['created_at_str']=date('Y-m-d H:i',$article['created_at']);
-            $article['ground_at']=date('Y-m-d',$article['ground_at']);
-            $article['lower_at']=date('Y-m-d',$article['lower_at']);
-            //模板赋值
-            $this->assign([
-                'article'=>$article,
-            ]);
-            //渲染模板
-            return $this->fetch();
+        $ismerchant=ismerchant();
+        $admin_role=db('admin_role')->find($id);
+        if(!$admin_role){
+            return json_return('F','500','请求错误');
+        }
+        if(ismerchant()){
+            if($admin_role['merchant_id']!=ismerchant()){
+                return json_return('F','500','请求错误');
+            }
+        }
+        //查出权限
+        if($ismerchant){
+            $menu_auth=db('admin_role')->where('id','2')->value('menu_auth');
+            $menu_auth=json_decode($menu_auth,true);
+            $admin_menu=db('admin_menu')->field('id,title,pid,url_value')->where('id','in',$menu_auth)->order('sort asc')->select();
+        }elseif(!isSupper()){
+            $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
+            $menu_auth=json_decode($menu_auth,true);
+            $admin_menu=db('admin_menu')->field('id,title,pid,url_value')->where('id','in',$menu_auth)->order('sort asc')->select();
         }else{
-            return $this->error('请求错误');
+            $menu_auth=false;
+            $admin_menu=db('admin_menu')->field('id,title,pid,url_value')->order('sort asc')->select();
+        }
+        $admin_menu=cateSort($admin_menu,0,0,'pid');
+        //处理数据
+        $admin_role['menu_auth']=json_decode($admin_role['menu_auth'],true);
+        //模板赋值
+        $this->assign([
+            'admin_menu'=>$admin_menu,
+            'menu_auth'=>$menu_auth,
+            'admin_role'=>$admin_role,
+        ]);
+        //渲染模板
+        return $this->fetch();
+    }
+    //删除
+    public function delete($record=[]){
+        $id=input('param.id');
+        if($id=='1' || $id=='2' || $id=='3'){
+            return json_return('F','500','请求错误');
+        }
+        $ismerchant=ismerchant();
+        $map=[];
+        if($ismerchant){
+            $map['merchant_id']=$ismerchant;
+        }
+        $admin_role=db('admin_role')->where($map)->where('id',$id)->find();
+        if($admin_role){
+            $admin_user=db('admin_user')->where('role',$id)->select();
+            if($admin_user){
+                return json_return('F','10000','此角色已被帐号引用，请删除账号后再删除此角色');
+            }
+            $rt=db('admin_role')->where($map)->where('id',$id)->delete();
+            if($rt!==false){
+                if($rt>0) record_log(request()->module(),request()->controller(),'删除角色');
+                return json_return('T','200','删除角色成功');
+            }else{
+                return json_return('F','500','删除角色失败');
+            }
+        }else{
+            return json_return('F','500','请求错误');
         }
     }
 }

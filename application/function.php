@@ -240,3 +240,36 @@ if(!function_exists('random')){
         return $code;
     }
 }
+//查找菜单所有父级
+if(!function_exists('get_menu_pids')){
+    function get_menu_pids($id){
+        $pids = '';
+        $parent_id = db('admin_menu')->where('id',$id)->value('pid');
+        if( $parent_id != '' ){
+            $pids .= $parent_id;
+            $npids = get_menu_pids( $parent_id );
+            if(isset($npids))
+                $pids .= ','.$npids;
+        }
+        $pids=trim($pids,',');
+        return $pids;
+    }
+}
+ /**
+ * 功能:无限级分类排序
+ * 参数:$data 类别查询结果集
+ * 返回值:$arr 递归查询排序后的数组
+ */
+if(!function_exists('cateSort')){
+    function cateSort($data,$pid=0,$level=0,$parent_name='parent_id') {
+        static $arr = [];
+        foreach($data as $k => $v) {
+            if($v[$parent_name] == $pid) {
+                $arr[$k] = $v;
+                $arr[$k]['level'] = $level + 1;
+                cateSort($data,$v['id'],$level+1,$parent_name);
+            }
+        }
+        return $arr;
+    }
+}

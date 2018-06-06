@@ -1,0 +1,239 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__ADMIN_JS__/ajaxfileupload.js"></script>
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<style>
+.auth_btn_all{display: inline-block;vertical-align: middle;text-align: center;padding: 10px 10px;}
+.auth_btn_all .auth_btn{display: inline-block;width: 120px;height: 30px;line-height: 30px; background: #5c90d2;color: #fff;text-align: center;border-radius: 5px;vertical-align: middle;cursor: pointer;}
+.menu_box{width:40%;min-width:600px;}
+.menu_auth{display: inline-block;border: 1px solid #ccc;padding: 10px 10px;vertical-align: middle;width: 100%;}
+.menu_auth .menu_auth_li{height: 30px;line-height: 30px;padding: 0 10px;vertical-align: middle; background: #f9f9f9;margin: 5px 0;}
+.menu_auth .menu_auth_li:hover{background: #ececec;}
+.menu_auth .menu_auth_li img{height: 18px; width: 18px;line-height: 30px;display: inline-block;cursor: pointer;vertical-align: middle;}
+.menu_auth .menu_auth_li label{cursor: pointer; display: inline-block;vertical-align: middle;height: 30px;line-height: 30px;}
+.menu_auth .menu_auth_li input[type="checkbox"]{height: 18px;width: 18px;line-height: 30px;display: inline-block;vertical-align: middle;margin:0;}
+.menu_auth .menu_auth_li input.menu_input{height: 20px;line-height: 20px;width: 150px;}
+.menu_auth .menu_auth_li span.menu_title{height: 30px;line-height: 30px;display: inline-block;vertical-align: middle;}
+.menu_auth .menu_auth_li i.url_value{height: 30px;line-height: 30px;font-size: 12px;color: #999; display: inline-block;vertical-align: middle;}
+.menu_auth .menu_auth_li a.menu_btn{display: none;}
+</style>
+
+
+<div class="add_edit">
+    <div class="con">
+        <ul>
+            <li>
+                <div style="display: inline-block;" class="menu_box">
+                <div class="menu_auth">
+                    {php}
+                        $ismeunshow_add=ismeunshow("manage/adminmenu/add");
+                        $ismeunshow_edit=ismeunshow("manage/adminmenu/edit");
+                        $ismeunshow_delete=ismeunshow("manage/adminmenu/delete");
+                    {/php}
+                    {volist name='admin_menu' id='vo'}
+                    {php}
+                        $padle=($vo['level']-1)*20+10;
+                        $pix=true;
+                        if($menu_auth===false){
+                            $menus=db('admin_menu')->field('id,title,pid')->where('pid',$vo['id'])->order('sort asc')->select();
+                            if(!$menus){
+                                $pix=false;
+                            }
+                        }else{
+                            $menus=db('admin_menu')->field('id,title,pid')->where('id','in',$menu_auth)->where('pid',$vo['id'])->order('sort asc')->select();
+                            if(!$menus){
+                                $pix=false;
+                            }
+                        }
+                    {/php}
+                    <div class="menu_auth_li" style="margin-left: {$padle}px;" level='{$vo.level}'>
+                        <span class="menu_title">{$vo.title}</span>
+                        &nbsp;&nbsp;<i class="url_value">{$vo.url_value}</i>
+                        {if condition='$ismeunshow_add'}
+                            {if condition='$vo.level < 4'}
+                            &nbsp;&nbsp;<a href="javascript:;" class="add_menu menu_btn" menu_id="{$vo.id}">添加</a>
+                            {/if}
+                        {/if}
+                        {if condition='$ismeunshow_edit'}
+                        &nbsp;&nbsp;<a href="javascript:;" class="edit_menu menu_btn" menu_id="{$vo.id}">修改</a>
+                        {/if}
+                        {if condition='$ismeunshow_delete'}
+                        &nbsp;&nbsp;<a href="javascript:;" class="delete_menu menu_btn" menu_id="{$vo.id}">删除</a>
+                        {/if}
+                    </div>
+                    {/volist}
+                </div>
+                </div>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+    $(function(){
+        {if condition='$ismeunshow_add'}
+        //添加
+        $('body').on('click','.menu_auth .menu_auth_li a.add_menu',function(){
+            $('.menu_auth .menu_auth_li').css('opacity','0.5');
+            _this=$(this);
+            _this.parent().css({'opacity':'1','background':'#ececec'});
+            _this.parent().find('a.menu_btn').hide();
+            var menu_id=_this.attr('menu_id');
+            var level=_this.parent().attr('level');
+            var _this0=0;
+            _this.parent().nextAll('.menu_auth_li').each(function(){
+                var lev=$(this).attr('level');
+                if(lev<=level){
+                    _this0=$(this);
+                    return false;
+                }
+            });
+            if(_this0==0){
+                $('.menu_auth').append('<div class="menu_auth_li add_menu_auth_li" style="margin-left: '+(level*20+10)+'px;">名称：<input type="text" name="title" value="" placeholder="请输入权限名称" style="height: 30px;line-height: 30px;width: 120px;min-width: 100px;">&nbsp;链接：<input type="text" name="url_value" value="" placeholder="请输入权限链接" style="height: 30px;line-height: 30px;width: 150px;min-width: 120px;">&nbsp;&nbsp;<a href="javascript:;" class="add_menu_submit" pid="'+menu_id+'">确定</a>&nbsp;&nbsp;<a href="javascript:;" class="add_menu_cancel">取消</a></div>');
+            }else{
+                _this0.before('<div class="menu_auth_li add_menu_auth_li" style="margin-left: '+(level*20+10)+'px;">名称：<input type="text" name="title" value="" placeholder="请输入权限名称" style="height: 30px;line-height: 30px;width: 120px;min-width: 100px;">&nbsp;链接：<input type="text" name="url_value" value="" placeholder="请输入权限链接" style="height: 30px;line-height: 30px;width: 150px;min-width: 120px;">&nbsp;&nbsp;<a href="javascript:;" class="add_menu_submit" pid="'+menu_id+'">确定</a>&nbsp;&nbsp;<a href="javascript:;" class="add_menu_cancel">取消</a></div>');
+            }
+            var add_menu_auth_li = $(".menu_auth .add_menu_auth_li").offset();      
+            $("html,body").animate({scrollTop:add_menu_auth_li.top - "450" + "px"}, 500);
+        });
+        $('body').on('click','.menu_auth .menu_auth_li a.add_menu_cancel',function(){
+            $(this).parent().remove();
+            $('.menu_auth .menu_auth_li').css({'opacity':'1','background':'#fcfcfc'});
+        });
+        $('body').on('click','.menu_auth .menu_auth_li a.add_menu_submit',function(){
+            var pid=$(this).attr('pid');
+            var title=$(this).parent().find('input[name="title"]').val();
+            var url_value=$(this).parent().find('input[name="url_value"]').val();
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/adminmenu/add")}',
+                data:{pid:pid,title:title,url_value:url_value},
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        {/if}
+        {if condition='$ismeunshow_edit'}
+        //修改
+        $('body').on('click','.menu_auth .menu_auth_li a.edit_menu',function(){
+            $('.menu_auth .menu_auth_li').css('opacity','0.5');
+            _this=$(this);
+            _this.parent().hide();
+            var menu_id=_this.attr('menu_id');
+            var level=_this.parent().attr('level');
+            var title=_this.parent().find('span').html();
+            var url_value=_this.parent().find('i').html();
+            _this.parent().after('<div class="menu_auth_li" style="margin-left: '+((level-1)*20+10)+'px;">名称：<input type="text" name="title" value="'+title+'" placeholder="请输入权限名称" style="height: 30px;line-height: 30px;width: 120px;min-width: 100px;">&nbsp;链接：<input type="text" name="url_value" value="'+url_value+'" placeholder="请输入权限链接" style="height: 30px;line-height: 30px;width: 150px;min-width: 120px;">&nbsp;&nbsp;<a href="javascript:;" class="edit_menu_submit" menu_id="'+menu_id+'">确定</a>&nbsp;&nbsp;<a href="javascript:;" class="edit_menu_cancel">取消</a></div>');
+        });
+        $('body').on('click','.menu_auth .menu_auth_li a.edit_menu_cancel',function(){
+            $(this).parent().remove();
+            $('.menu_auth .menu_auth_li').show();
+            $('.menu_auth .menu_auth_li').css({'opacity':'1'});
+        });
+        $('body').on('click','.menu_auth .menu_auth_li a.edit_menu_submit',function(){
+            var menu_id=$(this).attr('menu_id');
+            var title=$(this).parent().find('input[name="title"]').val();
+            var url_value=$(this).parent().find('input[name="url_value"]').val();
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/adminmenu/edit")}',
+                data:{id:menu_id,title:title,url_value:url_value},
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        {/if}
+        {if condition='$ismeunshow_delete'}
+        //删除
+        $("body").on('click','.menu_auth .menu_auth_li a.delete_menu',function(){
+            if(!confirm("确定删除？")){
+                return false;
+            }
+            var menu_id=parseInt($(this).attr('menu_id'));
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/adminmenu/delete")}',
+                data:{'id':menu_id},
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        {/if}
+        //按钮显隐
+        $('body').on('mouseover','.menu_auth .menu_auth_li',function(){
+            $(this).find('a.menu_btn').show();
+        });
+        $('body').on('mouseout','.menu_auth .menu_auth_li',function(){
+            $(this).find('a.menu_btn').hide();
+        });
+    });
+</script>
+
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}
