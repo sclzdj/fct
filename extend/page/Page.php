@@ -14,7 +14,13 @@ class Page extends Paginator
 {
     //跳转
     protected function go() {
-        $str="跳转至<input type='text' value='".$this->currentPage()."'>页&nbsp;";
+        $url=$this->url(1);
+        $parse_url=parse_url($url);
+        parse_str($parse_url['query'], $query);
+        $query['page']='';
+        $go_url=$parse_url['path'].'?'.http_build_query($query);
+        $str="<p class='pageRemark'>跳至<input type='text' onkeyup='this.value=this.value.replace(/[^\d]/g,\"\");if(this.value==0) this.value=1;if(this.value>".$this->lastPage.") this.value=".$this->lastPage.";' onkeypress='if(event.keyCode == 13){location.href=\"".$go_url."\"+this.value}' value='".$this->currentPage()."'>页</p>";
+        return $str;
     }
     //首页
     protected function home() {
@@ -50,7 +56,7 @@ class Page extends Paginator
     }
     //统计信息
     protected function info(){
-        return "<p class='pageRemark'>每页<b>". $this->listRows ."</b>条，共<b>". $this->lastPage ."</b>页<b>" . $this->total . "</b>条数据</p>";
+        return "<p class='pageRemark'>每页<b>". $this->listRows ."</b>条，共<b>". $this->lastPage ."</b>页<b>" . $this->total . "</b>条数据；</p>";
     }
     /**
      * 页码按钮
@@ -109,15 +115,15 @@ class Page extends Paginator
                 );
             } else {
                 return sprintf(
-                    '%s<div class="pagination">%s %s %s %s %s %s</div>',
+                    '%s<div class="pagination">%s %s %s %s %s %s %s</div>',
                     $this->css(),
-                    $this->go(),
                     $this->home(),
                     $this->prev(),
                     $this->getLinks(),
                     $this->next(),
                     $this->last(),
-                    $this->info()
+                    $this->info(),
+                    $this->go()
                 );
             }
         }
@@ -254,6 +260,16 @@ class Page extends Paginator
                 padding:0px 0px;
                 color:#808080;
                 line-height:24px;
+            }
+            .pagination input{
+                width:50px;
+                padding:0px 3px;
+                font-size:12px;
+                height:24px;
+                line-height:24px;
+                color:#bbb;
+                border:1px #999 solid;
+                text-align:center;
             }
             .dates li {font-size: 14px;margin:20px 0}
             .dates li span{float:right}
