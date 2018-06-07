@@ -91,6 +91,8 @@
             if(status=='1'){
                 $('.menu_auth .menu_auth_li input[type="checkbox"]').prop('disabled',true);
                 $('#edit_form_submit').attr('status','0');
+                $('.menu_auth .menu_auth_li input[type="checkbox"]').prop('checked',true);
+                $('.menu_auth .menu_auth_li.no_in input[type="checkbox"]').removeAttr('checked');
                 $('.menu_auth .menu_auth_li.no_in').css('opacity','0.5');
                 $(this).attr('status','0');
                 $('#edit_form_submit').hide();

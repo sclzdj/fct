@@ -22,17 +22,17 @@ class File extends Home
     {
         $oss_upload_file_clear_run=(int)db('configs')->where('name','oss_upload_file_clear_run')->value('value');
         if($oss_upload_file_clear_run){
-            return json_return('F','1000','系统正在清除OSS无效文件，请稍后上传！');
+            return json_text_return('F','1000','系统正在清除OSS无效文件，请稍后上传！');
         }
         $type=input('param.type','file');
         $multiple=input('param.multiple','0');
         $size=(int)input('param.size',3*1024*1024);
         $suffix=input('param.suffix','');
         if(!in_array($type, ['image','file'])){
-            return json_return('F','1000','上传类型错误！');
+            return json_text_return('F','1000','上传类型错误！');
         }
         if($size<=0){
-            return json_return('F','1000','大小限制需大于0！');
+            return json_text_return('F','1000','大小限制需大于0！');
         }
         $file = request()->file('file');  //获取到上传的文件
         $now=time();
@@ -44,7 +44,7 @@ class File extends Home
                 $tye=$tye_arr[0];
                 if($type=='image'){
                     if($tye!='image'){
-                        return json_return('F','1000','你上传的不是图片类型！');
+                        return json_text_return('F','1000','你上传的不是图片类型！');
                     }
                 }
                 $name_arr=explode('.', $info['name']);
@@ -52,7 +52,7 @@ class File extends Home
                 if($suffix!==''){
                     $suffix_arr=explode(',',$suffix);
                     if(!in_array($fix,$suffix_arr)){
-                        return json_return('F','1000','后缀只能为'.$suffix.'！');
+                        return json_text_return('F','1000','后缀只能为'.$suffix.'！');
                     }
                 }
                 if($info['size']>$size){
@@ -63,7 +63,7 @@ class File extends Home
                     }else{
                         $tips=$size.'B';
                     }
-                    return json_return('F','1000','文件大小不能超过'.$tips.'！');
+                    return json_text_return('F','1000','文件大小不能超过'.$tips.'！');
                 }
                 $up[]=['fix'=>$fix,'tmp_name'=>$info['tmp_name']];
             }
@@ -82,9 +82,9 @@ class File extends Home
                 }
             }
             if($data){
-                return json_return('T',$data,'上传成功'.count($data).'张');
+                return json_text_return('T',$data,'上传成功'.count($data).'张');
             }else{
-                return json_return('F','500','上传失败');
+                return json_text_return('F','500','上传失败');
             }
         }else{
             $info=$file->getInfo();
@@ -92,7 +92,7 @@ class File extends Home
             $tye=$tye_arr[0];
             if($type=='image'){
                 if($tye!='image'){
-                    return json_return('F','1000','你上传的不是图片类型！');
+                    return json_text_return('F','1000','你上传的不是图片类型！');
                 }
             }
             $name_arr=explode('.', $info['name']);
@@ -100,7 +100,7 @@ class File extends Home
             if($suffix!==''){
                 $suffix_arr=explode(',',$suffix);
                 if(!in_array($fix,$suffix_arr)){
-                    return json_return('F','1000','后缀只能为'.$suffix.'！');
+                    return json_text_return('F','1000','后缀只能为'.$suffix.'！');
                 }
             }
             if($info['size']>$size){
@@ -111,7 +111,7 @@ class File extends Home
                 }else{
                     $tips=$size.'B';
                 }
-                return json_return('F','1000','文件大小不能超过'.$tips.'！');
+                return json_text_return('F','1000','文件大小不能超过'.$tips.'！');
             }
             $alioss = config('alioss'); //获取oss的配置
             //实例化对象 将配置传入
@@ -123,9 +123,9 @@ class File extends Home
             if(isset($result['info']['url'])){
                 db('oss_files')->insertGetId(['bucket'=>$alioss['Bucket'],'object'=>$fileName,'url'=>$result['info']['url'],'created_at'=>$now]);
                 $data=$result['info']['url'];
-                return json_return('T',$data,'上传成功');
+                return json_text_return('T',$data,'上传成功');
             }else{
-                return json_return('F','500','上传失败');
+                return json_text_return('F','500','上传失败');
             }
         }
     }

@@ -103,10 +103,7 @@
 
 <form style="display: none;" id='up_one_form' enctype="multipart/form-data"><input type="file" name="file" id="up_one_form_in" ralate="" suffix="" msize=""></form>
 
-<style type="text/css">
-    #iframe_big_box,#iframe_big_box_1{display:block;justify-content: center;align-items: center;position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background-color: rgba(0,0,0,0.4); z-index: 9999;visibility:hidden;}
-    #iframe_small_box,#iframe_small_box_1{border: 1px solid #f2f2f2;background-color: #f2f2f2;margin:auto;max-height: 90%;width: 90%; display: block;max-width: 1200px;padding-bottom: 30px;}
-</style>
+
 <div id="iframe_big_box" isshow='0'>
     <iframe src="{:url('index/iframe/ordercarsourcelist')}" frameborder="0" id="iframe_small_box" name="iframe_small_box"></iframe>
 </div>
@@ -118,24 +115,13 @@
     $(function(){
         //选择客户
         $('#select_customer').click(function(){
-            if (!!window.ActiveXObject || "ActiveXObject" in window){
-                $(window.frames["iframe_small_box_1"].document).find(".filter_search a.byt").click();
-            }
             $('#iframe_big_box_1').attr('isshow','1');
+            $('html,body').css({'overflow':'hidden','height':'100%'});
             $('#iframe_big_box_1').show();
             return false;
         });
         //客户框架加载
         $('#iframe_small_box_1').load(function(){
-            var container=$(window.frames["iframe_small_box_1"].document).find(".content");
-            $("#iframe_small_box_1").css({
-                'height':(container.height()+145)+'px',
-            });
-            var h = document.documentElement.clientHeight || document.body.clientHeight;
-            var small_h=$('#iframe_small_box_1').height();
-            $("#iframe_small_box_1").css({
-                'marginTop':((h-small_h)/2)+'px',
-            });
             if($('#iframe_big_box_1').attr('isshow')=='1'){
                 $('#iframe_big_box_1').show();
             }else{
@@ -145,24 +131,13 @@
         });
         //选择车源
         $('#select_source').click(function(){
-            if (!!window.ActiveXObject || "ActiveXObject" in window){
-                $(window.frames["iframe_small_box"].document).find(".filter_search a.byt").click();
-            }
             $('#iframe_big_box').attr('isshow','1');
+            $('html,body').css({'overflow':'hidden','height':'100%'});
             $('#iframe_big_box').show();
             return false;
         });
         //车源框架加载
         $('#iframe_small_box').load(function(){
-            var container=$(window.frames["iframe_small_box"].document).find(".content");
-            $("#iframe_small_box").css({
-                'height':(container.height()+145)+'px',
-            });
-            var h = document.documentElement.clientHeight || document.body.clientHeight;
-            var small_h=$('#iframe_small_box').height();
-            $("#iframe_small_box").css({
-                'marginTop':((h-small_h)/2)+'px',
-            });
             if($('#iframe_big_box').attr('isshow')=='1'){
                 $('#iframe_big_box').show();
             }else{

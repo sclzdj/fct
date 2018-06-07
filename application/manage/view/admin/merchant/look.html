@@ -281,7 +281,7 @@
                 <div>
                     {volist name="merchant.imgs" id="vo"}
                     <div class="imgall">
-                        <img src="{$vo}" onclick="window.open('{$vo}');" target="_blank" title="点击查看大图，拖拽调整顺序">
+                        <img src="{$vo}" target="_blank" title="点击查看大图，拖拽调整顺序" ralate="img_show_{$key}">
                     </div>
                     {/volist}
                 </div>
@@ -313,6 +313,75 @@
 <div style="margin: 40px auto;text-align: center;">
     <a href="javascript:window.history.go(-1);" class="btn btn-minw btn-primary rbt">返&nbsp;回</a>
 </div>
+
+
+
+<div class="dj_bigbox">
+    {php}$count=count($merchant['imgs']);{/php}
+    <img src="__ADMIN_IMG__/finecar/u2679.png" title="上一张" class="up_img" count="{$count}">
+    {volist name="merchant.imgs" id="vo"}
+        <img src="{$vo}" class="imgs img_show_{$key}" index="{$key}">
+    {/volist}
+    <img src="__ADMIN_IMG__/finecar/u2677.png" title="下一张" class="down_img" count="{$count}">
+</div>  
+
+<script>
+$(function(){
+    //打开阅图
+    $('.add_edit .con ul li .imgall img').click(function(){
+        var ralate=$(this).attr('ralate');
+        $('.dj_bigbox').show();
+        $('.dj_bigbox img.'+ralate).show();
+    });
+    //翻页阅图
+    $('.dj_bigbox img.up_img').click(function(){
+        var count=parseInt($(this).attr('count'));
+        var key=0;
+        $('.dj_bigbox img.imgs').each(function(){
+            if($(this).css('display')=='block' || $(this).css('display')=='inline'){
+                var index=parseInt($(this).attr('index'));
+                if(index==0){
+                    key=count-1;
+                }else{
+                    key=index-1;
+                }
+                $(this).fadeOut('slow','linear',function(){
+                    $('.dj_bigbox img.img_show_'+key).fadeIn('slow','linear');
+                });
+                return false;
+            }
+        });
+        return false;
+    });
+    $('.dj_bigbox img.down_img').click(function(){
+        var count=parseInt($(this).attr('count'));
+        var key=0;
+        $('.dj_bigbox img.imgs').each(function(){
+            if($(this).css('display')=='block' || $(this).css('display')=='inline'){
+                var index=parseInt($(this).attr('index'));
+                if(index==count-1){
+                    key=0;
+                }else{
+                    key=index+1;
+                }
+                $(this).fadeOut('slow','linear',function(){
+                    $('.dj_bigbox img.img_show_'+key).fadeIn('slow','linear');
+                });
+                return false;
+            }
+        });
+        return false;
+    });
+    //关闭阅图
+    $('.dj_bigbox').click(function(){
+        $(this).hide();
+        $(this).find('img.imgs').hide();
+    });
+    $('.dj_bigbox img.imgs').click(function(){
+        return false;
+    });
+});  
+</script>
 
 </form>
 <script src="__ADMIN_JS__/specil.js"></script>

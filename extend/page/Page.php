@@ -12,6 +12,10 @@ namespace page;
 use think\Paginator;
 class Page extends Paginator
 {
+    //跳转
+    protected function go() {
+        $str="跳转至<input type='text' value='".$this->currentPage()."'>页&nbsp;";
+    }
     //首页
     protected function home() {
         if ($this->currentPage() > 1) {
@@ -107,6 +111,7 @@ class Page extends Paginator
                 return sprintf(
                     '%s<div class="pagination">%s %s %s %s %s %s</div>',
                     $this->css(),
+                    $this->go(),
                     $this->home(),
                     $this->prev(),
                     $this->getLinks(),

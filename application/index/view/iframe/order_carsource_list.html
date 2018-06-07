@@ -161,7 +161,7 @@
         </tbody>
     </table>
 </div>
-<div style="margin:20px 5px;margin-bottom: 30px;">
+<div style="margin:0px 5px;margin-bottom: 30px;">
     {notempty name="page"}
     <div style="text-align: left;height: 45px;float: left;">
        {$page}  
@@ -180,15 +180,6 @@
 <script type="text/javascript">
 $(function(){
     var iframe_big_box=$(window.parent.document).find('#iframe_big_box');
-    var container=$(".content");
-    iframe_big_box.find("#iframe_small_box").css({
-        'height':(container.height()+100)+'px',
-    });
-    var h = $(window.parent.document).find('body').height();
-    var small_h=iframe_big_box.find('#iframe_small_box').height();
-    iframe_big_box.find("#iframe_small_box").css({
-        'marginTop':((h-small_h)/2)+'px',
-    });
     if(iframe_big_box.attr('isshow')=='1'){
         iframe_big_box.show();
     }else{
@@ -246,7 +237,8 @@ $(function(){
         }else{
             $('input[name="defind_model"]').val('');
         }
-        iframe_big_box.attr('isshow','0')
+        iframe_big_box.attr('isshow','0');
+        $(window.parent.document).find('html,body').css({'overflow':'scroll','height':'auto'});
     });
     //多选框只能单选
     $('.select_car_source').each(function(){

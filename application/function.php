@@ -50,6 +50,20 @@ if(!function_exists('json_return')){
         }
     }
 }
+
+//json字符串输出（图片接口用这个）
+if(!function_exists('json_text_return')){
+    function json_text_return($type,$param1='',$param2=''){
+        if($type=='T'){
+            if($param2==='') $param2='success';
+            echo json_encode(['code'=>200,'msg'=>$param2,'data'=>$param1]);die;
+        }else{
+            if($param1==='') $param1='500';
+            echo json_encode(['code'=>$param1,'msg'=>$param2]);die;
+        }
+    }
+}
+
 //地区文字
 if(!function_exists('region_text')){
     function region_text($data='',$pix=true){
