@@ -21,7 +21,11 @@
 </div>
 {/if}
 
-
+{php}
+    $ismeunshow_move=ismeunshow("manage/guesslike/move");
+    $ismeunshow_delete=ismeunshow("manage/guesslike/delete");
+    $ismeunshow_look=ismeunshow("manage/carsource/look");
+{/php}
 {volist name="data" id="vo"}
 <div class="lit" {if condition='$key neq 0'}style="padding-top: 0;"{/if}>
     <table class="lit_table">
@@ -41,25 +45,21 @@
                 </div>
             </td>
             <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
-                {if condition='ismeunshow("manage/carsource/look")'}
+                {if condition='$ismeunshow_look'}
                     <a href="{:url('manage/carsource/look',['id'=>$vo['car_source_id']])}">详情</a>&nbsp;
                 {/if}
-                {if condition='ismeunshow("manage/guesslike/delete")'}
+                {if condition='$ismeunshow_delete'}
                     <a href="javascript:;" class="delete_guesslike" guesslike_id="{$vo.id}">移除</a>
                 {/if} 
             </td>
             <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">
                 <input type="hidden" value="{$vo.id}" class="all_ids" pos='{$key}'>
-                {if condition='ismeunshow("manage/guesslike/move")'}
+                {if condition='$ismeunshow_move'}
                     {if condition='$key neq 0'}
-                        {if condition='ismeunshow("manage/guesslike/move")'}
                         <a href="javascript:;" class="move_guesslike" type="1" pos='{$key}'>上移</a>&nbsp;
-                        {/if} 
                     {/if}
                     {if condition='$key neq (count($data)-1)'}
-                        {if condition='ismeunshow("manage/guesslike/move")'}
                         <a href="javascript:;" class="move_guesslike" type="0" pos='{$key}'>下移</a>&nbsp; 
-                        {/if}
                     {/if}
                 {/if}
             </td>

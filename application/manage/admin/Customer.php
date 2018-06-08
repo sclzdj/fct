@@ -49,8 +49,9 @@ class Customer extends Admin
             $map['a.follow_at']=['<= time',$filter_at['follow_at_end']];
         }
         //车商
-        if(ismerchant()){
-            $map['c.id']=ismerchant();
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            $map['c.id']=$ismerchant;
         }
         $order=input('param.order','a.follow_at desc');
         $order=str_replace('+', ' ', $order);
@@ -69,8 +70,8 @@ class Customer extends Admin
             $data[$key]['follow_at_str']=date('Y-m-d H:i',$value['follow_at']);
             if($data[$key]['car_source_id']>0){
             	$map=[];
-	            if(ismerchant()){
-		            $map['b.id']=ismerchant();
+	            if($ismerchant){
+		            $map['b.id']=$ismerchant;
 		        }
 	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$value['car_source_id'])->find();
 	            if($carsource){
@@ -84,8 +85,8 @@ class Customer extends Admin
         }
         //所有车商
         $where=[];
-        if(ismerchant()){
-            $where['id']=ismerchant();
+        if($ismerchant){
+            $where['id']=$ismerchant;
         }
         $merchant=db('merchants')->field('id,shop_name')->where($where)->select();
         //模板赋值
@@ -114,14 +115,15 @@ class Customer extends Admin
         );
         $data = db('customers')->alias('a')->field('a.id,a.name,a.state,a.source,a.car_source_id,a.defind_model,a.merchant_id,a.mobile,a.follow_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where(session('user_index_export_map'))->order(session('user_index_export_order'))->select();
         $new_data=[];
+        $ismerchant=ismerchant();
         //处理数据
         foreach ($data as $key => $value) {
         	$value['created_at_str']=date('Y-m-d H:i',$value['created_at']);
             $value['follow_at_str']=date('Y-m-d H:i',$value['follow_at']);
             if($value['car_source_id']>0){
             	$map=[];
-	            if(ismerchant()){
-		            $map['b.id']=ismerchant();
+	            if($ismerchant){
+		            $map['b.id']=$ismerchant;
 		        }
 	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$value['car_source_id'])->find();
 	            if($carsource){
@@ -220,10 +222,11 @@ class Customer extends Admin
             if($data['car_source_id']=='' && $data['defind_model']===''){
                 return json_return('F','1000','意向车源必选');
             }
+            $ismerchant=ismerchant();
             if($data['car_source_id']!=''){
             	$map=[];
-	            if(ismerchant()){
-		            $map['b.id']=ismerchant();
+	            if($ismerchant){
+		            $map['b.id']=$ismerchant;
 		        }
 	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
 	            if(!$carsource){
@@ -253,7 +256,7 @@ class Customer extends Admin
             $insert['source']=$data['source'];
             $insert['state']=$data['state'];
             $insert['remark']=$data['remark'];
-            $insert['merchant_id']=intval(ismerchant());
+            $insert['merchant_id']=intval($ismerchant);
             $insert['created_at']=$now;
             $insert['follow_at']=$now;
             $insert['runner_id']=UID;
@@ -285,8 +288,9 @@ class Customer extends Admin
             if(!$customer){
                 return json_return('F','500','请求错误');
             }
-            if(ismerchant()){
-                if($customer['merchant_id']!=ismerchant()){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($customer['merchant_id']!=$ismerchant){
                     return json_return('F','500','请求错误');
                 }
             }
@@ -321,8 +325,8 @@ class Customer extends Admin
             }
             if($data['car_source_id']!='0'){
             	$map=[];
-	            if(ismerchant()){
-		            $map['b.id']=ismerchant();
+	            if($ismerchant){
+		            $map['b.id']=$ismerchant;
 		        }
 	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
 	            if(!$carsource){
@@ -370,8 +374,9 @@ class Customer extends Admin
         if(!$customer){
             return $this->error('请求错误');
         }
-        if(ismerchant()){
-            if($customer['merchant_id']!=ismerchant()){
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            if($customer['merchant_id']!=$ismerchant){
                 return $this->error('请求错误');
             }
         }
@@ -393,8 +398,9 @@ class Customer extends Admin
     public function look($id=''){
         $customer=db('customers')->where('id',$id)->find();
         if($customer){
-            if(ismerchant()){
-                if($customer['merchant_id']!=ismerchant()){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($customer['merchant_id']!=$ismerchant){
                     return $this->error('请求错误');
                 }
             }
@@ -405,8 +411,8 @@ class Customer extends Admin
             $customer['shop_name']=(string)db('merchants')->where('id',$customer['merchant_id'])->value('shop_name');
             if($customer['car_source_id']>0){
             	$map=[];
-	            if(ismerchant()){
-		            $map['b.id']=ismerchant();
+	            if($ismerchant){
+		            $map['b.id']=$ismerchant;
 		        }
 	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$customer['car_source_id'])->find();
 	            if($carsource){

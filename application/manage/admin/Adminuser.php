@@ -255,7 +255,6 @@ class Adminuser extends Admin
             return $this->error('请求错误');
         }
         //查出角色
-        $ismerchant=ismerchant();
         if($ismerchant){
             $roles=db('admin_role')->field('id,name')->where('merchant_id',$ismerchant)->select();
         }else{

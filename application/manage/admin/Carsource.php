@@ -61,8 +61,9 @@ class Carsource extends Admin
             $map['a.stock_state']=$filter['stock_state'];
         }
         //车商
-        if(ismerchant()){
-            $map['c.id']=ismerchant();
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            $map['c.id']=$ismerchant;
         }
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
@@ -227,7 +228,7 @@ class Carsource extends Admin
             $insert['created_at']=$now;
             $insert['audit']=1;
             $insert['audit_at']=$now;
-            $insert['merchant_id']=intval(ismerchant());
+            $insert['merchant_id']=intval($ismerchant);
             $insert['runner_id']=UID;
             $insert_id=db('car_sources')->insertGetId($insert);
             //入库
@@ -265,8 +266,9 @@ class Carsource extends Admin
             if(!$car_source){
                 return json_return('F','500','请求错误');
             }
-            if(ismerchant()){
-                if($car_source['merchant_id']!=ismerchant()){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($car_source['merchant_id']!=$ismerchant){
                     return json_return('F','500','请求错误');
                 }
             }
@@ -410,8 +412,9 @@ class Carsource extends Admin
         if(!$car_source){
             return $this->error('请求错误');
         }
-        if(ismerchant()){
-            if($car_source['merchant_id']!=ismerchant()){
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            if($car_source['merchant_id']!=$ismerchant){
                 return $this->error('请求错误');
             }
         }
@@ -452,8 +455,9 @@ class Carsource extends Admin
     public function look($id=''){
         $car_source=db('car_sources')->where('id',$id)->find();
         if($car_source){
-            if(ismerchant()){
-                if($car_source['merchant_id']!=ismerchant()){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($car_source['merchant_id']!=$ismerchant){
                     return $this->error('请求错误');
                 }
             }
@@ -488,9 +492,10 @@ class Carsource extends Admin
             $ids=input('param.id');
             $ids=explode(',',$ids);
             $car_source=db('car_sources')->where('id','in',$ids)->where('audit','0')->select();
+            $ismerchant=ismerchant();
             foreach ($car_source as $k => $v) {
-                if(ismerchant()){
-                    if($v['merchant_id']!=ismerchant()){
+                if($ismerchant){
+                    if($v['merchant_id']!=$ismerchant){
                         unset($id[$k]);
                     }
                 }
@@ -506,8 +511,9 @@ class Carsource extends Admin
         }  
         $car_source=db('car_sources')->where('id',$id)->find();
         if($car_source){
-            if(ismerchant()){
-                if($car_source['merchant_id']!=ismerchant()){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($car_source['merchant_id']!=$ismerchant){
                     return json_return('F','500','请求错误');
                 }
             }
@@ -528,9 +534,10 @@ class Carsource extends Admin
             $ids=input('param.id');
             $ids=explode(',',$ids);
             $car_source=db('car_sources')->where('id','in',$ids)->where('audit','0')->select();
+            $ismerchant=ismerchant();
             foreach ($car_source as $k => $v) {
-                if(ismerchant()){
-                    if($v['merchant_id']!=ismerchant()){
+                if($ismerchant){
+                    if($v['merchant_id']!=$ismerchant){
                         unset($id[$k]);
                     }
                 }
@@ -546,8 +553,9 @@ class Carsource extends Admin
         }  
         $car_source=db('car_sources')->where('id',$id)->find();
         if($car_source){
-            if(ismerchant()){
-                if($car_source['merchant_id']!=ismerchant()){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($car_source['merchant_id']!=$ismerchant){
                     return json_return('F','500','请求错误');
                 }
             }
@@ -566,8 +574,9 @@ class Carsource extends Admin
     public function upstock($id=''){
         $car_source=db('car_sources')->where('id',$id)->find();
         if($car_source){
-            if(ismerchant()){
-                if($car_source['merchant_id']!=ismerchant()){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($car_source['merchant_id']!=$ismerchant){
                     return json_return('F','500','请求错误');
                 }
             }
@@ -586,8 +595,9 @@ class Carsource extends Admin
     public function downstock($id=''){
         $car_source=db('car_sources')->where('id',$id)->find();
         if($car_source){
-            if(ismerchant()){
-                if($car_source['merchant_id']!=ismerchant()){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($car_source['merchant_id']!=$ismerchant){
                     return json_return('F','500','请求错误');
                 }
             }
@@ -606,8 +616,9 @@ class Carsource extends Admin
     public function outstock($id=''){
         $car_source=db('car_sources')->where('id',$id)->find();
         if($car_source){
-            if(ismerchant()){
-                if($car_source['merchant_id']!=ismerchant()){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($car_source['merchant_id']!=$ismerchant){
                     return json_return('F','500','请求错误');
                 }
             }

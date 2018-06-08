@@ -71,9 +71,6 @@ class Adminmenu extends Admin
             if(mb_strlen($data['title'],'utf8')>20) {
                 return json_return('F','1000','权限名称最多20个字');
             }
-            if($data['url_value']===''){
-                return json_return('F','1000','权限链接必填');
-            }
             //入库
             $insert=[];
             $insert['pid']=$data['pid'];
@@ -135,9 +132,6 @@ class Adminmenu extends Admin
             }
             if(mb_strlen($data['title'],'utf8')>20) {
                 return json_return('F','1000','权限名称最多20个字');
-            }
-            if($data['url_value']===''){
-                return json_return('F','1000','权限链接必填');
             }
             //入库
             $update=[];

@@ -22,8 +22,9 @@ class Adminrole extends Admin
             $map['name']=['like','%'.$filter['name'].'%'];
         }
         //车商
-        if(ismerchant()){
-            $map['merchant_id']=ismerchant();
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            $map['merchant_id']=$ismerchant;
         }
         $order=input('param.order','create_time desc');
         $order=str_replace('+', ' ', $order);
@@ -154,8 +155,8 @@ class Adminrole extends Admin
             if(!$admin_role){
                 return json_return('F','500','请求错误');
             }
-            if(ismerchant()){
-                if($admin_role['merchant_id']!=ismerchant()){
+            if($ismerchant){
+                if($admin_role['merchant_id']!=$ismerchant){
                     return json_return('F','500','请求错误');
                 }
             }
@@ -224,8 +225,8 @@ class Adminrole extends Admin
         if(!$admin_role){
             return json_return('F','500','请求错误');
         }
-        if(ismerchant()){
-            if($admin_role['merchant_id']!=ismerchant()){
+        if($ismerchant){
+            if($admin_role['merchant_id']!=$ismerchant){
                 return json_return('F','500','请求错误');
             }
         }
@@ -261,8 +262,8 @@ class Adminrole extends Admin
         if(!$admin_role){
             return json_return('F','500','请求错误');
         }
-        if(ismerchant()){
-            if($admin_role['merchant_id']!=ismerchant()){
+        if($ismerchant){
+            if($admin_role['merchant_id']!=$ismerchant){
                 return json_return('F','500','请求错误');
             }
         }

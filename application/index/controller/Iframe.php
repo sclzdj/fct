@@ -86,8 +86,9 @@ class Iframe extends Common
             $map['a.mobile']=['like','%'.$filter['mobile'].'%'];
         }
         //车商
-        if(ismerchant()){
-            $map['c.id']=ismerchant();
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            $map['c.id']=$ismerchant;
         }
         $order=input('param.order','a.follow_at desc');
         $order=str_replace('+', ' ', $order);
@@ -102,8 +103,8 @@ class Iframe extends Common
             $data[$key]['follow_at_str']=date('Y-m-d H:i',$value['follow_at']);
             if($data[$key]['car_source_id']>0){
                 $map=[];
-                if(ismerchant()){
-                    $map['b.id']=ismerchant();
+                if($ismerchant){
+                    $map['b.id']=$ismerchant;
                 }
                 $carsource=db('car_sources a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$value['car_source_id'])->find();
                 if($carsource){
@@ -155,8 +156,9 @@ class Iframe extends Common
             $map['c.shop_name']=['like','%'.$filter['shop_name'].'%'];
         }
         //车商
-        if(ismerchant()){
-            $map['c.id']=ismerchant();
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            $map['c.id']=$ismerchant;
         }
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
@@ -211,8 +213,9 @@ class Iframe extends Common
             $map['c.shop_name']=['like','%'.$filter['shop_name'].'%'];
         }
         //车商
-        if(ismerchant()){
-            $map['c.id']=ismerchant();
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            $map['c.id']=$ismerchant;
         }
         //过滤添加过的
         $today_recomment=db('today_recomments')->field('car_source_id')->select();
@@ -275,8 +278,9 @@ class Iframe extends Common
             $map['c.shop_name']=['like','%'.$filter['shop_name'].'%'];
         }
         //车商
-        if(ismerchant()){
-            $map['c.id']=ismerchant();
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            $map['c.id']=$ismerchant;
         }
         //过滤添加过的
         $guess_like=db('guess_likes')->field('car_source_id')->select();

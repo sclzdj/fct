@@ -193,7 +193,7 @@ class Order extends Admin
             $insert['state']=$data['state'];
             $insert['sale_id']=$data['sale_id'];
             $insert['remark']=$data['remark'];
-            $insert['merchant_id']=$customer['id'];
+            $insert['merchant_id']=$customer['merchant_id'];
             $insert['created_at']=$now;
             $insert['runner_id']=UID;
             $insert['sn']=date('YmdHis',$now).str_pad(mt_rand(1,999),3,"0",STR_PAD_LEFT);
@@ -208,9 +208,10 @@ class Order extends Admin
             }
         }
         //获取该商户下的账号
-        if(ismerchant()){
+        $ismerchant=ismerchant();
+        if($ismerchant){
             $map=[];
-            $map['b.merchant_id']=ismerchant();
+            $map['b.merchant_id']=$ismerchant;
             $admin_user=db('admin_user')->alias('a')->join('admin_role b','a.role=b.id','LEFT')->field('a.id,a.username')->where('a.role','neq','1')->where($map)->select();
         }elseif(!isSupper()){
             $admin_user=db('admin_user')->field('id,username')->where('role','neq','1')->select();
@@ -274,8 +275,9 @@ class Order extends Admin
         if(!$order){
             return $this->error('请求错误');
         }
-        if(ismerchant()){
-            if($order['merchant_id']!=ismerchant()){
+        $ismerchant=ismerchant();
+        if($ismerchant){
+            if($order['merchant_id']!=$ismerchant){
                 return $this->error('请求错误');
             }
         }
@@ -285,8 +287,8 @@ class Order extends Admin
         $order['customer_state']=db('customers')->where('id',$order['customer_id'])->value('state');
         if($order['car_source_id']>0){
             $map=[];
-            if(ismerchant()){
-                $map['b.id']=ismerchant();
+            if($ismerchant){
+                $map['b.id']=$ismerchant;
             }
             $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$order['car_source_id'])->find();
             if($carsource){
@@ -311,8 +313,9 @@ class Order extends Admin
     public function look($id=''){
         $order=db('orders')->where('id',$id)->find();
         if($order){
-            if(ismerchant()){
-                if($order['merchant_id']!=ismerchant()){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($order['merchant_id']!=$ismerchant){
                     return $this->error('请求错误');
                 }
             }
@@ -321,8 +324,8 @@ class Order extends Admin
             $order['customer_state']=db('customers')->where('id',$order['customer_id'])->value('state');
             if($order['car_source_id']>0){
                 $map=[];
-                if(ismerchant()){
-                    $map['b.id']=ismerchant();
+                if($ismerchant){
+                    $map['b.id']=$ismerchant;
                 }
                 $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$order['car_source_id'])->find();
                 if($carsource){

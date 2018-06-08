@@ -128,6 +128,12 @@
                 </th>
         </thead>
         <tbody>
+        {php}
+            $ismeunshow_enable=ismeunshow("manage/merchant/enable");
+            $ismeunshow_disable=ismeunshow("manage/merchant/disable");
+            $ismeunshow_edit=ismeunshow("manage/merchant/edit");
+            $ismeunshow_look=ismeunshow("manage/merchant/look");
+        {/php}
         {volist name="data" id="vo"}
         <tr>
             <td>
@@ -157,24 +163,24 @@
             </td>
             <td>
                 {if condition='$vo.state'}
-                    {if condition='ismeunshow("manage/merchant/enable")'}
+                    {if condition='$ismeunshow_enable'}
                     开通&nbsp;
                     {/if}
-                    {if condition='ismeunshow("manage/merchant/disable")'}
+                    {if condition='$ismeunshow_disable'}
                     <a href="javascript:;" onclick="merchant_update_state({$vo.id},0);">冻结</a>&nbsp; 
                     {/if}
                 {else/}
-                    {if condition='ismeunshow("manage/merchant/enable")'}
+                    {if condition='$ismeunshow_enable'}
                     <a href="javascript:;" onclick="merchant_update_state({$vo.id},1);">开通</a>&nbsp;
                     {/if}
-                    {if condition='ismeunshow("manage/merchant/disable")'}
+                    {if condition='$ismeunshow_disable'}
                     冻结&nbsp;
                     {/if}
                 {/if}
-                {if condition='ismeunshow("manage/merchant/edit")'}
+                {if condition='$ismeunshow_edit'}
                     <a href="{:url('manage/merchant/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
                 {/if}
-                {if condition='ismeunshow("manage/merchant/look")'}
+                {if condition='$ismeunshow_look'}
                     <a href="{:url('manage/merchant/look',['id'=>$vo['id']])}">详情</a>
                 {/if}                            
             </td>

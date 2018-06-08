@@ -103,4 +103,41 @@ class Todayrecomment extends Admin
         }
         return json_return('T','200',$tips.'今日好车推荐成功');
     }
+    //保存标签
+    public function savetag(){
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $today_recomment=db('today_recomments')->where('id',$data['id'])->find();
+            if(!$today_recomment){
+                return json_return('F','500','请求错误');
+            }
+            if($data['tag1']!==''){
+                if(mb_strlen($data['tag1'],'utf8')>10) {
+                    return json_return('F','1000','标签1最多10个字');
+                }
+            }
+            if($data['tag2']!==''){
+                if(mb_strlen($data['tag2'],'utf8')>10) {
+                    return json_return('F','1000','标签2最多10个字');
+                }
+            }
+            if($data['tag3']!==''){
+                if(mb_strlen($data['tag3'],'utf8')>10) {
+                    return json_return('F','1000','标签3最多10个字');
+                }
+            }
+            $update=[];
+            $update['id']=$data['id'];
+            $update['tag1']=$data['tag1'];
+            $update['tag2']=$data['tag2'];
+            $update['tag3']=$data['tag3'];
+            $rt=db('today_recomments')->where('id',$data['id'])->update($update);
+            if($rt!==false){
+                if($rt>0) record_log(request()->module(),request()->controller(),'保存今日好车推荐标签');
+                return json_return('T','200','保存标签成功');
+            }else{
+                return json_return('F','500','保存标签失败');
+            }
+        } 
+    }
 }

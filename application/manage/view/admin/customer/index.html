@@ -157,6 +157,11 @@
                 </th>
         </thead>
         <tbody>
+        {php}
+            $ismeunshow_deliver=ismeunshow("manage/customer/deliver");
+            $ismeunshow_edit=ismeunshow("manage/customer/edit");
+            $ismeunshow_look=ismeunshow("manage/customer/look");
+        {/php}
         {volist name="data" id="vo"}
         <tr>
             <td>
@@ -204,13 +209,13 @@
                 {$vo.follow_at_str}                                    
             </td>
             <td>
-                {if condition='ismeunshow("manage/customer/deliver")'}
+                {if condition='$ismeunshow_deliver'}
                     <a href="javascript:;" class="deliver" merchant_id="{$vo.merchant_id}" customer_id="{$vo.id}">转交</a>&nbsp;
                 {/if}
-                {if condition='ismeunshow("manage/customer/edit")'}
+                {if condition='$ismeunshow_edit'}
                     <a href="{:url('manage/customer/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
                 {/if}
-                {if condition='ismeunshow("manage/customer/look")'}
+                {if condition='$ismeunshow_look'}
                     <a href="{:url('manage/customer/look',['id'=>$vo['id']])}">详情</a>
                 {/if}                            
             </td>

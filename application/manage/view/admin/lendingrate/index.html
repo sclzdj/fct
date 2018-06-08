@@ -11,7 +11,6 @@
 .table tr td input.input_rate{padding:0 5px;width:100px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;text-align: center;}
 .table tr td span.zui{display:inline-block;font-size: 14px;vertical-align:top;color: #666;height: 34px;line-height: 34px;border: 1px solid #ccc;border-left: none;width: 50px;text-align: center;}
 </style>
-
 <div class="table-responsive">
     <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
         <thead>
@@ -30,6 +29,9 @@
                 </th>  
         </thead>
         <tbody>
+        {php}
+            $ismeunshow_edit=ismeunshow("manage/lendingrate/edit");
+        {/php}
         {volist name="data" id="vo"}
         <tr>
             <td style="text-align:center;" class='td_id'>
@@ -39,10 +41,10 @@
                 {$vo.term}个月                                  
             </td>
             <td style="text-align:center;" class="td_rate">
-                <span class="edit_rate"{if condition='ismeunshow("manage/lendingrate/edit")'} title="点击修改" style="cursor: pointer;" rate="{$vo.rate}"{/if}>{$vo.rate}%</span>                               
+                <span class="edit_rate"{if condition='$ismeunshow_edit'} title="点击修改" style="cursor: pointer;" rate="{$vo.rate}"{/if}>{$vo.rate}%</span>                               
             </td>
             <td style="text-align:center;" class="td_btn">
-                {if condition='ismeunshow("manage/lendingrate/edit")'}
+                {if condition='$ismeunshow_edit'}
                 <a href="javascript:;" class="edit_rate" rate="{$vo.rate}">修改</a> 
                 {/if}
             </td>
@@ -58,8 +60,6 @@
 
 <script>
 $(function(){
-    
-    {if condition='ismeunshow("manage/lendingrate/edit")'}
     //点击修改
     $("body").on('click','.edit_rate',function(){
         var rate=$(this).attr('rate');
@@ -101,7 +101,6 @@ $(function(){
         $(this).parent().parent().find('td.td_rate').html('<span class="edit_rate" title="点击修改" style="cursor: pointer;" rate="'+rate+'">'+rate+'%</span>');
         $(this).parent().parent().find('td.td_btn').html('<a href="javascript:;" class="edit_rate" rate="'+rate+'">修改</a>');
     });
-    {/if}
 });
 </script>    
 

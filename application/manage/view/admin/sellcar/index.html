@@ -108,6 +108,9 @@
                 </th>
         </thead>
         <tbody>
+        {php}
+            $ismeunshow_look=ismeunshow("manage/sellcar/look");
+        {/php}
         {volist name="data" id="vo"}
         <tr>
             <td>
@@ -126,7 +129,7 @@
                 {$vo.submit_at_str}                                    
             </td>
             <td>
-                {if condition='ismeunshow("manage/sellcar/look")'}
+                {if condition='$ismeunshow_look'}
                     <a href="{:url('manage/sellcar/look',['id'=>$vo['id']])}">详情</a>
                 {/if} 
             </td>

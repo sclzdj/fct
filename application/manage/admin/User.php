@@ -64,7 +64,7 @@ class User extends Admin
           '手机号'=>'string',//text
           '注册时间'=>'string',//text
         );
-        $data = db('users')->where(session('user_index_export_map'))->order(session('user_index_export_order'))->select();
+        $data = db('users')->field('id,mobile,register_at')->where(session('user_index_export_map'))->order(session('user_index_export_order'))->select();
         //处理数据
         foreach ($data as $key => $value) {
         	$data[$key]['register_at']=date('Y-m-d H:i',$value['register_at']);

@@ -123,6 +123,11 @@
                 </th>
         </thead>
         <tbody>
+        {php}
+            $ismeunshow_disable=ismeunshow("manage/adminuser/disable");
+            $ismeunshow_enable=ismeunshow("manage/adminuser/enable");
+            $ismeunshow_edit=ismeunshow("manage/adminuser/edit");
+        {/php}
         {volist name="data" id="vo"}
         <tr>
             <td>
@@ -168,15 +173,15 @@
                     <div style="color: #ccc;text-align: center;">不可操作</div>  
                 {else/}
                     {if condition='$vo.status'}
-                        {if condition='ismeunshow("manage/adminuser/disable")'}
+                        {if condition='$ismeunshow_disable'}
                             <a href="javascript:;" status="0" class="enable_disable" admin_user_id="{$vo.id}">冻结</a>&nbsp;
                         {/if}
                     {else/}
-                        {if condition='ismeunshow("manage/adminuser/enable")'}
+                        {if condition='$ismeunshow_enable'}
                             <a href="javascript:;" status="1" class="enable_disable" admin_user_id="{$vo.id}">开通</a>&nbsp;
                         {/if}
                     {/if}
-                    {if condition='ismeunshow("manage/adminuser/edit")'}
+                    {if condition='$ismeunshow_edit'}
                         <a href="{:url('manage/adminuser/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
                     {/if}
                 {/if}

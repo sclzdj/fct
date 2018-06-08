@@ -43,7 +43,6 @@ class Article extends Admin
         //处理数据
         foreach ($data as $key => $value) {
             $data[$key]['ground_at_str']=date('Y-m-d',$value['ground_at']);
-            $data[$key]['lower_at_str']=date('Y-m-d',$value['lower_at']);
         }
         //模板赋值
         $this->assign([
@@ -77,12 +76,14 @@ class Article extends Admin
             }else{
                 $data['ground_at']=strtotime($data['ground_at'].' 00:00:00');
             }
-            if($data['lower_at']===''){
-                return json_return('F','1000','下架日期必选');
+            if($data['img']===''){
+                return json_return('F','1000','图片必传');
             }
-            $data['lower_at']=strtotime($data['lower_at'].' 23:59:59');
-            if($data['ground_at']-$data['lower_at']>=0){
-                return json_return('F','1000','下架日期必需大于上架日期');
+            if($data['describe']===''){
+                return json_return('F','1000','描述必填');
+            }
+            if(mb_strlen($data['describe'],'utf8')>200) {
+                return json_return('F','1000','描述最多200个字');
             }
             if(strip_tags($_POST['content'])!==''){
                 if(mb_strlen(strip_tags($_POST['content']),'utf8')>3000) {
@@ -93,7 +94,8 @@ class Article extends Admin
             $insert['title']=$data['title'];
             $insert['writer']=$data['writer'];
             $insert['ground_at']=$data['ground_at'];
-            $insert['lower_at']=$data['lower_at'];
+            $insert['img']=$data['img'];
+            $insert['describe']=$data['describe'];
             $insert['content']=$_POST['content'];
             $insert['state']='1';
             $insert['runner_id']=UID;
@@ -133,14 +135,16 @@ class Article extends Admin
             if($data['ground_at']===''){
                 return json_return('F','1000','上架日期必选');
             }
+            if($data['img']===''){
+                return json_return('F','1000','图片必传');
+            }
+            if($data['describe']===''){
+                return json_return('F','1000','描述必填');
+            }
+            if(mb_strlen($data['describe'],'utf8')>200) {
+                return json_return('F','1000','描述最多200个字');
+            }
             $data['ground_at']=strtotime($data['ground_at'].' 00:00:00');
-            if($data['lower_at']===''){
-                return json_return('F','1000','下架日期必选');
-            }
-            $data['lower_at']=strtotime($data['lower_at'].' 23:59:59');
-            if($data['ground_at']-$data['lower_at']>=0){
-                return json_return('F','1000','下架日期必需大于上架日期');
-            }
             if(strip_tags($_POST['content'])!==''){
                 if(mb_strlen(strip_tags($_POST['content']),'utf8')>3000) {
                     return json_return('F','1000','正文最多3000个字');
@@ -150,7 +154,8 @@ class Article extends Admin
             $update['title']=$data['title'];
             $update['writer']=$data['writer'];
             $update['ground_at']=$data['ground_at'];
-            $update['lower_at']=$data['lower_at'];
+            $insert['img']=$data['img'];
+            $insert['describe']=$data['describe'];
             $update['content']=$_POST['content'];
             $rt=db('articles')->where('id',$data['id'])->update($update);
             if($rt!==false){
@@ -164,7 +169,7 @@ class Article extends Admin
         if($article){
             $article['created_at_str']=date('Y-m-d H:i',$article['created_at']);
             $article['ground_at']=date('Y-m-d',$article['ground_at']);
-            $article['lower_at']=date('Y-m-d',$article['lower_at']);
+            $article['describe_len']=mb_strlen($article['describe'],'utf8');
             //模板赋值
             $this->assign([
                 'article'=>$article,
@@ -181,7 +186,6 @@ class Article extends Admin
         if($article){
             $article['created_at_str']=date('Y-m-d H:i',$article['created_at']);
             $article['ground_at']=date('Y-m-d',$article['ground_at']);
-            $article['lower_at']=date('Y-m-d',$article['lower_at']);
             //模板赋值
             $this->assign([
                 'article'=>$article,

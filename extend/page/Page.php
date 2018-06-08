@@ -270,6 +270,7 @@ class Page extends Paginator
                 color:#bbb;
                 border:1px #999 solid;
                 text-align:center;
+                margin:0 2px;
             }
             .dates li {font-size: 14px;margin:20px 0}
             .dates li span{float:right}

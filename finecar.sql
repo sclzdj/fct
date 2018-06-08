@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2018-06-07 14:49:17
+Date: 2018-06-08 19:55:26
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -311,7 +311,7 @@ CREATE TABLE `fc_admin_log` (
   KEY `action_ip_ix` (`action_ip`),
   KEY `action_id_ix` (`action_id`),
   KEY `user_id_ix` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=126 DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='行为日志表';
+) ENGINE=MyISAM AUTO_INCREMENT=128 DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='行为日志表';
 
 -- ----------------------------
 -- Records of fc_admin_log
@@ -441,6 +441,8 @@ INSERT INTO `fc_admin_log` VALUES ('122', '30', '1', '0', 'admin_menu', '320', '
 INSERT INTO `fc_admin_log` VALUES ('123', '31', '1', '0', 'admin_menu', '318', ' 编辑了节点：节点ID(318)', '1', '1528260442');
 INSERT INTO `fc_admin_log` VALUES ('124', '8', '1', '0', 'admin_role', '3', ' 编辑了角色：超级管理员', '1', '1528267403');
 INSERT INTO `fc_admin_log` VALUES ('125', '31', '1', '0', 'admin_menu', '316', ' 编辑了节点：节点ID(316)', '1', '1528268097');
+INSERT INTO `fc_admin_log` VALUES ('126', '30', '1', '0', 'admin_menu', '329', ' 添加了节点：所属模块(manage),所属节点ID(288),节点标题(保存标签),节点链接(manage/todayrecomment/savetag)', '1', '1528437049');
+INSERT INTO `fc_admin_log` VALUES ('127', '8', '1', '0', 'admin_role', '3', ' 编辑了角色：超级管理员', '1', '1528437590');
 
 -- ----------------------------
 -- Table structure for fc_admin_menu
@@ -463,7 +465,7 @@ CREATE TABLE `fc_admin_menu` (
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   `params` varchar(255) NOT NULL DEFAULT '' COMMENT '参数',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=328 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=MyISAM AUTO_INCREMENT=330 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
 -- Records of fc_admin_menu
@@ -667,6 +669,7 @@ INSERT INTO `fc_admin_menu` VALUES ('317', '302', 'manage', '权限树管理', '
 INSERT INTO `fc_admin_menu` VALUES ('318', '317', 'manage', '添加', '', 'module_admin', 'manage/adminmenu/add', '_self', '0', '1528260396', '1528260455', '1', '0', '1', '');
 INSERT INTO `fc_admin_menu` VALUES ('319', '317', 'manage', '修改', '', 'module_admin', 'manage/adminmenu/edit', '_self', '0', '1528260416', '1528260455', '2', '0', '1', '');
 INSERT INTO `fc_admin_menu` VALUES ('320', '317', 'manage', '删除', '', 'module_admin', 'manage/adminmenu/delete', '_self', '0', '1528260431', '1528260455', '3', '0', '1', '');
+INSERT INTO `fc_admin_menu` VALUES ('329', '288', 'manage', '保存标签', '', 'module_admin', 'manage/todayrecomment/savetag', '_self', '0', '1528437049', '1528437049', '100', '0', '1', '');
 
 -- ----------------------------
 -- Table structure for fc_admin_message
@@ -796,8 +799,8 @@ CREATE TABLE `fc_admin_role` (
 -- ----------------------------
 INSERT INTO `fc_admin_role` VALUES ('1', '0', '帝国制造者', '系统默认创建的角色，拥有最高权限', '', '0', '1476270000', '1468117612', '1', '1', '0', '0');
 INSERT INTO `fc_admin_role` VALUES ('2', '0', '商户', '好车商户最高管理全', '[\"236\",\"249\",\"251\",\"252\",\"253\",\"256\",\"257\",\"258\",\"259\",\"250\",\"260\",\"261\",\"263\",\"264\",\"266\",\"262\",\"267\",\"268\",\"270\",\"271\",\"269\",\"302\",\"305\",\"312\",\"313\",\"314\",\"315\",\"306\",\"307\",\"308\",\"309\",\"310\",\"311\",\"304\"]', '100', '1527074536', '1528212698', '1', '1', '236', '0');
-INSERT INTO `fc_admin_role` VALUES ('3', '0', '超级管理员', '好车系统最高管理员', '[\"236\",\"237\",\"238\",\"239\",\"240\",\"241\",\"242\",\"243\",\"244\",\"245\",\"246\",\"247\",\"248\",\"249\",\"250\",\"251\",\"252\",\"253\",\"254\",\"255\",\"256\",\"257\",\"258\",\"259\",\"260\",\"261\",\"262\",\"263\",\"264\",\"265\",\"266\",\"267\",\"268\",\"269\",\"270\",\"271\",\"272\",\"273\",\"274\",\"275\",\"276\",\"277\",\"278\",\"279\",\"280\",\"281\",\"282\",\"283\",\"284\",\"285\",\"286\",\"287\",\"288\",\"289\",\"290\",\"291\",\"292\",\"293\",\"294\",\"295\",\"296\",\"297\",\"298\",\"299\",\"300\",\"301\",\"302\",\"303\",\"304\",\"305\",\"306\",\"307\",\"308\",\"309\",\"310\",\"311\",\"312\",\"313\",\"314\",\"315\",\"316\",\"317\",\"318\",\"319\",\"320\",\"326\",\"327\"]', '100', '1527076385', '1528267403', '1', '1', '236', '0');
-INSERT INTO `fc_admin_role` VALUES ('8', '0', '文章管理员', '', '[\"236\",\"277\",\"296\",\"297\",\"298\",\"299\",\"300\",\"301\"]', '100', '1528212455', '1528212455', '1', '1', '236', '0');
+INSERT INTO `fc_admin_role` VALUES ('3', '0', '超级管理员', '好车系统最高管理员', '[\"236\",\"237\",\"238\",\"239\",\"240\",\"241\",\"242\",\"243\",\"244\",\"245\",\"246\",\"247\",\"248\",\"249\",\"250\",\"251\",\"252\",\"253\",\"254\",\"255\",\"256\",\"257\",\"258\",\"259\",\"260\",\"261\",\"262\",\"263\",\"264\",\"265\",\"266\",\"267\",\"268\",\"269\",\"270\",\"271\",\"272\",\"273\",\"274\",\"275\",\"276\",\"277\",\"278\",\"279\",\"280\",\"281\",\"282\",\"283\",\"284\",\"285\",\"286\",\"287\",\"288\",\"289\",\"290\",\"291\",\"292\",\"293\",\"294\",\"295\",\"296\",\"297\",\"298\",\"299\",\"300\",\"301\",\"302\",\"303\",\"304\",\"305\",\"306\",\"307\",\"308\",\"309\",\"310\",\"311\",\"312\",\"313\",\"314\",\"315\",\"316\",\"317\",\"318\",\"319\",\"320\",\"329\"]', '100', '1527076385', '1528437590', '1', '1', '236', '0');
+INSERT INTO `fc_admin_role` VALUES ('8', '0', '文章策划', '', '[\"236\",\"277\",\"296\",\"297\",\"298\",\"299\",\"300\",\"301\"]', '100', '1528212455', '1528212455', '1', '1', '236', '0');
 
 -- ----------------------------
 -- Table structure for fc_admin_user
@@ -831,13 +834,13 @@ CREATE TABLE `fc_admin_user` (
 -- ----------------------------
 -- Records of fc_admin_user
 -- ----------------------------
-INSERT INTO `fc_admin_user` VALUES ('1', 'admin', '', '$2y$10$FGSZd7CiIT5SBsVykQuOYugBRBu.WwVY11hN9RdeLGi5JzQm4Yl0C', '', '0', '', '0', '0', '0.00', '0', '1', '', '0', '0', '1476065410', '1528346923', '1528346923', '2130706433', '100', '1');
-INSERT INTO `fc_admin_user` VALUES ('2', 'finecar', '', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '', '0', '0', '0.00', '0', '3', '', '0', '0', '1527076428', '1528287492', '1528287492', '2130706433', '100', '1');
+INSERT INTO `fc_admin_user` VALUES ('1', 'admin', '', '$2y$10$FGSZd7CiIT5SBsVykQuOYugBRBu.WwVY11hN9RdeLGi5JzQm4Yl0C', '', '0', '', '0', '0', '0.00', '0', '1', '', '0', '0', '1476065410', '1528456893', '1528456893', '2130706433', '100', '1');
+INSERT INTO `fc_admin_user` VALUES ('2', 'finecar', '', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '', '0', '0', '0.00', '0', '3', '', '0', '0', '1527076428', '1528456912', '1528456912', '2130706433', '100', '1');
 INSERT INTO `fc_admin_user` VALUES ('7', 'dujun12342', '', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '', '0', '0', '0.00', '0', '2', '', '0', '0', '1527078997', '1527176013', '0', '0', '100', '1');
 INSERT INTO `fc_admin_user` VALUES ('6', 'dujun123456', '', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '', '0', '0', '0.00', '0', '2', '', '0', '0', '1527078997', '1527364802', '1527364802', '0', '100', '1');
 INSERT INTO `fc_admin_user` VALUES ('8', 'asfafs', '陈红', '$2y$10$8Bwp7x2nG4GWhnMLYQOQiufn6PoSIX0W0UIDu2fbp0sr3juGtQIh.', '', '0', '18353621790', '1', '0', '0.00', '0', '3', '财务', '0', '0', '1527078997', '1527943723', '0', '0', '100', '1');
-INSERT INTO `fc_admin_user` VALUES ('9', 'djj', '杜某某', '$2y$10$mib7jqUkGzsSwGLFgiZ.0ellrRg/p/lIXJhAyb1LNEckDK3nesCVe', '', '0', '18353622262', '1', '0', '0.00', '0', '3', '哈撒12', '0', '0', '1527942028', '1527943716', '0', '0', '100', '1');
-INSERT INTO `fc_admin_user` VALUES ('10', 'hhhhhhhh', '尘治', '$2y$10$3e/joCMjNWTCfHAReyRn7.1sgDzekaorrUee.YRJWogmN/q/MUqa2', '', '0', '18353622262', '1', '0', '0.00', '0', '8', 'hhhhhh', '0', '0', '1528212566', '1528212618', '1528212617', '0', '100', '1');
+INSERT INTO `fc_admin_user` VALUES ('9', 'djj', '杜某某', '$2y$10$mib7jqUkGzsSwGLFgiZ.0ellrRg/p/lIXJhAyb1LNEckDK3nesCVe', '', '0', '18353622262', '1', '0', '0.00', '0', '3', '哈撒12', '0', '0', '1527942028', '1528458615', '0', '0', '100', '1');
+INSERT INTO `fc_admin_user` VALUES ('10', 'hhhhhhhh', '尘治', '$2y$10$3e/joCMjNWTCfHAReyRn7.1sgDzekaorrUee.YRJWogmN/q/MUqa2', '', '0', '18353622262', '1', '0', '0.00', '0', '8', 'hhhhhh', '0', '0', '1528212566', '1528356268', '1528212617', '0', '100', '0');
 
 -- ----------------------------
 -- Table structure for fc_articles
@@ -848,7 +851,6 @@ CREATE TABLE `fc_articles` (
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
   `writer` varchar(100) NOT NULL DEFAULT '' COMMENT '作者',
   `ground_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '自动上架日期',
-  `lower_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '自动下架日期',
   `describe` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
   `content` longtext NOT NULL COMMENT '内容',
   `state` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0下架 1上架  ',
@@ -857,11 +859,12 @@ CREATE TABLE `fc_articles` (
   `runner_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '操作者id',
   `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建日期',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='文章';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='文章';
 
 -- ----------------------------
 -- Records of fc_articles
 -- ----------------------------
+INSERT INTO `fc_articles` VALUES ('1', '好人一生平安', '杜某某', '1528387200', '好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安', '<p style=\"text-align: center;\">好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安</p><p style=\"white-space: normal;\"><br/></p><p style=\"white-space: normal;\"><br/></p><p><br/></p><p><br/></p><p style=\"text-align: center;\"><img src=\"http://bestcar1.oss-cn-hangzhou.aliyuncs.com/2018060812463811xf7GaqVoR7DL2PzfnY6g7o9Y.jpg\" title=\"2018060812463811xf7GaqVoR7DL2PzfnY6g7o9Y.jpg\" alt=\"avatar.jpg\"/><img src=\"http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180608124647xTrILHBI5VDu1TDmYUVZBbH1gC.png\" title=\"20180608124647xTrILHBI5VDu1TDmYUVZBbH1gC.png\" alt=\"logo-text.png\"/></p><p><br/></p><p style=\"text-align: center;\"><br/></p><p><br/></p><p style=\"text-align: center;\">好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安好人一生平安</p><p style=\"white-space: normal;\"><br/></p><p style=\"white-space: normal;\"><br/></p><p><br/></p>', '1', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180608124726FBHVTiUUjFzX62kmdp5y5V0Kta.jpg', '2', '1528433257');
 
 -- ----------------------------
 -- Table structure for fc_banners
@@ -884,13 +887,12 @@ CREATE TABLE `fc_banners` (
 -- Records of fc_banners
 -- ----------------------------
 INSERT INTO `fc_banners` VALUES ('1', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531204720V628alXYE6rPUV1Q7aMrfvFRB1.jpg', '中国华为', '华为华为华为华为华为华为', '0', '2', '1', '1527770856');
-INSERT INTO `fc_banners` VALUES ('2', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧', '0', '3', '1', '1527770891');
 INSERT INTO `fc_banners` VALUES ('3', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531204720V628alXYE6rPUV1Q7aMrfvFRB1.jpg', '中国华为', '华为华为华为华为华为华为1', '0', '3', '1', '1527770856');
 INSERT INTO `fc_banners` VALUES ('4', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧1', '0', '1', '1', '1527770891');
 INSERT INTO `fc_banners` VALUES ('6', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧2', '0', '2', '1', '1527770891');
-INSERT INTO `fc_banners` VALUES ('7', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531222202PVc33zQcy1iMoLNHDGG3dTMooF.png', '中国华为', '华为华为华为华为华为华为3', '0', '4', '1', '1527776523');
+INSERT INTO `fc_banners` VALUES ('7', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531222202PVc33zQcy1iMoLNHDGG3dTMooF.png', '中国华为', '华为华为华为华为华为华为3', '0', '1', '1', '1527776523');
 INSERT INTO `fc_banners` VALUES ('8', '1', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805312047582c7MH5GK1HJNb0B0FKI4C4cNqi.jpg', '中国华为', '好吧4', '0', '4', '1', '1527770891');
-INSERT INTO `fc_banners` VALUES ('11', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531222557CgsJXbGDNeX9tGCSzrESJush7q.png', 'safsafa', 'fqwqfefw', '0', '1', '1', '1527776763');
+INSERT INTO `fc_banners` VALUES ('11', '0', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531222557CgsJXbGDNeX9tGCSzrESJush7q.png', 'safsafa', 'fqwqfefw', '0', '4', '1', '1527776763');
 
 -- ----------------------------
 -- Table structure for fc_car_sources
@@ -1190,8 +1192,8 @@ CREATE TABLE `fc_customers` (
 -- Records of fc_customers
 -- ----------------------------
 INSERT INTO `fc_customers` VALUES ('1', '张先生说', '18353621790', '男', '21', '277', '0', 'qweq', '朋友介绍', '1', '哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比哈比', '4', '1', '1527494586', '1527494586');
-INSERT INTO `fc_customers` VALUES ('2', '张先生说', '18353621790', '男', '27', '343', '1', '', '朋友介绍', '2', '哈比', '5', '1', '1527494586', '1527494649');
-INSERT INTO `fc_customers` VALUES ('3', '都可开始看开始看', '18353621792', '女', '22', '296', '7', '', '主动预约', '1', '物权法', '5', '1', '1527494586', '1527515884');
+INSERT INTO `fc_customers` VALUES ('2', '张先生说', '18353621790', '男', '27', '343', '1', '', '朋友介绍', '2', '哈比', '4', '1', '1527494586', '1527494649');
+INSERT INTO `fc_customers` VALUES ('3', '都可开始看开始看', '18353621792', '女', '22', '296', '7', '', '主动预约', '1', '物权法', '4', '1', '1527494586', '1527515884');
 INSERT INTO `fc_customers` VALUES ('4', '哪些人撒', '18353621790', '女', '21', '276', '0', '萨法', '主动预约', '2', '人人去', '5', '1', '1527494586', '1527518978');
 
 -- ----------------------------
@@ -1237,7 +1239,7 @@ CREATE TABLE `fc_feedbacks` (
 -- ----------------------------
 -- Records of fc_feedbacks
 -- ----------------------------
-INSERT INTO `fc_feedbacks` VALUES ('1', '1', '不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好', '1527078997', '1527078997');
+INSERT INTO `fc_feedbacks` VALUES ('1', '1', '不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1527078997', '1527078997');
 INSERT INTO `fc_feedbacks` VALUES ('2', '1', '不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好不好', '1527078997', '1527078997');
 
 -- ----------------------------
@@ -1259,8 +1261,8 @@ CREATE TABLE `fc_guess_likes` (
 -- ----------------------------
 INSERT INTO `fc_guess_likes` VALUES ('1', '4', '4', '1', '1527841909');
 INSERT INTO `fc_guess_likes` VALUES ('2', '15', '1', '1', '1527841917');
-INSERT INTO `fc_guess_likes` VALUES ('4', '1', '3', '1', '1527841952');
-INSERT INTO `fc_guess_likes` VALUES ('5', '2', '2', '1', '1527841962');
+INSERT INTO `fc_guess_likes` VALUES ('4', '1', '2', '1', '1527841952');
+INSERT INTO `fc_guess_likes` VALUES ('5', '2', '3', '1', '1527841962');
 
 -- ----------------------------
 -- Table structure for fc_lending_rates
@@ -1292,7 +1294,7 @@ CREATE TABLE `fc_logs` (
   `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
   PRIMARY KEY (`id`),
   KEY `runner_id` (`runner_id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=263 DEFAULT CHARSET=utf8 COMMENT='日志';
+) ENGINE=MyISAM AUTO_INCREMENT=303 DEFAULT CHARSET=utf8 COMMENT='日志';
 
 -- ----------------------------
 -- Records of fc_logs
@@ -1559,6 +1561,46 @@ INSERT INTO `fc_logs` VALUES ('259', '登录管理', '登录', '1', '1528268043'
 INSERT INTO `fc_logs` VALUES ('260', '登录管理', '登录', '2', '1528287492');
 INSERT INTO `fc_logs` VALUES ('261', '登录管理', '登录', '1', '1528346532');
 INSERT INTO `fc_logs` VALUES ('262', '登录管理', '登录', '1', '1528346923');
+INSERT INTO `fc_logs` VALUES ('263', '系统管理', '冻结账号', '1', '1528356268');
+INSERT INTO `fc_logs` VALUES ('264', '登录管理', '登录', '2', '1528432273');
+INSERT INTO `fc_logs` VALUES ('265', '系统管理', '添加权限', '2', '1528432331');
+INSERT INTO `fc_logs` VALUES ('266', '系统管理', '修改权限', '2', '1528432344');
+INSERT INTO `fc_logs` VALUES ('267', '系统管理', '删除权限', '2', '1528432350');
+INSERT INTO `fc_logs` VALUES ('268', '营销管理', '添加文章', '2', '1528433257');
+INSERT INTO `fc_logs` VALUES ('269', '营销管理', '修改文章', '2', '1528433675');
+INSERT INTO `fc_logs` VALUES ('270', '营销管理', '修改文章', '2', '1528433694');
+INSERT INTO `fc_logs` VALUES ('271', '登录管理', '登录', '1', '1528436989');
+INSERT INTO `fc_logs` VALUES ('272', '营销管理', '保存今日好车推荐标签', '1', '1528437221');
+INSERT INTO `fc_logs` VALUES ('273', '营销管理', '保存今日好车推荐标签', '1', '1528437476');
+INSERT INTO `fc_logs` VALUES ('274', '营销管理', '保存今日好车推荐标签', '1', '1528437521');
+INSERT INTO `fc_logs` VALUES ('275', '登录管理', '登录', '2', '1528456539');
+INSERT INTO `fc_logs` VALUES ('276', '用户管理', '导出用户列表', '2', '1528456653');
+INSERT INTO `fc_logs` VALUES ('277', '商户管理', '导出', '2', '1528456701');
+INSERT INTO `fc_logs` VALUES ('278', '登录管理', '登录', '1', '1528456893');
+INSERT INTO `fc_logs` VALUES ('279', '登录管理', '登录', '2', '1528456912');
+INSERT INTO `fc_logs` VALUES ('280', '用户管理', '导出用户列表', '2', '1528456940');
+INSERT INTO `fc_logs` VALUES ('281', '商户管理', '商户冻结', '2', '1528456961');
+INSERT INTO `fc_logs` VALUES ('282', '客户管理', '转交客户', '2', '1528457395');
+INSERT INTO `fc_logs` VALUES ('283', '客户管理', '转交客户', '2', '1528457403');
+INSERT INTO `fc_logs` VALUES ('284', '客户管理', '导出客户列表', '2', '1528457465');
+INSERT INTO `fc_logs` VALUES ('285', '订单管理', '修改订单', '2', '1528458312');
+INSERT INTO `fc_logs` VALUES ('286', '营销管理', '下移Banner', '2', '1528458347');
+INSERT INTO `fc_logs` VALUES ('287', '营销管理', '下移Banner', '2', '1528458351');
+INSERT INTO `fc_logs` VALUES ('288', '营销管理', '上移Banner', '2', '1528458355');
+INSERT INTO `fc_logs` VALUES ('289', '营销管理', '上移Banner', '2', '1528458359');
+INSERT INTO `fc_logs` VALUES ('290', '营销管理', '上移Banner', '2', '1528458362');
+INSERT INTO `fc_logs` VALUES ('291', '营销管理', '下移Banner', '2', '1528458365');
+INSERT INTO `fc_logs` VALUES ('292', '营销管理', '下移Banner', '2', '1528458368');
+INSERT INTO `fc_logs` VALUES ('293', '营销管理', '上移Banner', '2', '1528458374');
+INSERT INTO `fc_logs` VALUES ('294', '营销管理', '下移Banner', '2', '1528458377');
+INSERT INTO `fc_logs` VALUES ('295', '营销管理', '删除Banner', '2', '1528458392');
+INSERT INTO `fc_logs` VALUES ('296', '营销管理', '下移猜你喜欢', '2', '1528458487');
+INSERT INTO `fc_logs` VALUES ('297', '营销管理', '下移今日好车推荐', '2', '1528458493');
+INSERT INTO `fc_logs` VALUES ('298', '营销管理', '下架文章', '2', '1528458508');
+INSERT INTO `fc_logs` VALUES ('299', '营销管理', '上架文章', '2', '1528458512');
+INSERT INTO `fc_logs` VALUES ('300', '系统管理', '修改角色', '2', '1528458589');
+INSERT INTO `fc_logs` VALUES ('301', '系统管理', '冻结账号', '2', '1528458609');
+INSERT INTO `fc_logs` VALUES ('302', '系统管理', '开通账号', '2', '1528458615');
 
 -- ----------------------------
 -- Table structure for fc_merchants
@@ -1609,7 +1651,7 @@ CREATE TABLE `fc_merchants` (
 -- ----------------------------
 -- Records of fc_merchants
 -- ----------------------------
-INSERT INTO `fc_merchants` VALUES ('5', 'H0005', '好车', '好车店铺1', '123456789', '2018-05-16', '2018-05-18', '工商营业执照', '123456789', '19', '266', '2232', '二龙村', '', '2018-05-17', '2018-06-01', '二龙村三家塘', '123456789', '杜某某', '123456789', '123456789123456789', 'https://a.suiship.com/UHDqKahUjOxvfvKO1s0LCL24F07CwtyjiiHRpgF4FeAUOnWa1eDLg0n6TbMP5A6b.jpg?imageView2/2/w/500', '', '陈某某', '010-123456789', '123456789', 'scdujun@qq.com', '多某某', '101-123456789', '123456789', '7549233@qq.com', 'https://a.suiship.com/cQ2V52718BfXdybYIFBWKBW3SRpxuSJ8SR8W08ZkFv9YkHQnA40KH4zoSQjwbLto.jpg?imageView2/2/w/500,https://a.suiship.com/NKc1tglN0WphL91aPr7PQLNWV7WRON4XWm8mAxJkRwqmhO9jG52POkPwXn7PIa3c.jpg?imageView2/2/w/500', '6', '1', '1527078997', '1');
+INSERT INTO `fc_merchants` VALUES ('5', 'H0005', '好车', '好车店铺1', '123456789', '2018-05-16', '2018-05-18', '工商营业执照', '123456789', '19', '266', '2232', '二龙村', '', '2018-05-17', '2018-06-01', '二龙村三家塘', '123456789', '杜某某', '123456789', '123456789123456789', 'https://a.suiship.com/UHDqKahUjOxvfvKO1s0LCL24F07CwtyjiiHRpgF4FeAUOnWa1eDLg0n6TbMP5A6b.jpg?imageView2/2/w/500', '', '陈某某', '010-123456789', '123456789', 'scdujun@qq.com', '多某某', '101-123456789', '123456789', '7549233@qq.com', 'https://a.suiship.com/cQ2V52718BfXdybYIFBWKBW3SRpxuSJ8SR8W08ZkFv9YkHQnA40KH4zoSQjwbLto.jpg?imageView2/2/w/500,https://a.suiship.com/NKc1tglN0WphL91aPr7PQLNWV7WRON4XWm8mAxJkRwqmhO9jG52POkPwXn7PIa3c.jpg?imageView2/2/w/500', '6', '0', '1527078997', '1');
 INSERT INTO `fc_merchants` VALUES ('4', 'H0004', '好车', '好车店铺2', '123456789', '2018-05-16', '2018-05-18', '工商营业执照', '123456789', '19', '266', '2232', '二龙村', '', '2018-05-17', '2018-06-01', '二龙村三家塘', '123456789', '杜某某', '123456789', '123456789123456789', 'https://a.suiship.com/UHDqKahUjOxvfvKO1s0LCL24F07CwtyjiiHRpgF4FeAUOnWa1eDLg0n6TbMP5A6b.jpg?imageView2/2/w/500', '', '陈某某', '010-123456789', '123456789', 'scdujun@qq.com', '多某某', '101-123456789', '123456789', '7549233@qq.com', 'https://a.suiship.com/cQ2V52718BfXdybYIFBWKBW3SRpxuSJ8SR8W08ZkFv9YkHQnA40KH4zoSQjwbLto.jpg?imageView2/2/w/500,https://a.suiship.com/NKc1tglN0WphL91aPr7PQLNWV7WRON4XWm8mAxJkRwqmhO9jG52POkPwXn7PIa3c.jpg?imageView2/2/w/500', '6', '0', '1527078997', '1');
 
 -- ----------------------------
@@ -1646,7 +1688,7 @@ INSERT INTO `fc_orders` VALUES ('2', '20180259112356102', '1', '0', 'fwe', '2147
 INSERT INTO `fc_orders` VALUES ('3', '20180259112356022', '1', '0', 'fwe', '2147483648', '250002', '2018-05-11', '全款', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/66822fbee48292fbb46818192987b4e0.jpg', '-1', '2', 'ew', '1', '1', '1527602890');
 INSERT INTO `fc_orders` VALUES ('4', '20180259112356003', '4', '0', 'fwe', '2147483648', '2147483648', '2018-03-07', '按揭', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/66822fbee48292fbb46818192987b4e0.jpg', '-1', '2', 'ewwq访问二无若翁热无热无若无', '4', '1', '1527603046');
 INSERT INTO `fc_orders` VALUES ('5', '20180529230755566', '3', '0', '而分为', '24212400', '534200', '2018-05-17', '全款', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/abf4ca577598c88594dac6e8f80413ac.jpg', '0', '1', '哈哈哈哈哈哈哈哈或哈哈哈哈哈哈哈哈或哈哈哈哈哈哈哈哈或哈哈哈哈哈哈哈哈或哈哈哈哈哈哈哈哈或哈哈哈哈哈哈哈哈或哈哈哈哈哈哈哈哈或哈哈哈哈哈哈哈哈或哈哈哈哈哈哈哈哈或', '3', '1', '1527606475');
-INSERT INTO `fc_orders` VALUES ('6', '20180530222458339', '1', '6', '', '124142100', '124142100', '2018-05-10', '全款', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/5be191f356e8a71c25ee9bb768f7528d.jpg', '0', '7', '12414211241421', '1', '1', '1527690298');
+INSERT INTO `fc_orders` VALUES ('6', '20180530222458339', '1', '6', '', '124142100', '124142100', '2018-05-10', '按揭', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/5be191f356e8a71c25ee9bb768f7528d.jpg', '0', '7', '12414211241421', '1', '1', '1527690298');
 
 -- ----------------------------
 -- Table structure for fc_oss_files
@@ -1659,12 +1701,12 @@ CREATE TABLE `fc_oss_files` (
   `url` varchar(1000) NOT NULL DEFAULT '' COMMENT '文件地址',
   `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=78 DEFAULT CHARSET=utf8 COMMENT='oss文件';
+) ENGINE=MyISAM AUTO_INCREMENT=88 DEFAULT CHARSET=utf8 COMMENT='oss文件';
 
 -- ----------------------------
 -- Records of fc_oss_files
 -- ----------------------------
-INSERT INTO `fc_oss_files` VALUES ('1', 'bestcar1', '4bda9aaf081714cd638ea3f57a63308d.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/4bda9aaf081714cd638ea3f57a63308d.png', '1527766414');
+INSERT INTO `fc_oss_files` VALUES ('82', 'bestcar1', '20180608192839k6BjLiaOCvQtRlubpqrEGHapQM.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180608192839k6BjLiaOCvQtRlubpqrEGHapQM.png', '1528457319');
 INSERT INTO `fc_oss_files` VALUES ('2', 'bestcar1', '201805311934365b0fddccd539b.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201805311934365b0fddccd539b.jpg', '1527766476');
 INSERT INTO `fc_oss_files` VALUES ('3', 'bestcar1', '20180531194115sly7wlw6ticlEVZD.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531194115sly7wlw6ticlEVZD.jpg', '1527766875');
 INSERT INTO `fc_oss_files` VALUES ('4', 'bestcar1', '20180531194137UJXkNKj7ngkvchZe.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180531194137UJXkNKj7ngkvchZe.jpg', '1527766897');
@@ -1741,6 +1783,15 @@ INSERT INTO `fc_oss_files` VALUES ('74', 'bestcar1', '201806071405069qejskjLKXQL
 INSERT INTO `fc_oss_files` VALUES ('75', 'bestcar1', '20180607140506LnntrdU6kDNArYlexK99Aca3XF.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180607140506LnntrdU6kDNArYlexK99Aca3XF.jpg', '1528351506');
 INSERT INTO `fc_oss_files` VALUES ('76', 'bestcar1', '20180607140506UPg6wGTcbsRJKZUwSgj1jiXHcF.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180607140506UPg6wGTcbsRJKZUwSgj1jiXHcF.png', '1528351506');
 INSERT INTO `fc_oss_files` VALUES ('77', 'bestcar1', '201806071405064lVyv8OoOcIYwGSDHBL1RABb69.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/201806071405064lVyv8OoOcIYwGSDHBL1RABb69.png', '1528351506');
+INSERT INTO `fc_oss_files` VALUES ('78', 'bestcar1', '20180607152450EOeX63qkpNXFhlzzPjsL7hKsVu.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180607152450EOeX63qkpNXFhlzzPjsL7hKsVu.jpg', '1528356290');
+INSERT INTO `fc_oss_files` VALUES ('79', 'bestcar1', '2018060812463811xf7GaqVoR7DL2PzfnY6g7o9Y.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/2018060812463811xf7GaqVoR7DL2PzfnY6g7o9Y.jpg', '1528433198');
+INSERT INTO `fc_oss_files` VALUES ('80', 'bestcar1', '20180608124647xTrILHBI5VDu1TDmYUVZBbH1gC.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180608124647xTrILHBI5VDu1TDmYUVZBbH1gC.png', '1528433207');
+INSERT INTO `fc_oss_files` VALUES ('81', 'bestcar1', '20180608124726FBHVTiUUjFzX62kmdp5y5V0Kta.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180608124726FBHVTiUUjFzX62kmdp5y5V0Kta.jpg', '1528433246');
+INSERT INTO `fc_oss_files` VALUES ('83', 'bestcar1', '20180608192839mn8DyPAXwQeuRb84ZwUuZesnLr.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180608192839mn8DyPAXwQeuRb84ZwUuZesnLr.png', '1528457319');
+INSERT INTO `fc_oss_files` VALUES ('84', 'bestcar1', '20180608192843SXmE4CFH9cHTuDZvGAD99B0lTL.jpg', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180608192843SXmE4CFH9cHTuDZvGAD99B0lTL.jpg', '1528457323');
+INSERT INTO `fc_oss_files` VALUES ('85', 'bestcar1', '20180608192850HpSihqQswjHSUTQnQ3xov2IwqZ.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180608192850HpSihqQswjHSUTQnQ3xov2IwqZ.png', '1528457330');
+INSERT INTO `fc_oss_files` VALUES ('86', 'bestcar1', '20180608192850R8nyGx71Yeslj1USqHcJcSq0bU.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180608192850R8nyGx71Yeslj1USqHcJcSq0bU.png', '1528457330');
+INSERT INTO `fc_oss_files` VALUES ('87', 'bestcar1', '20180608192850FEWL7ZhK9vvbyMLDIRIJPbXNba.png', 'http://bestcar1.oss-cn-hangzhou.aliyuncs.com/20180608192850FEWL7ZhK9vvbyMLDIRIJPbXNba.png', '1528457330');
 
 -- ----------------------------
 -- Table structure for fc_regions
@@ -5228,6 +5279,9 @@ CREATE TABLE `fc_today_recomments` (
   `sort` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '排序 前台取数据排序规则(ORDEY BY sort asc,created desc）',
   `runner_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '操作者ID',
   `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `tag1` varchar(255) NOT NULL DEFAULT '' COMMENT '标签1',
+  `tag2` varchar(255) NOT NULL DEFAULT '' COMMENT '标签2',
+  `tag3` varchar(255) NOT NULL DEFAULT '' COMMENT '标签3',
   PRIMARY KEY (`id`),
   KEY `car_source_id` (`car_source_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='今日好车推荐';
@@ -5235,10 +5289,10 @@ CREATE TABLE `fc_today_recomments` (
 -- ----------------------------
 -- Records of fc_today_recomments
 -- ----------------------------
-INSERT INTO `fc_today_recomments` VALUES ('1', '1', '2', '1', '1527770891');
-INSERT INTO `fc_today_recomments` VALUES ('2', '2', '4', '1', '1527770891');
-INSERT INTO `fc_today_recomments` VALUES ('3', '6', '3', '1', '1527840931');
-INSERT INTO `fc_today_recomments` VALUES ('4', '4', '1', '1', '1527841339');
+INSERT INTO `fc_today_recomments` VALUES ('1', '1', '1', '1', '1527770891', '', '', '');
+INSERT INTO `fc_today_recomments` VALUES ('2', '2', '4', '1', '1527770891', '', '好车', '');
+INSERT INTO `fc_today_recomments` VALUES ('3', '6', '3', '1', '1527840931', '', '', '');
+INSERT INTO `fc_today_recomments` VALUES ('4', '4', '2', '1', '1527841339', '好车', '', '国际社会高度认可最棒');
 
 -- ----------------------------
 -- Table structure for fc_users

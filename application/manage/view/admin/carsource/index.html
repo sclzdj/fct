@@ -49,6 +49,16 @@
     </form>
     <div style="clear: both;"></div>
 </div>
+{php}
+    $ismeunshow_enable=ismeunshow("manage/carsource/enable");
+    $ismeunshow_disable=ismeunshow("manage/carsource/disable");
+    $ismeunshow_upstock=ismeunshow("manage/carsource/upstock");
+    $ismeunshow_downstock=ismeunshow("manage/carsource/downstock");
+    $ismeunshow_outstock=ismeunshow("manage/carsource/outstock");
+    $ismeunshow_edit=ismeunshow("manage/carsource/edit");
+    $ismeunshow_look=ismeunshow("manage/carsource/look");
+    $ismeunshow_printig=ismeunshow("manage/carsource/printig");
+{/php}
 {volist name="data" id="vo"}
 <div class="lit" {if condition='$key neq 0'}style="padding-top: 0;"{/if}>
     <table class="lit_table">
@@ -108,35 +118,35 @@
             <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">{$vo.reservoir_age}天</td>
             <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">
                 {if condition='$vo.audit eq 0'}
-                    {if condition='ismeunshow("manage/carsource/enable")'}
+                    {if condition='$ismeunshow_enable'}
                     <a href="javascript:;" onclick="carsource_update_audit({$vo.id},1);">通过</a>&nbsp;
                     {/if} 
-                    {if condition='ismeunshow("manage/carsource/disable")'}
+                    {if condition='$ismeunshow_disable'}
                     <a href="javascript:;" onclick="carsource_update_audit({$vo.id},0);">拒绝</a>&nbsp; 
                     {/if}
                 {/if}
                 {if condition='$vo.stock_state eq 0'}
-                    {if condition='ismeunshow("manage/carsource/upstock")'}
+                    {if condition='$ismeunshow_upstock'}
                     <a href="javascript:;" onclick="carsource_update_stock_state({$vo.id},1);">上架</a>&nbsp;
                     {/if}
                 {/if}
                 {if condition='$vo.stock_state eq 1'}
-                    {if condition='ismeunshow("manage/carsource/downstock")'}
+                    {if condition='$ismeunshow_downstock'}
                     <a href="javascript:;" onclick="carsource_update_stock_state({$vo.id},0);">下架</a>&nbsp;
                     {/if}
                 {/if}
                 {if condition='$vo.stock_state neq 4'}
-                    {if condition='ismeunshow("manage/carsource/outstock")'}
+                    {if condition='$ismeunshow_outstock'}
                         <a href="javascript:;" onclick="carsource_update_stock_state({$vo.id},4);">退库</a>&nbsp;
                     {/if}
                 {/if}
-                {if condition='ismeunshow("manage/carsource/edit")'}
+                {if condition='$ismeunshow_edit'}
                     <a href="{:url('manage/carsource/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
                 {/if}
-                {if condition='ismeunshow("manage/carsource/look")'}
+                {if condition='$ismeunshow_look'}
                     <a href="{:url('manage/carsource/look',['id'=>$vo['id']])}">详情</a>
                 {/if} 
-                {if condition='ismeunshow("manage/carsource/printig")'}
+                {if condition='$ismeunshow_printig'}
                     <a href="{:url('manage/carsource/printig',['id'=>$vo['id']])}">打印价签</a>
                 {/if} 
             </td>
@@ -148,10 +158,10 @@
 {if condition='count($data) > 1'}
 <div class="list_pi_run">
     <label><input type="checkbox" id="all_check">全选</label>
-    {if condition='ismeunshow("manage/carsource/enable")'}
+    {if condition='$ismeunshow_enable'}
     <a href="javascript:;" class="btn btn-minw btn-primary rbt" style="margin-top: 13px;" onclick="carsource_update_audit('',1);">批量通过</a>
     {/if} 
-    {if condition='ismeunshow("manage/carsource/disable")'}
+    {if condition='$ismeunshow_disable'}
     <a href="javascript:;" class="btn btn-minw btn-primary rbt" style="margin-top: 13px;" onclick="carsource_update_audit('',0);">批量拒绝</a>
     {/if} 
 </div>

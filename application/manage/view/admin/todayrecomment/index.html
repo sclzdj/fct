@@ -12,6 +12,8 @@
 .fister_add{height: 60px; line-height: 60px;margin-bottom: 20px;background: #fff;padding:0 20px;}
 .fister_add button{padding:0 5px;min-width:80px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;background: #fff;display: inline-block;margin-top: 13px;}
 .fister_add button:hover{background: #eee;}
+table input.tag_input{width: 150px;margin: 2px auto;height: 26px;line-height: 26px;padding: 0 3px;text-align: center;}
+table input.tag_input_no{width: 150px;margin: 5px auto;height: 30px;line-height: 30px;padding: 0 3px;text-align: center;}
 </style>
 <div class="fister_add">
     <span>添加今日好车推荐：</span>
@@ -21,12 +23,18 @@
 </div>
 {/if}
 
-
+{php}
+    $ismeunshow_move=ismeunshow("manage/todayrecomment/move");
+    $ismeunshow_delete=ismeunshow("manage/todayrecomment/delete");
+    $ismeunshow_look=ismeunshow("manage/carsource/look");
+    $ismeunshow_savetag=ismeunshow("manage/todayrecomment/savetag");
+{/php}
 {volist name="data" id="vo"}
 <div class="lit" {if condition='$key neq 0'}style="padding-top: 0;"{/if}>
     <table class="lit_table">
         <tr>
             <th style="padding-left: 0;">{$vo.audit_at_str}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;车源号：{$vo.sn}</th>
+            <th style="text-align: center;">{if condition='$key eq 0'}标签{/if}</th>
             <th style="text-align: center;" class="ddv1">{if condition='$key eq 0'}操作{/if}</th>
             <th style="text-align: center;" class="ddv2">{if condition='$key eq 0'}移动{/if}</th>
         </tr>
@@ -41,25 +49,33 @@
                 </div>
             </td>
             <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
-                {if condition='ismeunshow("manage/carsource/look")'}
+                {if condition='$ismeunshow_savetag'}
+                <input type="text" class="tag_input tag1" value="{$vo.tag1}" placeholder=""><br>
+                <input type="text" class="tag_input tag2" value="{$vo.tag2}" placeholder=""><br>
+                <input type="text" class="tag_input tag3" value="{$vo.tag3}" placeholder=""><br>
+                <a href="javascript:;" class="tag_submit" style="background: #5c90d2;color: #fff;font-size: 12px;display: block;height: 24px;line-height: 24px;text-align: center;cursor: pointer;width: 60px;margin-top: 6px;" row_id="{$vo.id}">保存</a>
+                {else/}
+                <input type="text" class="tag_input_no" value="{$vo.tag1}" placeholder="" readonly="readonly"><br>
+                <input type="text" class="tag_input_no" value="{$vo.tag2}" placeholder="" readonly="readonly"><br>
+                <input type="text" class="tag_input_no" value="{$vo.tag3}" placeholder="" readonly="readonly">
+                {/if}
+            </td>
+            <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
+                {if condition='$ismeunshow_look'}
                     <a href="{:url('manage/carsource/look',['id'=>$vo['car_source_id']])}">详情</a>&nbsp;
                 {/if}
-                {if condition='ismeunshow("manage/todayrecomment/delete")'}
+                {if condition='$ismeunshow_delete'}
                     <a href="javascript:;" class="delete_todayrecomment" todayrecomment_id="{$vo.id}">移除</a>
                 {/if} 
             </td>
             <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">
                 <input type="hidden" value="{$vo.id}" class="all_ids" pos='{$key}'>
-                {if condition='ismeunshow("manage/todayrecomment/move")'}
+                {if condition='$ismeunshow_move'}
                     {if condition='$key neq 0'}
-                        {if condition='ismeunshow("manage/todayrecomment/move")'}
                         <a href="javascript:;" class="move_todayrecomment" type="1" pos='{$key}'>上移</a>&nbsp;
-                        {/if} 
                     {/if}
                     {if condition='$key neq (count($data)-1)'}
-                        {if condition='ismeunshow("manage/todayrecomment/move")'}
                         <a href="javascript:;" class="move_todayrecomment" type="0" pos='{$key}'>下移</a>&nbsp; 
-                        {/if}
                     {/if}
                 {/if}
             </td>
@@ -78,6 +94,35 @@
 <script type="text/javascript">
   
 $(function(){
+    //保存标签
+    $('.tag_submit').click(function(){
+        var row_id=$(this).attr('row_id');
+        var tag1=$(this).parent().find('input.tag1').val();
+        var tag2=$(this).parent().find('input.tag2').val();
+        var tag3=$(this).parent().find('input.tag3').val();
+        Dolphin.loading();
+        $.ajax({
+            type:'post',
+            url:'{:url("manage/todayrecomment/savetag")}',
+            data:{'id':row_id,tag1:tag1,tag2:tag2,tag3:tag3},
+            dataType:'JSON',
+            success:function(data){
+                Dolphin.loading('hide');
+                if (data.code==200) {
+                    Dolphin.notify(data.msg, 'success');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            },
+            error:function(xhr,status,error){
+                Dolphin.loading('hide');
+                Dolphin.notify('服务器错误~', 'danger');
+            }
+        });
+    });
     //选择车源
     $('#select_source').click(function(){
         $('#iframe_big_box').attr('isshow','1');

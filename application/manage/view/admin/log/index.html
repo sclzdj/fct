@@ -34,32 +34,32 @@
                     ID 
                     <span>
                     {switch name="order"}
-                        {case value="id asc"}
-                        {php}$filter['order']='id desc';{/php}
+                        {case value="a.id asc"}
+                        {php}$filter['order']='a.id desc';{/php}
                         <a href="{:url('manage/log/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-caret-up"></i> 
                         </a>
                         {/case}
-                        {case value="id desc"}
-                        {php}$filter['order']='id asc';{/php}
+                        {case value="a.id desc"}
+                        {php}$filter['order']='a.id asc';{/php}
                         <a href="{:url('manage/log/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-caret-down"></i>
                         </a>
                         {/case}
-                        {case value="created_at asc"}
-                        {php}$filter['order']='id asc';{/php}
+                        {case value="a.created_at asc"}
+                        {php}$filter['order']='a.id asc';{/php}
                         <a href="{:url('manage/log/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>
                         {/case}
-                        {case value="created_at desc"}
-                        {php}$filter['order']='id asc';{/php}
+                        {case value="a.created_at desc"}
+                        {php}$filter['order']='a.id asc';{/php}
                         <a href="{:url('manage/log/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>
                         {/case}
                         {default /}
-                        {php}$filter['order']='id asc';{/php}
+                        {php}$filter['order']='a.id asc';{/php}
                         <a href="{:url('manage/log/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>
@@ -79,32 +79,32 @@
                     操作时间
                     <span>
                     {switch name="order"}
-                        {case value="id asc"}
-                        {php}$filter['order']='created_at desc';{/php}
+                        {case value="a.id asc"}
+                        {php}$filter['order']='a.created_at desc';{/php}
                         <a href="{:url('manage/log/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>
                         {/case}
-                        {case value="id desc"}
-                        {php}$filter['order']='created_at desc';{/php}
+                        {case value="a.id desc"}
+                        {php}$filter['order']='a.created_at desc';{/php}
                         <a href="{:url('manage/log/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>
                         {/case}
-                        {case value="created_at asc"}
-                        {php}$filter['order']='created_at desc';{/php}
+                        {case value="a.created_at asc"}
+                        {php}$filter['order']='a.created_at desc';{/php}
                         <a href="{:url('manage/log/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-caret-up"></i> 
                         </a>
                         {/case}
-                        {case value="created_at desc"}
-                        {php}$filter['order']='created_at asc';{/php}
+                        {case value="a.created_at desc"}
+                        {php}$filter['order']='a.created_at asc';{/php}
                         <a href="{:url('manage/log/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-caret-down"></i> 
                         </a>
                         {/case}
                         {default /}
-                        {php}$filter['order']='created_at desc';{/php}
+                        {php}$filter['order']='a.created_at desc';{/php}
                         <a href="{:url('manage/log/index',$filter)}" data-toggle="tooltip" data-original-title="排序">
                             <i class="fa fa-sort text-muted"></i>
                         </a>

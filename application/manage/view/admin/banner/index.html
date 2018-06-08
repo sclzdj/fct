@@ -26,6 +26,11 @@
     </div>
     <div style="clear: both;"></div>
     <div class="con">
+        {php}
+            $ismeunshow_move=ismeunshow("manage/banner/move");
+            $ismeunshow_edit=ismeunshow("manage/banner/edit");
+            $ismeunshow_delete=ismeunshow("manage/banner/delete");
+        {/php}
         {volist name="data" id="vo"}
         <div class="lit" style="margin-bottom: 0;padding-top:5px;padding-bottom:5px;">
             <table class="lit_table">
@@ -75,22 +80,22 @@
                     {/switch}
                     </td>
                     <td align="center" style="min-width:100px;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
-                        {if condition='ismeunshow("manage/banner/edit")'}
+                        {if condition='$ismeunshow_edit'}
                             <a href="{:url('manage/banner/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
                         {/if}
-                        {if condition='ismeunshow("manage/banner/delete")'}
+                        {if condition='$ismeunshow_delete'}
                             <a href="javascript:;" class="delete_banner" banner_id="{$vo.id}">删除</a>
                         {/if} 
                     </td>
                     <td align="center" style="min-width:100px;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">
                         {if condition='ismeunshow("manage/banner/move")'}
                             {if condition='$key neq 0'}
-                                {if condition='ismeunshow("manage/banner/move")'}
+                                {if condition='$ismeunshow_move'}
                                 <a href="javascript:;" class="move_banner" type="1" pos='{$key}'>上移</a>&nbsp;
                                 {/if} 
                             {/if}
                             {if condition='$key neq (count($data)-1)'}
-                                {if condition='ismeunshow("manage/banner/move")'}
+                                {if condition='$ismeunshow_move'}
                                 <a href="javascript:;" class="move_banner" type="0" pos='{$key}'>下移</a>&nbsp; 
                                 {/if}
                             {/if}

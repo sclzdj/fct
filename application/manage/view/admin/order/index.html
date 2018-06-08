@@ -39,6 +39,13 @@
     </form>
     <div style="clear: both;"></div>
 </div>
+<style>
+.lit table.lit_table tr td{height: 126px;}
+</style>
+{php}
+    $ismeunshow_edit=ismeunshow("manage/order/edit");
+    $ismeunshow_look=ismeunshow("manage/order/look");
+{/php}
 {volist name="data" id="vo"}
 <div class="lit">
     <table class="lit_table">
@@ -49,13 +56,20 @@
         </tr>
         <tr>
             <td style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-left: 1px solid #ccc;">
+                {if condition='$vo.is_defind eq 1'}
+                <div class="xiao">
+                    <span>{$vo.defind_model}</span><br>
+                    <span>{if condition='$vo.shop_name'}{$vo.shop_name}{else/}<i style="color: #ccc;font-style: normal;">店铺名称暂无</i>{/if}</span>
+                </div>
+                {else/}
                 <div style="float: left;min-height: 120px;"><img src="{if condition='$vo.is_defind eq 0'}{$vo.main_img}{else/}__ADMIN_IMG__/none.png{/if}"></div>
                 <div class="core">
-                    <span>{if condition='$vo.is_defind eq 0'}{$vo.brand_id}.{$vo.serie_id}.{$vo.model_id}{else/}{if condition='$vo.is_defind eq 1'}{$vo.defind_model}{/if}{/if}</span>
+                    <span>{if condition='$vo.is_defind eq 0'}{$vo.brand_id}.{$vo.serie_id}.{$vo.model_id}{else/}<i style="color: #ccc;font-style: normal;">车型缺失</i>{/if}</span>
                     <span>{if condition='$vo.is_defind eq 0'}{$vo.first_plate_year}年/{$vo.mileage}公里&nbsp;&nbsp;{$vo.region_one_text}{/if}</span>
                     <span>{if condition='$vo.is_defind eq 0'}{$vo.price}万{/if}</span>
-                    <span>{$vo.shop_name}</span>
+                    <span>{if condition='$vo.shop_name'}{$vo.shop_name}{else/}<i style="color: #ccc;font-style: normal;">店铺名称暂无</i>{/if}</span>
                 </div>
+                {/if}
             </td>
             <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
                 <div class="xiao">
@@ -77,11 +91,11 @@
                     {default /}
                 {/switch}
                 {if condition='$vo.state eq 0'}
-                    {if condition='ismeunshow("manage/order/edit")'}
+                    {if condition='$ismeunshow_edit'}
                         <a href="{:url('manage/order/edit',['id'=>$vo['id']])}" class="yesclick" style="margin-bottom: 5px;">修改</a>
                     {/if}
                 {/if}
-                {if condition='ismeunshow("manage/order/look")'}
+                {if condition='$ismeunshow_look'}
                     <a href="{:url('manage/order/look',['id'=>$vo['id']])}" class="yesclick">订单详情</a>
                 {/if} 
             </td>
