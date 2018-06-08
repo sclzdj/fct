@@ -27,12 +27,12 @@
             <li>
                 <span class="latips"><span class="required">*</span>店铺名称：</span>
                 <input type="text" name="shop_name" value="{$merchant.shop_name}" placeholder="请输入店铺名称">
-                <span class="bztips">允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：8-30个字符</span>
+                <span class="bztips">允许输入汉字、字母、数字，不允许特殊字符输入，长度：8-30个字</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>合同编号：</span>
                 <input type="text" name="contract_no" value="{$merchant.contract_no}" placeholder="请输入合同编号">
-                <span class="bztips">允许输入大写字母、数字、- 三种字符，字符长度：10-30个字符，例：HC-JM-20180415001</span>
+                <span class="bztips">允许输入大写字母、数字、- 三种字符，长度：10-30个字符</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>合同有效期：</span>
@@ -46,7 +46,7 @@
                     <option value="工商营业执照" {if condition='$merchant.licence_type=="工商营业执照"'}selected="selected"{/if}>工商营业执照</option>
                     <option value="统一社会信用代码营业执照" {if condition='$merchant.licence_type=="统一社会信用代码营业执照"'}selected="selected"{/if}>统一社会信用代码营业执照</option>
                 </select>
-                <span class="bztips">选择工商营业执照时证件号码只允许输入13位数字；选择统一社会信用代码用业执照时证件号码只允许输入18位数字</span>
+                <span class="bztips">选择工商营业执照时号码只允许输入13位数字；选择统一社会信用代码用业执照时号码只允许输入18位数字</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>证件号码：</span>
