@@ -42,7 +42,6 @@ class Evaluate extends Admin
         $data=$data_all['data'];
         //处理数据
         foreach ($data as $key => $value) {
-            $data[$key]['city_text']=(string)db('regions')->where(['id'=>$value['city_id'],'level'=>'2','parent_id'=>$value['province_id']])->value('name');
         	$data[$key]['evaluate_at_str']=date('Y-m-d H:i',$value['evaluate_at']);
         }
         //模板赋值

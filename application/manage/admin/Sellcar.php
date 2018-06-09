@@ -42,7 +42,6 @@ class Sellcar extends Admin
         $data=$data_all['data'];
         //处理数据
         foreach ($data as $key => $value) {
-            $data[$key]['city_text']=(string)db('regions')->where(['id'=>$value['city_id'],'level'=>'2','parent_id'=>$value['province_id']])->value('name');
         	$data[$key]['submit_at_str']=date('Y-m-d H:i',$value['submit_at']);
         }
         //模板赋值
@@ -58,7 +57,6 @@ class Sellcar extends Admin
     public function look($id=''){
         $sellcar=db('sellcars')->where('id',$id)->find();
         if($sellcar){
-            $sellcar['region_text']=region_text([$sellcar['province_id'],$sellcar['city_id'],$sellcar['area_id']]);
             $sellcar['plate_at_str']=date('Y-m-d H:i',$sellcar['plate_at']);
             $sellcar['submit_at_str']=date('Y-m-d H:i',$sellcar['submit_at']);
             $sellcar['created_at_str']=date('Y-m-d H:i',$sellcar['created_at']);

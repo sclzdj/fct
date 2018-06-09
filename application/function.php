@@ -327,3 +327,17 @@ if(!function_exists('cateSort')){
         return $arr;
     }
 }
+if(!function_exists('mb_strlen')){
+    function mb_strlen($str,$encoding="utf8")  {
+        $step = $encoding=="utf8"?2:1;
+        $count = 0;//字数
+        $strlen = strlen($str);
+        for($i=0;$i<$strlen;$i++){
+            $count++;
+            if(ord($str{$i})>=128){
+                $i=$i+$step;
+            }
+        }
+        return $count;
+    }
+}

@@ -25,16 +25,16 @@
             </li>
             <li>
                 <span class="looktips">所在地区：</span>
-                {if condition='$sellcar.region_text!==""'}
-                <span class="lacon">{$sellcar.region_text}</span>
+                {if condition='$sellcar.city_name!==""'}
+                <span class="lacon">{$sellcar.city_name}</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
                 {/if}
             </li>
             <li>
                 <span class="looktips">车型：</span>
-                {if condition='$sellcar.brand_id!==""'}
-                <span class="lacon">{$sellcar.brand_id}</span>
+                {if condition='$sellcar.car_name!==""'}
+                <span class="lacon">{$sellcar.car_name}</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
                 {/if}
