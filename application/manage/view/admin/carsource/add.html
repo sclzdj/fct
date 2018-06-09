@@ -34,14 +34,17 @@
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>车型：</span>
-                <select name="brand_id" style="width: 8%;min-width: 90px;" id="select_brand">
-                    <option value="">请选择品牌</option>
+                <select name="brand_id" style="width: 10%;min-width: 100px;" id="select_brand">
+                    <option value="-1">请选择品牌</option>
+                    {volist name="brand" id="vo"}
+                    <option value="{$vo.p_pinpai_id}">{$vo.p_pinpai}</option>
+                    {/volist}
                 </select>&nbsp;
-                <select name="serie_id" style="width: 8%;min-width: 90px;" id="select_serie">
-                    <option value="">请选择车系</option>
+                <select name="serie_id" style="width: 12%;min-width: 120px;" id="select_serie">
+                    <option value="-1">请选择车系</option>
                 </select>&nbsp;
-                <select name="model_id" style="width: 8%;min-width: 90px;" id="select_model">
-                    <option value="">请选择车型</option>
+                <select name="car_id" style="width: 16%;min-width: 160px;" id="select_car">
+                    <option value="-1">请选择车型</option>
                 </select>&nbsp;
                 <a href="javascript:;">查看参数</a>
             </li>
@@ -543,6 +546,64 @@
                                 html+='<option value="'+v.id+'">'+v.name+'</option>';
                             });
                             $('#select_city').html(html);
+                        } else {
+                            Dolphin.notify(data.msg, 'danger');
+                        }
+                    },
+                    error:function(xhr,status,error){
+                        Dolphin.notify('服务器错误~', 'danger');
+                    }
+                });
+            }
+        });
+        //查出车系
+        $('#select_brand').change(function(){
+            var val=$(this).val();
+            if(val=='-1'){
+                $('#select_serie').html('<option value="-1">请选择车系</option>');
+                $('#select_car').html('<option value="-1">请选择车型</option>');
+            }else{
+                $.ajax({
+                    type:'GET',
+                    url:'{:url("index/car/getSeries")}',
+                    data:{'brand_id':val},
+                    dataType:'JSON',
+                    success:function(data){
+                        if (data.code==200) {
+                            var html='<option value="-1">请选择车系</option>';
+                            $(data.serie).each(function(k,v){
+                                html+='<option value="'+v.p_chexi_id+'">'+v.p_chexi+'</option>';
+                            });
+                            $('#select_serie').html(html);
+                            $('#select_car').html('<option value="-1">请选择车型</option>');
+                        } else {
+                            Dolphin.notify(data.msg, 'danger');
+                        }
+                    },
+                    error:function(xhr,status,error){
+                        Dolphin.notify('服务器错误~', 'danger');
+                    }
+                });
+            }
+        });
+        //查出车型
+        $('#select_serie').change(function(){
+            var val=$(this).val();
+            if(val=='-1'){
+                $('#select_car').html('<option value="-1">请选择车型</option>');
+            }else{
+                $.ajax({
+                    type:'GET',
+                    url:'{:url("index/car/getJxCars")}',
+                    data:{'serie_id':val},
+                    dataType:'JSON',
+                    success:function(data){
+                        if (data.code==200) {
+                            var html='<option value="-1">请选择车型</option>';
+                            $(data.car).each(function(k,v){
+                                html+='<option value="'+v.p_chexing_id+'">'+v.p_chexingmingcheng_jx+'</option>';
+                            });
+                            $('#select_car').html(html);
                         } else {
                             Dolphin.notify(data.msg, 'danger');
                         }

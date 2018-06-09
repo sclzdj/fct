@@ -50,7 +50,7 @@
                 <span class="latips"><span class="required">*</span>意向车源：</span>
                 <input type="hidden" name="car_source_id" value="{$customer.car_source_id}">
                 <input type="hidden" name="defind_model" value="{$customer.defind_model}">
-                <span class="lacon" style="margin-right: 10px;">{if condition='$customer.car_source_id neq "0"'}{$customer.car_source_id}{else/}{$customer.defind_model}{/if}</span>
+                <span class="lacon" style="margin-right: 10px;">{if condition='$customer.car_source_id neq "0"'}{$customer.car_name}{else/}{$customer.defind_model}{/if}</span>
                 <button id="select_source">+{if condition='$customer.car_source_id eq "" && $customer.defind_model eq ""'}选择{else/}重选{/if}</button>
             </li>
             <li>

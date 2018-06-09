@@ -126,6 +126,14 @@
                 </span>
             </li>
             <li>
+                <span class="looktips">销售人员：</span>
+                {if condition='$order.sale_name!==""'}
+                <span class="lacon">{$order.sale_name}</span>
+                {else/}
+                <span class="lacon" style="color:#ccc;">暂无</span>
+                {/if}
+            </li>
+            <li>
                 <span class="looktips">创建时间：</span>
                 {if condition='$order.created_at_str!==""'}
                 <span class="lacon">{$order.created_at_str}</span>

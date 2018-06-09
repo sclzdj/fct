@@ -137,27 +137,67 @@ if(!function_exists('isSupper')){
         }
     }
 }
+//权限
+if(!function_exists('menu_auth')){
+    function menu_auth($uid=0,$ismerchant=false){
+        if($uid<=0){
+            $uid=defined('UID')?UID:session('user_auth.uid');
+        }
+        $role=db('admin_user')->where('id',$uid)->value('role');
+        if($role==1){
+            $admin_menu=db('admin_menu')->field('id')->select();
+            $menus=[];
+            foreach ($admin_menu as $k => $v) {
+                $menus[]=$v['id'];
+            }
+            return $menus;
+        }
+        
+        //车商
+        if($ismerchant){
+            $menu_auth=db('admin_role')->where('id','2')->value('');
+            eval('$menus='.$menu_auth.';');
+            $manage_auth=$menus;
+        }else{
+            //管理员
+            $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
+            eval('$menus='.$menu_auth.';');
+            $manage_auth=$menus;
+        }
+        //具体权限
+        $menu_auth=db('admin_role')->where('id',$role)->value('menu_auth');
+        eval('$menus='.$menu_auth.';');
+        foreach ($menus as $k => $v) {
+            if(!in_array($v,$manage_auth)){
+                unset($menus[$k]);
+            }
+        }
+        return $menus;
+    }
+}
 //是否有权限
 if(!function_exists('isaccess')){
     function isaccess($menu_id=0){
         $uid=defined('UID')?UID:session('user_auth.uid');
         $role=db('admin_user')->where('id',$uid)->value('role');
-        if($role==1) return true;//完全管理员豁免
+        if($role==1) return true;//完全豁免
         if($menu_id<=0){
             // 获取当前操作的id
             $location = MenuModel::getLocation();
             $action   = end($location);
             $menu_id=$action['id'];
         }  
-        //管理员
-        $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
-        eval('$menu_auth='.$menu_auth.';');
-        if(!in_array($menu_id, $menu_auth)){
-            return false;
-        }
+        
         //车商
         if(ismerchant()){
             $menu_auth=db('admin_role')->where('id','2')->value('menu_auth');
+            eval('$menu_auth='.$menu_auth.';');
+            if(!in_array($menu_id, $menu_auth)){
+                return false;
+            }
+        }else{
+            //管理员
+            $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
             eval('$menu_auth='.$menu_auth.';');
             if(!in_array($menu_id, $menu_auth)){
                 return false;
@@ -177,7 +217,7 @@ if(!function_exists('isaccess')){
 if(!function_exists('ismeunshow')){
     function ismeunshow($url_value){
         $role=db('admin_user')->where('id',UID)->value('role');
-        if($role==1) return true;//完全管理员豁免
+        if($role==1) return true;//完全豁免
         $menu_id=db('admin_menu')->where('url_value',$url_value)->value('id');
         //管理员
         $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');

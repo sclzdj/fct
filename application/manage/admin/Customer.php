@@ -75,7 +75,7 @@ class Customer extends Admin
 		        }
 	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$value['car_source_id'])->find();
 	            if($carsource){
-	            	$data[$key]['car_source']=$value['car_source_id'];
+	            	$data[$key]['car_source']=$carsource['name'];
 	            }else{
 	            	$data[$key]['car_source']='';
 	            }
@@ -127,7 +127,7 @@ class Customer extends Admin
 		        }
 	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$value['car_source_id'])->find();
 	            if($carsource){
-	            	$value['car_source']=$value['car_source_id'];
+	            	$value['car_source']=$carsource['name'];
 	            }else{
 	            	$value['car_source']='';
 	            }
@@ -184,7 +184,7 @@ class Customer extends Admin
             return $this->error('文件未生成成功，请重试');
         } else {    
             record_log(request()->module(),request()->controller(),'导出客户列表');
-            header('Location:'.config('finecar.host_url').'/public/'.$file_dir.$file_name);
+            header('Location:'.config('finecar.host_url').'/'.$file_dir.$file_name);
             die;
         } 
 	}
@@ -382,6 +382,18 @@ class Customer extends Admin
         }
         //处理数据
         $customer['remark_len']=mb_strlen($customer['remark'],'utf8');
+        if($customer['car_source_id']>0){
+            $map=[];
+            if($ismerchant){
+                $map['b.id']=$ismerchant;
+            }
+            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$customer['car_source_id'])->find();
+            if($carsource){
+                $customer['car_name']=$carsource['name'];
+            }else{
+                $customer['car_name']='';
+            }
+        }
         //获取中国省份
         $province=db('regions')->field('id,name')->where(['parent_id'=>'1','level'=>'1'])->order('sort asc')->select();
         $city=db('regions')->field('id,name')->where(['parent_id'=>$customer['province_id'],'level'=>'2'])->order('sort asc')->select();
@@ -416,7 +428,7 @@ class Customer extends Admin
 		        }
 	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$customer['car_source_id'])->find();
 	            if($carsource){
-	            	$customer['car_source']=$customer['car_source_id'];
+	            	$customer['car_source']=$carsource['name'];
 	            }else{
 	            	$customer['car_source']='';
 	            }

@@ -18,7 +18,7 @@ class Order extends Admin
             'merchant_id'=>input('param.merchant_id',''),
             'brand_id'=>input('param.brand_id',''),
             'serie_id'=>input('param.serie_id',''),
-            'model_id'=>input('param.model_id',''),
+            'car_id'=>input('param.car_id',''),
             'paid_at_start'=>input('param.paid_at_start',''),
             'paid_at_end'=>input('param.paid_at_end',''),
         ];
@@ -32,12 +32,21 @@ class Order extends Admin
         }
         if($filter['brand_id']!==''){
             $map['d.brand_id']=$filter['brand_id'];
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+        }else{
+            $serie=[];
         }
         if($filter['serie_id']!==''){
             $map['d.serie_id']=$filter['serie_id'];
+            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+            foreach ($car as $k => $v) {
+                $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
+            }
+        }else{
+            $car=[];
         }
-        if($filter['model_id']!==''){
-            $map['d.model_id']=$filter['model_id'];
+        if($filter['car_id']!==''){
+            $map['d.car_id']=$filter['car_id'];
         }
         if($filter['paid_at_start']!=='' && $filter['paid_at_end']!==''){
             $map['a.paid_at']=['between time',[$filter['paid_at_start'],$filter['paid_at_end']]];
@@ -54,7 +63,7 @@ class Order extends Admin
         $order=input('param.order','a.paid_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('orders')->alias('a')->field('a.id,a.sn,a.amount,a.earnest,a.state,a.paid_at,a.paid_type,a.car_source_id,a.defind_model,a.created_at,b.name customer_name,c.shop_name,d.brand_id,d.serie_id,d.model_id,d.plate_province_id,d.plate_city_id,d.first_plate_at,d.mileage,d.price,d.imgs')->join('customers b','a.customer_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->join('car_sources d','a.car_source_id=d.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('orders')->alias('a')->field('a.id,a.sn,a.amount,a.earnest,a.state,a.paid_at,a.paid_type,a.car_source_id,a.defind_model,a.created_at,b.name customer_name,c.shop_name,d.name car_name,d.brand_id,d.serie_id,d.car_id,d.plate_province_id,d.plate_city_id,d.first_plate_at,d.mileage,d.price,d.imgs')->join('customers b','a.customer_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->join('car_sources d','a.car_source_id=d.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -89,6 +98,8 @@ class Order extends Admin
             $where['id']=$ismerchant;
         }
         $merchant=db('merchants')->field('id,shop_name')->where($where)->select();
+        //获取品牌
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -96,6 +107,9 @@ class Order extends Admin
             'data'=>$data,
             'merchant'=>$merchant,
             'page'=>$page,
+            'brand'=>$brand,
+            'serie'=>$serie,
+            'car'=>$car,
         ]);
         //渲染模板
         return $this->fetch();
@@ -292,7 +306,7 @@ class Order extends Admin
             }
             $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$order['car_source_id'])->find();
             if($carsource){
-                $order['car_source']=$order['car_source_id'];
+                $order['car_source']=$carsource['name'];
             }else{
                 $order['car_source']='';
             }
@@ -322,6 +336,7 @@ class Order extends Admin
             $order['created_at_str']=date('Y-m-d H:i',$order['created_at']);
             $order['customer_name']=db('customers')->where('id',$order['customer_id'])->value('name');
             $order['customer_state']=db('customers')->where('id',$order['customer_id'])->value('state');
+            $order['sale_name']=db('admin_user')->where('id',$order['sale_id'])->value('username');
             if($order['car_source_id']>0){
                 $map=[];
                 if($ismerchant){
@@ -329,7 +344,7 @@ class Order extends Admin
                 }
                 $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$order['car_source_id'])->find();
                 if($carsource){
-                    $order['car_source']=$order['car_source_id'];
+                    $order['car_source']=$carsource['name'];
                 }else{
                     $order['car_source']='';
                 }

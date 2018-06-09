@@ -38,10 +38,10 @@
             <td style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-left: 1px solid #ccc;">
                 <div style="float: left;min-height: 120px;"><img src="{$vo.main_img}"></div>
                 <div class="core">
-                    <span>阿斯顿马丁  V8 Vantage  2013款 4.0T</span>
+                    <span>{$vo.name}</span>
                     <span>{$vo.first_plate_year}年/{$vo.mileage}公里&nbsp;&nbsp;{$vo.region_one_text}</span>
                     <span>{$vo.price}万</span>
-                    <span>{$vo.shop_name}</span>
+                    <span>{if condition='$vo.shop_name'}{$vo.shop_name}{else/}<i style="color: #ccc;font-style: normal;">店铺名称暂无</i>{/if}</span>
                 </div>
             </td>
             <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">

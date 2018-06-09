@@ -42,22 +42,22 @@ table input.tag_input_no{width: 150px;margin: 5px auto;height: 30px;line-height:
             <td style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-left: 1px solid #ccc;">
                 <div style="float: left;min-height: 120px;"><img src="{$vo.main_img}"></div>
                 <div class="core">
-                    <span>阿斯顿马丁  V8 Vantage  2013款 4.0T</span>
+                    <span>{$vo.name}</span>
                     <span>{$vo.first_plate_year}年/{$vo.mileage}公里&nbsp;&nbsp;{$vo.region_one_text}</span>
                     <span>{$vo.price}万</span>
-                    <span>{$vo.shop_name}</span>
+                    <span>{if condition='$vo.shop_name'}{$vo.shop_name}{else/}<i style="color: #ccc;font-style: normal;">店铺名称暂无</i>{/if}</span>
                 </div>
             </td>
             <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
                 {if condition='$ismeunshow_savetag'}
-                <input type="text" class="tag_input tag1" value="{$vo.tag1}" placeholder=""><br>
-                <input type="text" class="tag_input tag2" value="{$vo.tag2}" placeholder=""><br>
-                <input type="text" class="tag_input tag3" value="{$vo.tag3}" placeholder=""><br>
+                <input type="text" class="tag_input tag1" value="{$vo.tag1}" placeholder="请输入标签1"><br>
+                <input type="text" class="tag_input tag2" value="{$vo.tag2}" placeholder="请输入标签2"><br>
+                <input type="text" class="tag_input tag3" value="{$vo.tag3}" placeholder="请输入标签3"><br>
                 <a href="javascript:;" class="tag_submit" style="background: #5c90d2;color: #fff;font-size: 12px;display: block;height: 24px;line-height: 24px;text-align: center;cursor: pointer;width: 60px;margin-top: 6px;" row_id="{$vo.id}">保存</a>
                 {else/}
-                <input type="text" class="tag_input_no" value="{$vo.tag1}" placeholder="" readonly="readonly"><br>
-                <input type="text" class="tag_input_no" value="{$vo.tag2}" placeholder="" readonly="readonly"><br>
-                <input type="text" class="tag_input_no" value="{$vo.tag3}" placeholder="" readonly="readonly">
+                <input type="text" class="tag_input_no" value="{$vo.tag1}" placeholder="无权限输入标签1" readonly="readonly"><br>
+                <input type="text" class="tag_input_no" value="{$vo.tag2}" placeholder="无权限输入标签2" readonly="readonly"><br>
+                <input type="text" class="tag_input_no" value="{$vo.tag3}" placeholder="无权限输入标签3" readonly="readonly">
                 {/if}
             </td>
             <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">

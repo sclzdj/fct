@@ -18,7 +18,7 @@ class Carsource extends Admin
             'audit'=>input('param.audit',''),
             'brand_id'=>input('param.brand_id',''),
             'serie_id'=>input('param.serie_id',''),
-            'model_id'=>input('param.model_id',''),
+            'car_id'=>input('param.car_id',''),
             'shop_name'=>input('param.shop_name',''),
             'merchant_sn'=>input('param.merchant_sn',''),
             'audit_at_start'=>input('param.audit_at_start',''),
@@ -35,12 +35,21 @@ class Carsource extends Admin
         }
         if($filter['brand_id']!==''){
             $map['a.brand_id']=$filter['brand_id'];
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+        }else{
+            $serie=[];
         }
         if($filter['serie_id']!==''){
             $map['a.serie_id']=$filter['serie_id'];
+            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+            foreach ($car as $k => $v) {
+                $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
+            }
+        }else{
+            $car=[];
         }
-        if($filter['model_id']!==''){
-            $map['a.model_id']=$filter['model_id'];
+        if($filter['car_id']!==''){
+            $map['a.car_id']=$filter['car_id'];
         }
         if($filter['shop_name']!==''){
             $map['c.shop_name']=['like','%'.$filter['shop_name'].'%'];
@@ -68,7 +77,7 @@ class Carsource extends Admin
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.sn,a.driving_img,a.brand_id,a.serie_id,a.model_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.driving_img,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -83,12 +92,17 @@ class Carsource extends Admin
             $data[$key]['first_plate_year']=explode('-',$value['first_plate_at'])[0];
             $data[$key]['region_one_text']=region_text([$value['plate_province_id'],$value['plate_city_id']],false);
         }
+        //获取品牌
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
             'order'=>$order,
             'data'=>$data,
             'page'=>$page,
+            'brand'=>$brand,
+            'serie'=>$serie,
+            'car'=>$car,
         ]);
         //渲染模板
         return $this->fetch();
@@ -106,15 +120,15 @@ class Carsource extends Admin
             if(!preg_match('/^[A-Z0-9]{1,34}$/',$data['vin_no'])) {
                 return json_return('F','1000','车架号允许大写字母和数字组合，字符长度：34个字符，例WDBGP57B6PB127810');
             }
-            /*if($data['brand_id']===''){
+            if($data['brand_id']=='-1'){
                 return json_return('F','1000','车牌必选');
             }
-            if($data['serie_id']===''){
+            if($data['serie_id']=='-1'){
                 return json_return('F','1000','车系必选');
             }
-            if($data['model_id']===''){
+            if($data['car_id']=='-1'){
                 return json_return('F','1000','车型必选');
-            }*/
+            }
             if($data['install_config']!==''){
                 if(mb_strlen($data['install_config'],'utf8')>1000) {
                     return json_return('F','1000','加装配置最多1000个字');
@@ -179,7 +193,11 @@ class Carsource extends Admin
                 return json_return('F','1000','车源检测结论最多1000个字');
             }
             //处理多级选项
-            $option_ids=$data['option_ids'];
+            if(isset($data['option_ids'])){
+                $option_ids=$data['option_ids'];
+            }else{
+                $option_ids=[];
+            }
             $new_option_ids=[];
             foreach ($option_ids as $k => $v) {
                 $option=db('check_report_options')->field('id,level,parent_id')->where('id',$v)->where('level','in','1,2,3')->find();
@@ -203,7 +221,7 @@ class Carsource extends Admin
             $insert['vin_no']=$data['vin_no'];
             $insert['brand_id']=$data['brand_id'];
             $insert['serie_id']=$data['serie_id'];
-            $insert['model_id']=$data['model_id'];
+            $insert['car_id']=$data['car_id'];
             $insert['install_config']=$data['install_config'];
             $insert['price']=$data['price']*100;
             $insert['color']=$data['color'];
@@ -228,8 +246,25 @@ class Carsource extends Admin
             $insert['created_at']=$now;
             $insert['audit']=1;
             $insert['audit_at']=$now;
+            $ismerchant=ismerchant();
             $insert['merchant_id']=intval($ismerchant);
             $insert['runner_id']=UID;
+            $car=db('cars')->field('p_pinpai,p_chexi,p_chexingmingcheng')->where('p_chexing_id',$data['car_id'])->find();
+            if(strpos($car['p_chexingmingcheng'],$car['p_chexi']) !== false){ 
+                if(strpos($car['p_chexingmingcheng'],$car['p_pinpai']) !== false){
+                    $car_name=$car['p_chexingmingcheng'];
+                }else{
+                    $car_name=$car['p_pinpai'].' '.$car['p_chexingmingcheng'];
+                }
+            }else{
+                if(strpos($car['p_chexingmingcheng'],$car['p_pinpai']) !== false){
+                    $car['p_chexingmingcheng']=str_replace($car['p_pinpai'],'',$car['p_chexingmingcheng']);
+                    $car_name=$car['p_pinpai'].' '.$car['p_chexi'].' '.$car['p_chexingmingcheng'];
+                }else{
+                    $car_name=$car['p_pinpai'].' '.$car['p_chexi'].' '.$car['p_chexingmingcheng'];
+                } 
+            }
+            $insert['name']=$car_name;
             $insert_id=db('car_sources')->insertGetId($insert);
             //入库
             if ($insert_id>0) {
@@ -242,15 +277,18 @@ class Carsource extends Admin
         }
 		//获取检测报告配置项
 		$option=db('check_report_options')->field('id,name,parent_id')->where('level','in','1,2,3')->order('sort asc')->select();
-		$option=get_arr_tree($option);/*dump($option);die;*/
+		$option=get_arr_tree($option);
 		//获取颜色配置
 		$colorpick=config('colorpick');
         //获取中国省份
         $province=db('regions')->field('id,name')->where(['parent_id'=>'1','level'=>'1'])->order('sort asc')->select();
+        //获取品牌
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
         //模板赋值
         $this->assign([
             'province'=>$province,
             'colorpick'=>$colorpick,
+            'brand'=>$brand,
             'option'=>$option,
         ]);
         //渲染模板
@@ -279,15 +317,15 @@ class Carsource extends Admin
             if(!preg_match('/^[A-Z0-9]{1,34}$/',$data['vin_no'])) {
                 return json_return('F','1000','车架号允许大写字母和数字组合，字符长度：34个字符，例WDBGP57B6PB127810');
             }
-            /*if($data['brand_id']===''){
+            if($data['brand_id']=='-1'){
                 return json_return('F','1000','车牌必选');
             }
-            if($data['serie_id']===''){
+            if($data['serie_id']=='-1'){
                 return json_return('F','1000','车系必选');
             }
-            if($data['model_id']===''){
+            if($data['car_id']=='-1'){
                 return json_return('F','1000','车型必选');
-            }*/
+            }
             if($data['install_config']!==''){
                 if(mb_strlen($data['install_config'],'utf8')>1000) {
                     return json_return('F','1000','加装配置最多1000个字');
@@ -352,7 +390,11 @@ class Carsource extends Admin
                 return json_return('F','1000','车源检测结论最多1000个字');
             }
             //处理多级选项
-            $option_ids=$data['option_ids'];
+            if(isset($data['option_ids'])){
+                $option_ids=$data['option_ids'];
+            }else{
+                $option_ids=[];
+            }
             $new_option_ids=[];
             foreach ($option_ids as $k => $v) {
                 $option=db('check_report_options')->field('id,level,parent_id')->where('id',$v)->where('level','in','1,2,3')->find();
@@ -376,7 +418,7 @@ class Carsource extends Admin
             $update['vin_no']=$data['vin_no'];
             $update['brand_id']=$data['brand_id'];
             $update['serie_id']=$data['serie_id'];
-            $update['model_id']=$data['model_id'];
+            $update['car_id']=$data['car_id'];
             $update['install_config']=$data['install_config'];
             $update['price']=$data['price']*100;
             $update['color']=$data['color'];
@@ -397,6 +439,22 @@ class Carsource extends Admin
             $update['imgs']=implode(',', $data['imgs']);
             $update['check_result']=$data['check_result'];
             $update['option_ids']=implode(',', $new_option_ids);
+            $car=db('cars')->field('p_pinpai,p_chexi,p_chexingmingcheng')->where('p_chexing_id',$data['car_id'])->find();
+            if(strpos($car['p_chexingmingcheng'],$car['p_chexi']) !== false){ 
+                if(strpos($car['p_chexingmingcheng'],$car['p_pinpai']) !== false){
+                    $car_name=$car['p_chexingmingcheng'];
+                }else{
+                    $car_name=$car['p_pinpai'].' '.$car['p_chexingmingcheng'];
+                }
+            }else{
+                if(strpos($car['p_chexingmingcheng'],$car['p_pinpai']) !== false){
+                    $car['p_chexingmingcheng']=str_replace($car['p_pinpai'],'',$car['p_chexingmingcheng']);
+                    $car_name=$car['p_pinpai'].' '.$car['p_chexi'].' '.$car['p_chexingmingcheng'];
+                }else{
+                    $car_name=$car['p_pinpai'].' '.$car['p_chexi'].' '.$car['p_chexingmingcheng'];
+                } 
+            }
+            $update['name']=$car_name;
             $rt=db('car_sources')->where('id',$data['id'])->update($update);
             //入库
             if ($rt!==false) {
@@ -437,13 +495,23 @@ class Carsource extends Admin
         $option=get_arr_tree($option);
         //获取颜色配置
         $colorpick=config('colorpick');
-        //获取中国省份
+        //获取中国地区
         $province=db('regions')->field('id,name')->where(['parent_id'=>'1','level'=>'1'])->order('sort asc')->select();
         $city=db('regions')->field('id,name')->where(['parent_id'=>$car_source['plate_province_id'],'level'=>'2'])->order('sort asc')->select();
+        //获取车型
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
+        $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$car_source['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+        $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$car_source['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+        foreach ($car as $k => $v) {
+            $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
+        }
         //模板赋值
         $this->assign([
             'province'=>$province,
             'city'=>$city,
+            'brand'=>$brand,
+            'serie'=>$serie,
+            'car'=>$car,
             'colorpick'=>$colorpick,
             'option'=>$option,
             'car_source'=>$car_source,

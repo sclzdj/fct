@@ -21,7 +21,7 @@ class Iframe extends Common
             'sn'=>input('param.sn',''),
             'brand_id'=>input('param.brand_id',''),
             'serie_id'=>input('param.serie_id',''),
-            'model_id'=>input('param.model_id',''),
+            'car_id'=>input('param.car_id',''),
             'shop_name'=>input('param.shop_name',''),
         ];
         //整理筛选参数
@@ -31,12 +31,21 @@ class Iframe extends Common
         }
         if($filter['brand_id']!==''){
             $map['a.brand_id']=$filter['brand_id'];
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+        }else{
+            $serie=[];
         }
         if($filter['serie_id']!==''){
             $map['a.serie_id']=$filter['serie_id'];
+            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+            foreach ($car as $k => $v) {
+                $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
+            }
+        }else{
+            $car=[];
         }
-        if($filter['model_id']!==''){
-            $map['a.model_id']=$filter['model_id'];
+        if($filter['car_id']!==''){
+            $map['a.car_id']=$filter['car_id'];
         }
         if($filter['shop_name']!==''){
             $map['c.shop_name']=['like','%'.$filter['shop_name'].'%'];
@@ -48,7 +57,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources a')->field('a.id,a.sn,a.driving_img,a.brand_id,a.serie_id,a.model_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.driving_img,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -58,12 +67,17 @@ class Iframe extends Common
             $data[$key]['audit_at_str']=date('Y-m-d H:i',$value['audit_at']);
             $data[$key]['price']=number_format($value['price'],2,'.','');
         }
+        //获取品牌
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
             'order'=>$order,
             'data'=>$data,
             'page'=>$page,
+            'brand'=>$brand,
+            'serie'=>$serie,
+            'car'=>$car,
             '_pop'=>1,
         ]);
         //渲染模板
@@ -93,7 +107,7 @@ class Iframe extends Common
         $order=input('param.order','a.follow_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('customers a')->field('a.id,a.name,a.state,a.mobile,a.runner_id,a.follow_at,a.car_source_id,a.defind_model,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('customers')->alias('a')->field('a.id,a.name,a.state,a.mobile,a.runner_id,a.follow_at,a.car_source_id,a.defind_model,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -108,7 +122,7 @@ class Iframe extends Common
                 }
                 $carsource=db('car_sources a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$value['car_source_id'])->find();
                 if($carsource){
-                    $data[$key]['car_source']=$value['car_source_id'];
+                    $data[$key]['car_source']=$carsource['name'];
                 }else{
                     $data[$key]['car_source']='';
                 }
@@ -135,7 +149,7 @@ class Iframe extends Common
             'sn'=>input('param.sn',''),
             'brand_id'=>input('param.brand_id',''),
             'serie_id'=>input('param.serie_id',''),
-            'model_id'=>input('param.model_id',''),
+            'car_id'=>input('param.car_id',''),
             'shop_name'=>input('param.shop_name',''),
         ];
         //整理筛选参数
@@ -145,12 +159,21 @@ class Iframe extends Common
         }
         if($filter['brand_id']!==''){
             $map['a.brand_id']=$filter['brand_id'];
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+        }else{
+            $serie=[];
         }
         if($filter['serie_id']!==''){
             $map['a.serie_id']=$filter['serie_id'];
+            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+            foreach ($car as $k => $v) {
+                $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
+            }
+        }else{
+            $car=[];
         }
-        if($filter['model_id']!==''){
-            $map['a.model_id']=$filter['model_id'];
+        if($filter['car_id']!==''){
+            $map['a.car_id']=$filter['car_id'];
         }
         if($filter['shop_name']!==''){
             $map['c.shop_name']=['like','%'.$filter['shop_name'].'%'];
@@ -163,7 +186,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources a')->field('a.id,a.sn,a.driving_img,a.brand_id,a.serie_id,a.model_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.driving_img,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -173,12 +196,17 @@ class Iframe extends Common
             $data[$key]['audit_at_str']=date('Y-m-d H:i',$value['audit_at']);
             $data[$key]['price']=number_format($value['price'],2,'.','');
         }
+        //获取品牌
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
             'order'=>$order,
             'data'=>$data,
             'page'=>$page,
+            'brand'=>$brand,
+            'serie'=>$serie,
+            'car'=>$car,
             '_pop'=>1,
         ]);
         //渲染模板
@@ -192,7 +220,7 @@ class Iframe extends Common
             'sn'=>input('param.sn',''),
             'brand_id'=>input('param.brand_id',''),
             'serie_id'=>input('param.serie_id',''),
-            'model_id'=>input('param.model_id',''),
+            'car_id'=>input('param.car_id',''),
             'shop_name'=>input('param.shop_name',''),
         ];
         //整理筛选参数
@@ -202,12 +230,21 @@ class Iframe extends Common
         }
         if($filter['brand_id']!==''){
             $map['a.brand_id']=$filter['brand_id'];
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+        }else{
+            $serie=[];
         }
         if($filter['serie_id']!==''){
             $map['a.serie_id']=$filter['serie_id'];
+            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+            foreach ($car as $k => $v) {
+                $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
+            }
+        }else{
+            $car=[];
         }
-        if($filter['model_id']!==''){
-            $map['a.model_id']=$filter['model_id'];
+        if($filter['car_id']!==''){
+            $map['a.car_id']=$filter['car_id'];
         }
         if($filter['shop_name']!==''){
             $map['c.shop_name']=['like','%'.$filter['shop_name'].'%'];
@@ -228,7 +265,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources a')->field('a.id,a.sn,a.driving_img,a.brand_id,a.serie_id,a.model_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.driving_img,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -238,12 +275,17 @@ class Iframe extends Common
             $data[$key]['audit_at_str']=date('Y-m-d H:i',$value['audit_at']);
             $data[$key]['price']=number_format($value['price'],2,'.','');
         }
+        //获取品牌
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
             'order'=>$order,
             'data'=>$data,
             'page'=>$page,
+            'brand'=>$brand,
+            'serie'=>$serie,
+            'car'=>$car,
             '_pop'=>1,
         ]);
         //渲染模板
@@ -257,7 +299,7 @@ class Iframe extends Common
             'sn'=>input('param.sn',''),
             'brand_id'=>input('param.brand_id',''),
             'serie_id'=>input('param.serie_id',''),
-            'model_id'=>input('param.model_id',''),
+            'car_id'=>input('param.car_id',''),
             'shop_name'=>input('param.shop_name',''),
         ];
         //整理筛选参数
@@ -267,12 +309,21 @@ class Iframe extends Common
         }
         if($filter['brand_id']!==''){
             $map['a.brand_id']=$filter['brand_id'];
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+        }else{
+            $serie=[];
         }
         if($filter['serie_id']!==''){
             $map['a.serie_id']=$filter['serie_id'];
+            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+            foreach ($car as $k => $v) {
+                $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
+            }
+        }else{
+            $car=[];
         }
-        if($filter['model_id']!==''){
-            $map['a.model_id']=$filter['model_id'];
+        if($filter['car_id']!==''){
+            $map['a.car_id']=$filter['car_id'];
         }
         if($filter['shop_name']!==''){
             $map['c.shop_name']=['like','%'.$filter['shop_name'].'%'];
@@ -293,7 +344,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources a')->field('a.id,a.sn,a.driving_img,a.brand_id,a.serie_id,a.model_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.driving_img,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -303,12 +354,17 @@ class Iframe extends Common
             $data[$key]['audit_at_str']=date('Y-m-d H:i',$value['audit_at']);
             $data[$key]['price']=number_format($value['price'],2,'.','');
         }
+        //获取品牌
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
             'order'=>$order,
             'data'=>$data,
             'page'=>$page,
+            'brand'=>$brand,
+            'serie'=>$serie,
+            'car'=>$car,
             '_pop'=>1,
         ]);
         //渲染模板

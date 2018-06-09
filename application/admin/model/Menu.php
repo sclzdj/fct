@@ -115,9 +115,12 @@ class Menu extends Model
             $map['status'] = 1;
             $map['pid']    = 0;
             $menus = self::where($map)->order('sort,id')->limit($max)->column('id,pid,module,title,url_value,url_type,url_target,icon,params');
+            $isSupper=isSupper();
+            $ismerchant=ismerchant();
+            $menu_auth=menu_auth(0,$ismerchant);
             foreach ($menus as $key => &$menu) {
                 // 没有访问权限的节点不显示
-                if (!RoleModel::checkAuth($menu['id'])) {
+                if (!$isSupper && !in_array($menu['id'], $menu_auth)) {
                     unset($menus[$key]);
                     continue;
                 }
@@ -167,10 +170,13 @@ class Menu extends Model
             $menus = self::where($map)->order('sort,id')->column('id,pid,module,title,url_value,url_type,url_target,icon,params');
 
             // 解析模块链接
+            $isSupper=isSupper();
+            $ismerchant=ismerchant();
+            $menu_auth=menu_auth(0,$ismerchant);
             foreach ($menus as $key => &$menu) {
                 // 没有访问权限的节点不显示
                 //if (!RoleModel::checkAuth($menu['id'])) {
-                if(!isaccess($menu['id'])){
+                if(!$isSupper && !in_array($menu['id'], $menu_auth)){
                     unset($menus[$key]);
                     continue;
                 }

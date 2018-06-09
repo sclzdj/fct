@@ -281,7 +281,7 @@ return [
 
     //finecar模块
     'finecar'=> [
-        'host_url'=> 'http://localhost/finecar',//系统域名
+        'host_url'=> 'http://dyhc.jasonre.cn',//系统域名
         'www_url'=> '',//前台域名
     ],
     //模块名称

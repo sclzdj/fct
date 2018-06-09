@@ -16,14 +16,23 @@
     <form action="{:url('index/iframe/orderCarsourceList')}" name="search_form" target="iframe_small_box">
         <div class="blo"><span class="latips">车源号：</span><input type="text" name="sn" value="{$filter.sn}" placeholder="请输入车源号"></div>
         <div class="blo"><span class="latips">车型：</span>
-            <select name="brand_id" value="{$filter.brand_id}" style="margin-right: 5px;">
+            <select name="brand_id" style="margin-right: 5px;" id="select_brand">
                 <option value="">全部品牌</option>
+                {volist name="brand" id="vo"}
+                <option value="{$vo.p_pinpai_id}" {if condition='$filter.brand_id==$vo.p_pinpai_id'}selected="selected"{/if}>{$vo.p_pinpai}</option>
+                {/volist}
             </select>
-            <select name="serie_id" value="{$filter.serie_id}" style="margin-right: 5px;">
+            <select name="serie_id" style="margin-right: 5px;" id="select_serie">
                 <option value="">全部车系</option>
+                {volist name="serie" id="vo"}
+                <option value="{$vo.p_chexi_id}" {if condition='$filter.serie_id==$vo.p_chexi_id'}selected="selected"{/if}>{$vo.p_chexi}</option>
+                {/volist}
             </select>
-            <select name="model_id" value="{$filter.model_id}">
+            <select name="car_id" style="margin-right: 5px;" id="select_car">
                 <option value="">全部车型</option>
+                {volist name="car" id="vo"}
+                <option value="{$vo.p_chexing_id}" {if condition='$filter.car_id==$vo.p_chexing_id'}selected="selected"{/if}>{$vo.p_chexingmingcheng}</option>
+                {/volist}
             </select>
         </div>
         {if condition='!ismerchant()'}
@@ -128,6 +137,9 @@
                 </th>
         </thead>
         <tbody>
+        {php}
+        $ismeunshow_look=ismeunshow("manage/carsource/look");
+        {/php}
         {volist name="data" id="vo"}
         <tr>
             <td>
@@ -140,7 +152,7 @@
                 {$vo.shop_name}                                    
             </td>
             <td>
-                {$vo.brand_id}.{$vo.serie_id}.{$vo.model_id}                                
+                {$vo.name}                               
             </td>
             <td>
                 {$vo.price}万元                                    
@@ -149,12 +161,12 @@
                 {$vo.audit_at_str}                                    
             </td>
             <td>
-                {if condition='ismeunshow("manage/carsource/look")'}
+                {if condition='$ismeunshow_look'}
                     <a href="{:url('manage/carsource/look',['id'=>$vo['id']])}" target="_blank">详情</a>
                 {/if} 
             </td>
             <td align="center">
-                <input class="select_car_source select_option" type="checkbox" value="{$vo.id}" carmod='{$vo.brand_id}.{$vo.serie_id}.{$vo.model_id}'>
+                <input class="select_car_source select_option" type="checkbox" value="{$vo.id}" carmod='{$vo.name}'>
             </td>
         </tr>
         {/volist}
@@ -203,6 +215,7 @@ $(function(){
             $(window.parent.document).find('#select_source').html('+重选');
         }
         iframe_big_box.attr('isshow','0');
+        $(window.parent.document).find('html,body').css({'overflow':'scroll','height':'auto'});
     });
     //关闭
     $('#close_frame').click(function(){
@@ -228,6 +241,64 @@ $(function(){
                 $('input[name="car_source_id"]').val('');
             }
         });
+    });
+    //查出车系
+    $('#select_brand').change(function(){
+        var val=$(this).val();
+        if(val===''){
+            $('#select_serie').html('<option value="">全部车系</option>');
+            $('#select_car').html('<option value="">全部车型</option>');
+        }else{
+            $.ajax({
+                type:'GET',
+                url:'{:url("index/car/getSeries")}',
+                data:{'brand_id':val},
+                dataType:'JSON',
+                success:function(data){
+                    if (data.code==200) {
+                        var html='<option value="">全部车系</option>';
+                        $(data.serie).each(function(k,v){
+                            html+='<option value="'+v.p_chexi_id+'">'+v.p_chexi+'</option>';
+                        });
+                        $('#select_serie').html(html);
+                        $('#select_car').html('<option value="">全部车型</option>');
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        }
+    });
+    //查出车型
+    $('#select_serie').change(function(){
+        var val=$(this).val();
+        if(val===''){
+            $('#select_car').html('<option value="">全部车型</option>');
+        }else{
+            $.ajax({
+                type:'GET',
+                url:'{:url("index/car/getJxCars")}',
+                data:{'serie_id':val},
+                dataType:'JSON',
+                success:function(data){
+                    if (data.code==200) {
+                        var html='<option value="">全部车型</option>';
+                        $(data.car).each(function(k,v){
+                            html+='<option value="'+v.p_chexing_id+'">'+v.p_chexingmingcheng_jx+'</option>';
+                        });
+                        $('#select_car').html(html);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        }
     });
 });
 </script>

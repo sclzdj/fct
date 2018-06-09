@@ -86,7 +86,7 @@ class User extends Admin
             return $this->error('文件未生成成功，请重试');
         } else {    
             record_log(request()->module(),request()->controller(),'导出用户列表');
-            header('Location:'.config('finecar.host_url').'/public/'.$file_dir.$file_name);
+            header('Location:'.config('finecar.host_url').'/'.$file_dir.$file_name);
             die;
         } 
 	}
