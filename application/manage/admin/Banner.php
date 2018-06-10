@@ -105,7 +105,6 @@ class Banner extends Admin
             $update['img']=$data['img'];
             $update['brand']=$data['brand'];
             $update['remark']=$data['remark'];
-            $update['created_at']=$now;
             $rt=db('banners')->where('id',$data['id'])->update($update);
             //入库
             if ($rt!==false) {

@@ -1,0 +1,198 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+
+
+<div style="height: 60px; line-height: 60px;margin-bottom: 20px;background: #fff;padding:0 20px;">
+    <span style="color: #888;">注：首页品牌最多添加8个</span>
+    {if condition='ismeunshow("manage/homebrand/add")'}
+    <a href="{:url('manage/homebrand/add')}" class="btn btn-minw btn-primary rbt" style="float: right;margin-top: 13px;margin-right: 1%;">添&nbsp;加</a>
+    {/if}
+</div>
+
+
+<div class="add_edit">
+    <div class="con">
+        {php}
+            $ismeunshow_move=ismeunshow("manage/homebrand/move");
+            $ismeunshow_edit=ismeunshow("manage/homebrand/edit");
+            $ismeunshow_delete=ismeunshow("manage/homebrand/delete");
+        {/php}
+        {volist name="data" id="vo"}
+        <div class="lit" style="margin-bottom: 0;padding-top:5px;padding-bottom:5px;">
+            <table class="lit_table">
+                {if condition='$key eq 0'}
+                <tr>
+                    <th style="padding-left: 0;min-width: 350px;"></th>
+                    <th style="text-align: center;" class="ddv1">对应品牌</th>
+                    <th style="text-align: center;" class="ddv2">操作</th>
+                    <th style="text-align: center;" class="ddv3">移动</th>
+                </tr>
+                {else/}
+                <tr>
+                    <th style="padding-left: 0;height: 0px;min-width: 350px;"></th>
+                    <th style="text-align: center;height: 0px;" class="ddv1"></th>
+                    <th style="text-align: center;height: 0px;" class="ddv2"></th>
+                    <th style="text-align: center;height: 0px;" class="ddv3"></th>
+                </tr>
+                {/if}
+                <tr>
+                    <td style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-left: 1px solid #ccc;">
+                        <input type="hidden" value="{$vo.id}" class="all_ids" pos='{$key}'>
+                        <div style="float: left;min-height: 120px;"><img src="{$vo.img}"></div>
+                        <div class="xiao">
+                            <span style="height: 120px; line-height: 120px;display: block;">{$vo.brand}</span>
+                        </div>
+                    </td>
+                    <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
+                    {$vo.p_pinpai}
+                    </td>
+                    <td align="center" style="min-width:100px;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
+                        {if condition='$ismeunshow_edit'}
+                            <a href="{:url('manage/homebrand/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
+                        {/if}
+                        {if condition='$ismeunshow_delete'}
+                            <a href="javascript:;" class="delete_homebrand" homebrand_id="{$vo.id}">删除</a>
+                        {/if} 
+                    </td>
+                    <td align="center" style="min-width:100px;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">
+                        {if condition='ismeunshow("manage/homebrand/move")'}
+                            {if condition='$key neq 0'}
+                                {if condition='$ismeunshow_move'}
+                                <a href="javascript:;" class="move_homebrand" type="1" pos='{$key}'>上移</a>&nbsp;
+                                {/if} 
+                            {/if}
+                            {if condition='$key neq (count($data)-1)'}
+                                {if condition='$ismeunshow_move'}
+                                <a href="javascript:;" class="move_homebrand" type="0" pos='{$key}'>下移</a>&nbsp; 
+                                {/if}
+                            {/if}
+                        {/if}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        {/volist}
+    </div>
+</div>
+
+<div style="margin-bottom: 40px;"></div>
+    
+<script type="text/javascript">
+$(function(){
+    //删除
+    $("body").on('click','a.delete_homebrand',function(){
+        if(!confirm("确定删除？")){
+            return false;
+        }
+        var homebrand_id=parseInt($(this).attr('homebrand_id'));
+        Dolphin.loading();
+        $.ajax({
+            type:'post',
+            url:'{:url("manage/homebrand/delete")}',
+            data:{'id':homebrand_id},
+            dataType:'JSON',
+            success:function(data){
+                Dolphin.loading('hide');
+                if (data.code==200) {
+                    Dolphin.notify(data.msg, 'success');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            },
+            error:function(xhr,status,error){
+                Dolphin.loading('hide');
+                Dolphin.notify('服务器错误~', 'danger');
+            }
+        });
+    });
+    //移动
+    $("body").on('click','a.move_homebrand',function(){
+        var type=parseInt($(this).attr('type'));
+        var bz_pos=parseInt($(this).attr('pos'));
+        var ids=[];
+        $('input.all_ids').each(function(){
+            var pos=parseInt($(this).attr('pos'));
+            ids[pos]=$(this).val();
+        });
+        var bz='';
+        if (type) {
+            bz=ids[bz_pos];
+            ids[bz_pos]=ids[bz_pos-1];
+            ids[bz_pos-1]=bz;
+        }else{
+            bz=ids[bz_pos];
+            ids[bz_pos]=ids[bz_pos+1];
+            ids[bz_pos+1]=bz;
+        }
+        ids=ids.join(',');
+        Dolphin.loading();
+        $.ajax({
+            type:'post',
+            url:'{:url("manage/homebrand/move")}',
+            data:{type:type,'id':ids},
+            dataType:'JSON',
+            success:function(data){
+                Dolphin.loading('hide');
+                if (data.code==200) {
+                    Dolphin.notify(data.msg, 'success');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 800);
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            },
+            error:function(xhr,status,error){
+                Dolphin.loading('hide');
+                Dolphin.notify('服务器错误~', 'danger');
+            }
+        });
+    });
+    //长度对齐
+    var ddv1_width=0;
+    $('table.lit_table tr th.ddv1').each(function(){
+        if($(this).width()>ddv1_width){
+            ddv1_width=$(this).width();
+        }
+    });
+    if(ddv1_width>220) ddv1_width=220;
+    var ddv2_width=0;
+    $('table.lit_table tr th.ddv2').each(function(){
+        if($(this).width()>ddv2_width){
+            ddv2_width=$(this).width();
+        }
+    });
+    if(ddv2_width>220) ddv2_width=220;
+    var ddv3_width=0;
+    $('table.lit_table tr th.ddv3').each(function(){
+        if($(this).width()>ddv3_width){
+            ddv3_width=$(this).width();
+        }
+    });
+    if(ddv3_width>220) ddv3_width=220;
+    var ddv_width=(ddv1_width+ddv2_width+ddv2_width+ddv3_width)/4;
+    $('table.lit_table tr th.ddv1').css('width',ddv_width);
+    $('table.lit_table tr th.ddv2').css('width',ddv_width);
+    $('table.lit_table tr th.ddv3').css('width',ddv_width);
+});
+</script>
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

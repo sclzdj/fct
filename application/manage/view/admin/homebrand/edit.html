@@ -1,0 +1,158 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+<link href="__ADMIN_CSS__/all.css" rel="stylesheet" type="text/css" />
+<script src="__ADMIN_JS__/ajaxfileupload.js"></script>
+<script src="__LIBS__/bootstrap-datepicker/bootstrap-datepicker.js"></script> 
+<form id="edit_form">
+<input type="hidden" name="id" value="{$home_brand.id}">
+
+<div class="add_edit">
+    <div class="title">首页品牌信息</div>
+    <div style="clear: both;"></div>
+    <div class="con">
+        <ul>
+            <li>
+                <span class="latips"><span class="required">*</span>图片：</span>
+                <input type="hidden" name="img" value="{$home_brand.img}" class="img">
+                {if condition='$home_brand.img neq ""'}
+                <div class="imgone">
+                    <a href="javascript:void;">
+                        <img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除">
+                        <img src="{$home_brand.img}" onclick="window.open('{$home_brand.img}');" title="点击查看大图">
+                    </a>
+                    <span class="editimg addoneimg" title="点击更换" ralate="img" suffix='png,jpg,jpeg' msize='3145728'>修改</span>
+                </div>
+                {else/}
+                <div class="addimg addoneimg" title="点击上传" ralate="img" suffix='png,jpg,jpeg' msize='3145728'><img src="__ADMIN_IMG__/add.png"></div>
+                {/if}
+                <span class="bztips">支持扩展名：png、jpg、jpeg；大小不超过30M；小程序端像素：750*340； PC端：宽:通屏，高:400</span>
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>品牌名称：</span>
+                <input type="text" name="brand" value="{$home_brand.brand}" placeholder="请输入品牌名称">
+            </li>
+            <li>
+                <span class="latips"><span class="required">*</span>对应品牌：</span>
+                <select name="brand_id">
+                    <option value="">请选择</option>
+                    {volist name="brand" id="vo"}
+                    <option value="{$vo.p_pinpai_id}" {if condition='$home_brand.brand_id==$vo.p_pinpai_id'}selected="selected"{/if}>{$vo.p_pinpai}</option>
+                    {/volist}
+                </select>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+
+<div style="margin: 40px auto;text-align: center;">
+    <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="edit_form_submit">确&nbsp;定</a>
+</div>
+
+</form>
+
+<form style="display: none;" id='up_one_form' enctype="multipart/form-data"><input type="file" name="file" id="up_one_form_in" ralate="" suffix="" msize=""></form>
+
+<script>
+    $(function(){
+        //单图上传
+        $("body").on('click','.addoneimg',function(){
+            var ralate=$(this).attr('ralate');
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            $('#up_one_form_in').attr('ralate',ralate);
+            $('#up_one_form_in').attr('suffix',suffix);
+            $('#up_one_form_in').attr('msize',msize);
+            $('#up_one_form_in').click();
+        });
+        $("body").on('change','#up_one_form_in',function(){
+            var ralate=$(this).attr('ralate');
+            var suffix=$(this).attr('suffix');
+            var msize=$(this).attr('msize');
+            Dolphin.loading();
+            $.ajaxFileUpload({
+                fileElementId: 'up_one_form_in',    //需要上传的文件域的ID，即<input type="file">的ID。
+                url: "{:url('index/file/upload',['type'=>'image','multiple'=>'0'])}", //后台方法的路径
+                type: 'post',   //当要提交自定义参数时，这个参数要设置成post
+                data:{suffix:suffix,msize:msize},
+                dataType: 'json',   //服务器返回的数据类型。可以为xml,script,json,html。如果不填写，jQuery会自动判断。
+                secureuri: false,   //是否启用安全提交，默认为false。
+                async : true,   //是否是异步
+                success: function(data) {   //提交成功后自动执行的处理函数，参数data就是服务器返回的数据。
+                    Dolphin.loading('hide');
+                    $('#up_one_form_in').attr('ralate','');
+                    $('#up_one_form_in').attr('suffix','');
+                    $('#up_one_form_in').attr('msize','');
+                    if (data.code==200) {
+                        $('.'+ralate).val(data.data);
+                        $('.'+ralate).parent().find('.addimg').remove();
+                        $('.'+ralate).parent().find('.imgone').remove();
+                        var html='<div class="imgone"><a href="javascript:;"><img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除"><img src="'+data.data+'" onclick="window.open(\''+data.data+'\');" title="点击查看大图"></a><span class="editimg addoneimg" title="点击更换" ralate="'+ralate+'" suffix="'+suffix+'" msize="'+msize+'">修改</span></div>';
+                        $('.'+ralate).after(html);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error: function(data, status, e) {  //提交失败自动执行的处理函数。
+                    Dolphin.loading('hide');
+                    $('#up_one_form_in').attr('ralate','');
+                    $('#up_one_form_in').attr('suffix','');
+                    $('#up_one_form_in').attr('msize','');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        //单图删除
+        $("body").on('click','.add_edit .con ul li .imgone a img.delimg',function(){
+            var ralate=$(this).parent().parent().find('.editimg').attr('ralate');
+            var suffix=$(this).parent().parent().find('.editimg').attr('suffix');
+            var msize=$(this).parent().parent().find('.editimg').attr('msize');
+            $(this).parent().parent().parent().find('input').val('');
+            $(this).parent().parent().parent().find('input').after('<div class="addimg addoneimg" title="点击上传" ralate="'+ralate+'" suffix="'+suffix+'" msize="'+msize+'"><img src="__ADMIN_IMG__/add.png"></div>');
+            $(this).parent().parent().remove();
+        });
+        //提交
+        $('#edit_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/homebrand/edit")}',
+                data:$('#edit_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/homebrand/edit",["id"=>$home_brand["id"]])}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<script src="__ADMIN_JS__/specil.js"></script>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script src="__ADMIN_JS__/food.js"></script>
+{/block}

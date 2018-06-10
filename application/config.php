@@ -303,6 +303,7 @@ return [
             'todayrecomment'=>'营销管理',
             'guesslike'=>'营销管理',
             'article'=>'营销管理',
+            'homebrand'=>'营销管理',
             'info'=>'系统管理',
             'log'=>'系统管理',
             'adminuser'=>'系统管理',

@@ -46,7 +46,7 @@
             <li>
                 <span class="looktips">车型：</span>
                 <span class="lacon">{$car_source.name}</span>
-                <a href="javascript:;">查看参数</a>
+                <a href="javascript:;" class="lacas" id='look_car' car_id="{$car_source.car_id}">查看参数</a>
             </li>
             <li>
                 <span class="looktips" style="vertical-align:top;">加装配置：</span>
@@ -353,10 +353,79 @@
     <img src="__ADMIN_IMG__/finecar/u2677.png" title="下一张" class="down_img" count="{$count}">
 </div>  
 
-
+<style>
+.car_box{position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background-color: rgba(0,0,0,0.4);display: none;  z-index: 9999;}
+.car_box .con{width: 80%;position: fixed; top: 50%;left: 50%;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);background-color:#fff;overflow-y: scroll;padding:30px 1%;}
+.car_box .con ul{list-style: none;padding: 0;margin: 0;}
+.car_box .con li{list-style: none;padding: 0;margin: 0; float: left;width: 33%;height: 30px;line-height: 30px;font-size: 14px;padding: 0 2%;}
+.car_box .con li.chang{width: 100%;height: auto;}
+</style>
+<div class="car_box">
+    <div class="con">
+        <div class="add_edit" style="margin-top: 10px;margin-bottom: 10px;">
+            <div class="title" style="height: 40px;line-height: 40px;">参数详情</div>
+            <div style="clear: both;"></div>
+        </div>
+        <ul>
+            
+        </ul>
+        <div style="clear: both;"></div>
+        <div style="padding: 20px auto; text-align: center;margin-top: 20px;">
+            <a href="javascript:;" class="btn btn-minw btn-primary rbt close_car">关&nbsp;闭</a>
+        </div>
+    </div>
+</div>  
 
 <script>
     $(function(){
+        //查看参数
+        $('.car_box .con').css('height',$(window).height()*0.8);
+        $('.car_box').click(function(){
+            $('.car_box .con ul').html('');
+            $('.car_box').hide();
+        });
+        $('.car_box .con').click(function(){
+            return false;
+        });
+        $('#look_car').click(function(){
+            var car_id=$(this).attr('car_id');
+            if(car_id<=0){
+                Dolphin.notify('无效车型', 'danger');
+                return false;
+            }
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("index/car/look")}',
+                data:{id:car_id},
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        var html='';
+                        $(data.data).each(function(k,v){
+                            var chang='';
+                            if(v.type){
+                                chang=' class="chang"';
+                            }
+                            html+='<li'+chang+'>'+v.name+'：'+v.value+'</li>';
+                        });
+                        $('.car_box .con ul').html(html);
+                        $('.car_box').show();
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        $('.car_box .close_car').click(function(){
+            $('.car_box .con ul').html('');
+            $('.car_box').hide();
+        });
         //导航切换
         $('.add_edit .tab ul li').click(function(){
             var state=$(this).attr('state');

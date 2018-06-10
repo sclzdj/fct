@@ -46,7 +46,7 @@
                 <select name="car_id" style="width: 16%;min-width: 160px;" id="select_car">
                     <option value="-1">请选择车型</option>
                 </select>&nbsp;
-                <a href="javascript:;">查看参数</a>
+                <a href="javascript:;" class="lacas" id='look_car'>查看参数</a>
             </li>
             <li>
                 <span class="latips">加装配置：</span>
@@ -262,15 +262,84 @@
     <a href="javascript:;" class="btn btn-minw btn-primary rbt" id="add_form_submit">确&nbsp;定</a>
 </div>
 
-
-
 </form>
 
 <form style="display: none;" id='up_one_form' enctype="multipart/form-data"><input type="file" name="file" id="up_one_form_in" ralate="" suffix="" msize=""></form>
 <form style="display: none;" id='up_many_form' enctype="multipart/form-data"><input type="file" name="file[]" id='up_many_form_in' multiple="multiple" suffix='' msize=''></form>
 
+<style>
+.car_box{position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background-color: rgba(0,0,0,0.4);display: none;  z-index: 9999;}
+.car_box .con{width: 80%;position: fixed; top: 50%;left: 50%;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);background-color:#fff;overflow-y: scroll;padding:30px 1%;}
+.car_box .con ul{list-style: none;padding: 0;margin: 0;}
+.car_box .con li{list-style: none;padding: 0;margin: 0; float: left;width: 33%;height: 30px;line-height: 30px;font-size: 14px;padding: 0 2%;}
+.car_box .con li.chang{width: 100%;height: auto;}
+</style>
+<div class="car_box">
+    <div class="con">
+        <div class="add_edit" style="margin-top: 10px;margin-bottom: 10px;">
+            <div class="title" style="height: 40px;line-height: 40px;">参数详情</div>
+            <div style="clear: both;"></div>
+        </div>
+        <ul>
+            
+        </ul>
+        <div style="clear: both;"></div>
+        <div style="padding: 20px auto; text-align: center;margin-top: 20px;">
+            <a href="javascript:;" class="btn btn-minw btn-primary rbt close_car">关&nbsp;闭</a>
+        </div>
+    </div>
+</div>  
+
 <script>
     $(function(){
+        //查看参数
+        $('.car_box .con').css('height',$(window).height()*0.8);
+        $('.car_box').click(function(){
+            $('.car_box .con ul').html('');
+            $('.car_box').hide();
+        });
+        $('.car_box .con').click(function(){
+            return false;
+        });
+        $('#look_car').click(function(){
+            var car_id=$(this).parent().find('#select_car').val();
+            if(car_id<=0){
+                Dolphin.notify('请先选择车型', 'danger');
+                return false;
+            }
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("index/car/look")}',
+                data:{id:car_id},
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        var html='';
+                        $(data.data).each(function(k,v){
+                            var chang='';
+                            if(v.type){
+                                chang=' class="chang"';
+                            }
+                            html+='<li'+chang+'>'+v.name+'：'+v.value+'</li>';
+                        });
+                        $('.car_box .con ul').html(html);
+                        $('.car_box').show();
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        $('.car_box .close_car').click(function(){
+            $('.car_box .con ul').html('');
+            $('.car_box').hide();
+        });
         //多图上传
         $("body").on('click','.addallimg',function(){
             var suffix=$(this).attr('suffix');
