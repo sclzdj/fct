@@ -53,7 +53,7 @@ class Car extends Common
             $car_attr_en=json_decode($car_attr_en,true);
             $data=[];
             foreach ($car_attr_en as $k => $v) {
-                if($car[$v]!==''){
+                if($car[$v]!=='' && $car[$v]!='-' && $car[$v]!='●'){
                     $pix=[];
                     if($v=='p_waiguanyanse' || $v=='p_neishiyanse'){
                         $pix['type']=1;
