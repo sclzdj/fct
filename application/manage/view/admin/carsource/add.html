@@ -350,7 +350,7 @@
         });
         $("body").on('change','#up_many_form_in',function(){
             var up_len=this.files.length;
-            if(up_len==0){
+            if(up_len<=0){
                 $('#up_many_form_in').attr('suffix','');
                 $('#up_many_form_in').attr('msize','');
                 return false;
@@ -411,6 +411,8 @@
             $('#up_one_form_in').click();
         });
         $("body").on('change','#up_one_form_in',function(){
+            var up_len=this.files.length;
+            if(up_len<=0) return false;
             var ralate=$(this).attr('ralate');
             var suffix=$(this).attr('suffix');
             var msize=$(this).attr('msize');
@@ -572,31 +574,6 @@
             var len = $(this).val().length;
             $(this).parent().find('.numtips b').html(len);
         });
-        //提交
-        $('#add_form_submit').click(function(){
-            Dolphin.loading();
-            $.ajax({
-                type:'post',
-                url:'{:url("manage/carsource/add")}',
-                data:$('#add_form').serializeArray(),
-                dataType:'JSON',
-                success:function(data){
-                    Dolphin.loading('hide');
-                    if (data.code==200) {
-                        Dolphin.notify(data.msg, 'success');
-                        setTimeout(function () {
-                            location.href = '{:url("manage/carsource/add")}';
-                        }, 1500);
-                    } else {
-                        Dolphin.notify(data.msg, 'danger');
-                    }
-                },
-                error:function(xhr,status,error){
-                    Dolphin.loading('hide');
-                    Dolphin.notify('服务器错误~', 'danger');
-                }
-            });
-        });
         //查出城市
         $('#select_province').change(function(){
             var val=$(this).val();
@@ -646,7 +623,7 @@
                             $('#select_serie').html(html);
                             $('#select_car').html('<option value="-1">请选择车型</option>');
                         } else {
-                            Dolphin.notify(data.msg, 'danger');
+                            Dolphin.notify(data.msg, 'danger');alert(data.code);
                         }
                     },
                     error:function(xhr,status,error){
@@ -682,6 +659,140 @@
                     }
                 });
             }
+        });
+        //提交
+        $('#add_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/carsource/add")}',
+                data:$('#add_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/carsource/add")}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                        if(data.code==1001){
+                            $('.add_edit .tab ul li:first').click();
+                            $('input[name="vin_no"]').addClass('error');
+                            $('input[name="vin_no"]').focus();
+                            var vin_no_li = $('input[name="vin_no"]').parent().offset();      
+                            $("html,body").animate({scrollTop:vin_no_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1002){
+                            $('.add_edit .tab ul li:first').click();
+                            $('select[name="brand_id"]').addClass('error');
+                            $('select[name="brand_id"]').focus();
+                            var brand_id_li = $('select[name="brand_id"]').parent().offset();      
+                            $("html,body").animate({scrollTop:brand_id_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1003){
+                            $('.add_edit .tab ul li:first').click();
+                            $('select[name="serie_id"]').addClass('error');
+                            $('select[name="serie_id"]').focus();
+                            var serie_id_li = $('select[name="serie_id"]').parent().offset();      
+                            $("html,body").animate({scrollTop:serie_id_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1004){
+                            $('.add_edit .tab ul li:first').click();
+                            $('select[name="car_id"]').addClass('error');
+                            $('select[name="car_id"]').focus();
+                            var car_id_li = $('select[name="car_id"]').parent().offset();      
+                            $("html,body").animate({scrollTop:car_id_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1005){
+                            $('.add_edit .tab ul li:first').click();
+                            $('textarea[name="install_config"]').addClass('error');
+                            $('textarea[name="install_config"]').focus();
+                            var install_config_li = $('textarea[name="install_config"]').parent().offset();      
+                            $("html,body").animate({scrollTop:install_config_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1006){
+                            $('.add_edit .tab ul li:first').click();
+                            $('input[name="price"]').addClass('error');
+                            $('input[name="price"]').focus();
+                            var price_li = $('input[name="price"]').parent().offset();      
+                            $("html,body").animate({scrollTop:price_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1007){
+                            $('.add_edit .tab ul li:first').click();
+                            $('input[name="color"]').addClass('error');
+                            $('input[name="color"]').focus();
+                            $('#color1').show();
+                            var color_li = $('input[name="color"]').parent().offset();      
+                            $("html,body").animate({scrollTop:color_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1008){
+                            $('.add_edit .tab ul li:first').click();
+                            $('input[name="is_oncard"]:last').parent().after('<span class="error">！必须选择</span>');
+                            var is_oncard_li = $('input[name="is_oncard"]:last').parent().parent().offset();      
+                            $("html,body").animate({scrollTop:is_oncard_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1009){
+                            $('.add_edit .tab ul li:first').click();
+                            $('input[name="maintain"]:last').parent().after('<span class="error">！必须选择</span>');
+                            var maintain_li = $('input[name="maintain"]:last').parent().parent().offset();  
+                            $("html,body").animate({scrollTop:maintain_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1010){
+                            $('.add_edit .tab ul li:first').click();
+                            $('input[name="mileage"]').addClass('error');
+                            $('input[name="mileage"]').focus();
+                            var mileage_li = $('input[name="mileage"]').parent().offset();      
+                            $("html,body").animate({scrollTop:mileage_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1011){
+                            $('.add_edit .tab ul li:first').click();
+                            $('input[name="first_plate_at"]').addClass('error');
+                            $('input[name="first_plate_at"]').focus();
+                            var first_plate_at_li = $('input[name="first_plate_at"]').parent().offset();      
+                            $("html,body").animate({scrollTop:first_plate_at_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1012){
+                            $('.add_edit .tab ul li:first').click();
+                            $('input[name="guid_price"]').addClass('error');
+                            $('input[name="guid_price"]').focus();
+                            var guid_price_li = $('input[name="guid_price"]').parent().offset();      
+                            $("html,body").animate({scrollTop:guid_price_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1013){
+                            $('.add_edit .tab ul li:first').click();
+                            $('input[name="transfer_num"]').addClass('error');
+                            $('input[name="transfer_num"]').focus();
+                            var transfer_num_li = $('input[name="transfer_num"]').parent().offset();      
+                            $("html,body").animate({scrollTop:transfer_num_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1014){
+                            $('.add_edit .tab ul li:first').click();
+                            $('input[name="key_num"]').addClass('error');
+                            $('input[name="key_num"]').focus();
+                            var key_num_li = $('input[name="key_num"]').parent().offset();      
+                            $("html,body").animate({scrollTop:key_num_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1015){
+                            $('.add_edit .tab ul li:first').click();
+                            $('textarea[name="car_condition"]').addClass('error');
+                            $('textarea[name="car_condition"]').focus();
+                            var car_condition_li = $('textarea[name="car_condition"]').parent().offset();      
+                            $("html,body").animate({scrollTop:car_condition_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1016){
+                            $('.add_edit .tab ul li:first').click();
+                            $('.add_edit .con ul li .addimg2').addClass('error');
+                            var imgs_li = $('.add_edit .con ul li .addimg2').parent().prev().offset();      
+                            $("html,body").animate({scrollTop:imgs_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1017){
+                            $('.add_edit .tab ul li:last').click();
+                            $('textarea[name="check_result"]').addClass('error');
+                            $('textarea[name="check_result"]').focus();
+                            var check_result_li = $('textarea[name="car_condition"]').parent().offset();      
+                            $("html,body").animate({scrollTop:check_result_li.top - "450" + "px"}, 0);
+                        }
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        $('body').on('blur','.add_edit .con ul li input[type="text"],.add_edit .con ul li input[type="password"],.add_edit .con ul li select,.add_edit .con ul li textarea',function(){
+            $(this).removeClass('error');
+        });
+        $('.content').click(function(){
+            $('.add_edit .con ul li .addimg').removeClass('error');
+            $('.add_edit .con ul li .addimg2').removeClass('error');
+            $('.add_edit .con ul li span.error').remove();
         });
     });
 </script>

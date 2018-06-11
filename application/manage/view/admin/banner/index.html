@@ -37,6 +37,7 @@
                 {if condition='$key eq 0'}
                 <tr>
                     <th style="padding-left: 0;min-width: 350px;"></th>
+                    <th style="text-align: center;" class="ddv0">{if condition='$terminal eq 0'}对应品牌{else/}链接地址{/if}</th>
                     <th style="text-align: center;" class="ddv1">展示终端</th>
                     <th style="text-align: center;" class="ddv2">位置</th>
                     <th style="text-align: center;" class="ddv3">操作</th>
@@ -45,6 +46,7 @@
                 {else/}
                 <tr>
                     <th style="padding-left: 0;height: 0px;min-width: 350px;"></th>
+                    <th style="text-align: center;height: 0px;" class="ddv0"></th>
                     <th style="text-align: center;height: 0px;" class="ddv1"></th>
                     <th style="text-align: center;height: 0px;" class="ddv2"></th>
                     <th style="text-align: center;height: 0px;" class="ddv3"></th>
@@ -59,6 +61,9 @@
                             <span style="height: 60px; line-height: 60px;display: block;">{$vo.brand}</span>
                             <span style="height: 60px; line-height: 60px;display: block;">{$vo.remark}</span>
                         </div>
+                    </td>
+                    <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
+                    {$vo.relate_str}
                     </td>
                     <td align="center" style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;">
                     {switch name="vo.terminal"}
@@ -185,6 +190,13 @@ $(function(){
         });
     });
     //长度对齐
+    var ddv0_width=0;
+    $('table.lit_table tr th.ddv0').each(function(){
+        if($(this).width()>ddv0_width){
+            ddv0_width=$(this).width();
+        }
+    });
+    if(ddv0_width>220) ddv0_width=220;
     var ddv1_width=0;
     $('table.lit_table tr th.ddv1').each(function(){
         if($(this).width()>ddv1_width){
@@ -214,6 +226,7 @@ $(function(){
     });
     if(ddv4_width>220) ddv4_width=220;
     var ddv_width=(ddv1_width+ddv2_width+ddv3_width+ddv4_width)/4;
+    $('table.lit_table tr th.ddv0').css('width',ddv_width);
     $('table.lit_table tr th.ddv1').css('width',ddv_width);
     $('table.lit_table tr th.ddv2').css('width',ddv_width);
     $('table.lit_table tr th.ddv3').css('width',ddv_width);

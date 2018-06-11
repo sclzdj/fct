@@ -126,6 +126,8 @@
             $('#up_one_form_in').click();
         });
         $("body").on('change','#up_one_form_in',function(){
+            var up_len=this.files.length;
+            if(up_len<=0) return false;
             var ralate=$(this).attr('ralate');
             var suffix=$(this).attr('suffix');
             var msize=$(this).attr('msize');
@@ -188,6 +190,27 @@
                         }, 1500);
                     } else {
                         Dolphin.notify(data.msg, 'danger');
+                        if(data.code==1001){
+                            $('select[name="paid_type"]').addClass('error');
+                            $('select[name="paid_type"]').focus();
+                            var paid_type_li = $('select[name="paid_type"]').parent().offset();      
+                            $("html,body").animate({scrollTop:paid_type_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1002){
+                            $('select[name="state"]').addClass('error');
+                            $('select[name="state"]').focus();
+                            var state_li = $('select[name="state"]').parent().offset();      
+                            $("html,body").animate({scrollTop:state_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1003){
+                            $('select[name="customer_state"]').addClass('error');
+                            $('select[name="customer_state"]').focus();
+                            var customer_state_li = $('select[name="customer_state"]').parent().offset();      
+                            $("html,body").animate({scrollTop:customer_state_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1004){
+                            $('textarea[name="remark"]').addClass('error');
+                            $('textarea[name="remark"]').focus();
+                            var remark_li = $('textarea[name="remark"]').parent().offset();      
+                            $("html,body").animate({scrollTop:remark_li.top - "450" + "px"}, 0);
+                        }
                     }
                 },
                 error:function(xhr,status,error){
@@ -195,6 +218,14 @@
                     Dolphin.notify('服务器错误~', 'danger');
                 }
             });
+        });
+        $('body').on('blur','.add_edit .con ul li input[type="text"],.add_edit .con ul li input[type="password"],.add_edit .con ul li select,.add_edit .con ul li textarea',function(){
+            $(this).removeClass('error');
+        });
+        $('.content').click(function(){
+            $('.add_edit .con ul li .addimg').removeClass('error');
+            $('.add_edit .con ul li button').removeClass('error');
+            $('.add_edit .con ul li span.error').remove();
         });
     });
 </script>

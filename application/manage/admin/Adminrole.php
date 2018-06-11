@@ -54,10 +54,10 @@ class Adminrole extends Admin
 		if ($this->request->isPost()) {
             $data = $this->request->post();
             if($data['name']===''){
-                return json_return('F','1000','角色名称必填');
+                return json_return('F','1001','角色名称必填');
             }
             if(mb_strlen($data['name'],'utf8')>20) {
-                return json_return('F','1000','角色名称最多20个字');
+                return json_return('F','1001','角色名称最多20个字');
             }
             $ismerchant=ismerchant();
             //检查有无越限
@@ -161,10 +161,10 @@ class Adminrole extends Admin
                 }
             }
             if($data['name']===''){
-                return json_return('F','1000','角色名称必填');
+                return json_return('F','1001','角色名称必填');
             }
             if(mb_strlen($data['name'],'utf8')>20) {
-                return json_return('F','1000','角色名称最多20个字');
+                return json_return('F','1001','角色名称最多20个字');
             }
             //检查有无越限
             if($ismerchant){

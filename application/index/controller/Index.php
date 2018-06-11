@@ -66,5 +66,65 @@ class Index extends Home
         //echo '<form action="'.url('index/file/upload',['type'=>'image','multiple'=>'0']).'" method="post" enctype="multipart/form-data"><input type="file" name="file"><input type="submit" value="提交"></form>';
         //echo '<form action="'.url('index/file/upload',['type'=>'image','multiple'=>'1']).'" method="post" enctype="multipart/form-data"><input type="file" name="file[]" multiple="multiple"><input type="submit" value="提交"></form>';
     }
+    public function nocar(){
+        return false;
+        $data=db('cars')->field('id,p_pinpai_id,p_pinpai,p_chexi_id,p_chexi')->where("(p_chexing_id='' || p_chexingmingcheng='')")->select();
+        $header = array(
+          'ID'=>'string',//text
+          '品牌号'=>'string',//text
+          '品牌名称'=>'string',//text
+          '车系号'=>'string',//text
+          '车系名称'=>'string',//text
+        );
+        $file_name = 'nocar-'.date('YmdHis').'-'.mt_rand(1000,9999).'.xlsx';     //下载文件名    
+        $file_dir = "excels/";        //下载文件存放目录  
+        do_rmdir($file_dir,false);//先清空文件夹
+        $rows = $data;
+        import('PHP_XLSXWriter-master.xlsxwriter', EXTEND_PATH,'.class.php');
+        $writer = new \XLSXWriter();
+        $writer->writeSheetHeader('Sheet1', $header);
+        foreach($rows as $row){
+            $row=array_values($row);
+            $writer->writeSheetRow('Sheet1', $row);
+        }
+        $writer->writeToFile($file_dir.$file_name);
+        //检查文件是否存在    
+        if (! file_exists ( $file_dir . $file_name )) {    
+            return $this->error('文件未生成成功，请重试');
+        } else { 
+            header('Location:http://localhost/finecar/public/'.$file_dir.$file_name);
+            die;
+        } 
+    }
+    public function filtercar(){
+        set_time_limit(0);
+        db('brands')->where('id','neq','0')->update(['is_show'=>'0']);
+        db('series')->where('id','neq','0')->update(['is_show'=>'0']);
+        db('cars')->where('id','neq','0')->update(['is_show'=>'0']);
+        db('brands')->where(['p_pinpai'=>['neq',''],'p_pinpai_id'=>['neq','']])->update(['is_show'=>'1']);
+        db('series')->where(['p_chexi'=>['neq',''],'p_chexi_id'=>['neq','']])->update(['is_show'=>'1']);
+        db('cars')->where(['p_chexingmingcheng'=>['neq',''],'p_chexing_id'=>['neq','']])->update(['is_show'=>'1']);
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        foreach ($brand as $b) {
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['is_show'=>'1','p_pinpai_id'=>$b['p_pinpai_id']])->select();
+            if($serie){
+                $pix=true;
+                foreach ($serie as $s) {
+                    $car=db('cars')->field('id,p_chexing_id,p_chexingmingcheng')->where(['is_show'=>'1','p_chexi_id'=>$s['p_chexi_id']])->select();
+                    if($car){
+                        $pix=false;
+                    }else{
+                        db('series')->where('id',$s['id'])->update(['is_show'=>'0']);
+                    }
+                }
+                if($pix){
+                    db('brands')->where('id',$b['id'])->update(['is_show'=>'0']);
+                }
+            }else{
+                db('brands')->where('id',$b['id'])->update(['is_show'=>'0']);
+            }    
+        }
+        die('执行完成');
+    }
 }
  

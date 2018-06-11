@@ -99,7 +99,7 @@ class Order extends Admin
         }
         $merchant=db('merchants')->field('id,shop_name')->where($where)->select();
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -123,7 +123,7 @@ class Order extends Admin
             $data = $this->request->post();
             //验证
             if($data['customer_id']==''){
-                return json_return('F','1000','成交客户必选');
+                return json_return('F','1001','成交客户必选');
             }
             $map=[];
             if($ismerchant){
@@ -131,10 +131,10 @@ class Order extends Admin
             }
             $customer=db('customers')->where($map)->where('id',$data['customer_id'])->find();
             if(!$customer){
-                return json_return('F','1000','选择的客户已不存在');
+                return json_return('F','1001','选择的客户已不存在');
             }
             if($data['car_source_id']=='' && $data['defind_model']===''){
-                return json_return('F','1000','成交车源必选');
+                return json_return('F','1002','成交车源必选');
             }
             if($data['car_source_id']!=''){
             	$map=[];
@@ -143,35 +143,35 @@ class Order extends Admin
 		        }
 	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
 	            if(!$carsource){
-	            	return json_return('F','1000','选择的成交车源已不存在');
+	            	return json_return('F','1002','选择的成交车源已不存在');
 	            }
             }
             if($data['amount']===''){
-                return json_return('F','1000','订单总额必填');
+                return json_return('F','1003','订单总额必填');
             }
             if(!preg_match('/^[0-9]+(\.\d{1,2})?$/',$data['amount'])) {
-                return json_return('F','1000','订单总额只允许输入数字与符号. 格式：XXX.XX，两位小数');
+                return json_return('F','1003','订单总额只允许输入数字与符号. 格式：XXX.XX，两位小数');
             }
             if($data['earnest']===''){
-                return json_return('F','1000','定金金额必填');
+                return json_return('F','1004','定金金额必填');
             }
             if(!preg_match('/^[0-9]+(\.\d{1,2})?$/',$data['earnest'])) {
-                return json_return('F','1000','定金金额只允许输入数字与符号. 格式：XXX.XX，两位小数');
+                return json_return('F','1004','定金金额只允许输入数字与符号. 格式：XXX.XX，两位小数');
             }
             if($data['paid_at']===''){
-                return json_return('F','1000','付款时间必选');
+                return json_return('F','1005','付款时间必选');
             }
             if($data['paid_type']===''){
-                return json_return('F','1000','付款方式必选');
+                return json_return('F','1006','付款方式必选');
             }
             if($data['state']===''){
-                return json_return('F','1000','订单状态必选');
+                return json_return('F','1007','订单状态必选');
             }
             if($data['customer_state']===''){
-                return json_return('F','1000','客户状态必选');
+                return json_return('F','1008','客户状态必选');
             }
             if($data['sale_id']==''){
-                return json_return('F','1000','销售人员必选');
+                return json_return('F','1009','销售人员必选');
             }
             if($ismerchant){
             $map=[];
@@ -187,10 +187,10 @@ class Order extends Admin
                 $admin_user_ids[]=$v['id'];
             }
             if(!in_array($data['sale_id'],$admin_user_ids)){
-                return json_return('F','1000','选择的销售人员已不存在');
+                return json_return('F','1009','选择的销售人员已不存在');
             }
             if(mb_strlen($data['remark'],'utf8')>200) {
-                return json_return('F','1000','订单备注最多200个字');
+                return json_return('F','1010','订单备注最多200个字');
             }
             //处理数据
             $insert['customer_id']=$data['customer_id'];
@@ -257,16 +257,16 @@ class Order extends Admin
             $data = $this->request->post();
             //验证
             if($data['paid_type']===''){
-                return json_return('F','1000','付款方式必选');
+                return json_return('F','1001','付款方式必选');
             }
             if($data['state']===''){
-                return json_return('F','1000','订单状态必选');
+                return json_return('F','1002','订单状态必选');
             }
             if($data['customer_state']===''){
-                return json_return('F','1000','客户状态必选');
+                return json_return('F','1003','客户状态必选');
             }
             if(mb_strlen($data['remark'],'utf8')>200) {
-                return json_return('F','1000','订单备注最多200个字');
+                return json_return('F','1004','订单备注最多200个字');
             }
             //处理数据
             $update['paid_type']=$data['paid_type'];

@@ -58,7 +58,7 @@
             </li>
             <li>
                 <span class="looktips">价格：</span>
-                {if condition='$car_source.price!==""'}
+                {if condition='$car_source.price>0'}
                 <span class="lacon">{$car_source.price}万元</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
@@ -141,7 +141,7 @@
             </li>
             <li>
                 <span class="looktips">新车指导价：</span>
-                {if condition='$car_source.guid_price'}
+                {if condition='$car_source.guid_price>0'}
                 <span class="lacon">{$car_source.guid_price}万元</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>

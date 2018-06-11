@@ -52,6 +52,7 @@ function herhide(id){
     }); 
 }
 
+
 $.fn.extend({  
     "preventScroll":function(){  
         $(this).each(function(){  
@@ -71,3 +72,7 @@ $.fn.extend({
         })    
     }  
 });  
+
+$(function(){
+    $('input.timepick').prop('readonly',true);
+});

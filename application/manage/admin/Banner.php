@@ -18,6 +18,11 @@ class Banner extends Admin
         //处理数据
         foreach ($data as $key => $value) {
         	$data[$key]['created_at_str']=date('Y-m-d H:i',$value['created_at']);
+            if($value['terminal']=='0'){
+                $data[$key]['relate_str']=db('brands')->where('p_pinpai_id',$value['relate'])->value('p_pinpai');
+            }else{
+                $data[$key]['relate_str']="<a href='".$value['relate']."' target='_blank'>查看</a>";
+            }
         }
         //模板赋值
         $this->assign([
@@ -35,7 +40,7 @@ class Banner extends Admin
             $data = $this->request->post();
             //验证
             if($data['terminal']===''){
-                return json_return('F','1000','展示端必选');
+                return json_return('F','1001','展示端必选');
             }
             if($data['terminal']=='0'){
                 $count=db('banners')->where(['terminal'=>'0'])->count('id');
@@ -44,22 +49,34 @@ class Banner extends Admin
                 }
             }
             if($data['img']===''){
-                return json_return('F','1000','图片必传');
+                return json_return('F','1002','图片必传');
             }
             if($data['brand']===''){
-                return json_return('F','1000','对应品牌必填');
+                return json_return('F','1003','品牌名称必填');
             }
             if($data['remark']===''){
-                return json_return('F','1000','描述必填');
+                return json_return('F','1004','描述必填');
             }
             if(mb_strlen($data['remark'],'utf8')>40) {
-                return json_return('F','1000','描述最多40个字');
+                return json_return('F','1004','描述最多40个字');
+            }
+            if($data['terminal']=='0'){
+                if($data['brand_id']===''){
+                    return json_return('F','1005','对应品牌必选');
+                }
+                $relate=$data['brand_id'];
+            }else{
+                if($data['url']===''){
+                    return json_return('F','1006','链接地址必填');
+                }
+                $relate=$data['url'];
             }
             //处理数据
             $insert['terminal']=$data['terminal'];
             $insert['img']=$data['img'];
             $insert['brand']=$data['brand'];
             $insert['remark']=$data['remark'];
+            $insert['relate']=$relate;
             $insert['runner_id']=UID;
             $insert['created_at']=$now;
             $insert_id=db('banners')->insertGetId($insert);
@@ -71,6 +88,12 @@ class Banner extends Admin
                 return json_return('F','500','添加Banner失败');
             }
         }
+        //获取品牌
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        //模板赋值
+        $this->assign([
+            'brand'=>$brand,
+        ]);
         //渲染模板
         return $this->fetch();
     }
@@ -86,25 +109,43 @@ class Banner extends Admin
             }
             //验证
             if($data['terminal']===''){
-                return json_return('F','1000','展示端必选');
+                return json_return('F','1001','展示端必选');
+            }
+            if($data['terminal']=='0'){
+                $count=db('banners')->where(['terminal'=>'0'])->count('id');
+                if($count>=5){
+                    return json_return('F','1000','小程序端最多上传5张Banner图');
+                }
             }
             if($data['img']===''){
-                return json_return('F','1000','图片必传');
+                return json_return('F','1002','图片必传');
             }
             if($data['brand']===''){
-                return json_return('F','1000','对应品牌必填');
+                return json_return('F','1003','品牌名称必填');
             }
             if($data['remark']===''){
-                return json_return('F','1000','描述必填');
+                return json_return('F','1004','描述必填');
             }
             if(mb_strlen($data['remark'],'utf8')>40) {
-                return json_return('F','1000','描述最多40个字');
+                return json_return('F','1004','描述最多40个字');
+            }
+            if($data['terminal']=='0'){
+                if($data['brand_id']===''){
+                    return json_return('F','1005','对应品牌必选');
+                }
+                $relate=$data['brand_id'];
+            }else{
+                if($data['url']===''){
+                    return json_return('F','1006','链接地址必填');
+                }
+                $relate=$data['url'];
             }
             //处理数据
             $update['terminal']=$data['terminal'];
             $update['img']=$data['img'];
             $update['brand']=$data['brand'];
             $update['remark']=$data['remark'];
+            $update['relate']=$relate;
             $rt=db('banners')->where('id',$data['id'])->update($update);
             //入库
             if ($rt!==false) {
@@ -119,9 +160,12 @@ class Banner extends Admin
         $banner=db('banners')->where('id',$id)->find();
         if($banner){
             $banner['created_at_str']=date('Y-m-d H:i',$banner['created_at']);
+            //获取品牌
+            $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
             //模板赋值
             $this->assign([
                 'banner'=>$banner,
+                'brand'=>$brand,
             ]);
             //渲染模板
             return $this->fetch();

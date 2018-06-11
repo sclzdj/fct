@@ -115,197 +115,197 @@ class Merchant extends Admin
             $data = $this->request->post();
             //验证
             if($data['company_name']===''){
-                return json_return('F','1000','公司名称必填');
+                return json_return('F','1001','公司名称必填');
             }
             if(!preg_match('/^[（）()\x{4e00}-\x{9fa5}]+$/u',$data['company_name'])) {
-                return json_return('F','1000','公司名称只允许输入汉字或中英文()，不允许输入字母、数字、及其他特殊符号');
+                return json_return('F','1001','公司名称只允许输入汉字或中英文()，不允许输入字母、数字、及其他特殊符号');
             }
             if($data['shop_name']===''){
-                return json_return('F','1000','店铺名称必填');
+                return json_return('F','1002','店铺名称必填');
             }
-            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]{8,30}$/u',$data['shop_name'])) {
-                return json_return('F','1000','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：8-30个字符');
+            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]{4,30}$/u',$data['shop_name'])) {
+                return json_return('F','1002','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：4-30个字符');
             }
             if($data['contract_no']===''){
-                return json_return('F','1000','合同编号必填');
+                return json_return('F','1003','合同编号必填');
             }
             if(!preg_match('/^[A-Za-z0-9-]{10,30}$/',$data['contract_no'])) {
-                return json_return('F','1000','合同编号允许输入大写字母、数字、- 三种字符，字符长度：10-30个字符，例：HC-JM-20180415001');
+                return json_return('F','1003','合同编号允许输入大写字母、数字、- 三种字符，字符长度：10-30个字符，例：HC-JM-20180415001');
             }
             if($data['contract_valid_start']===''){
-                return json_return('F','1000','合同有效期开始日期必选');
+                return json_return('F','1004','合同有效期开始日期必选');
             }
             if($data['contract_valid_end']===''){
-                return json_return('F','1000','合同有效期结束日期必选');
+                return json_return('F','1005','合同有效期结束日期必选');
             }
             if($data['licence_type']===''){
-                return json_return('F','1000','证件类型必选');
+                return json_return('F','1006','证件类型必选');
             }
             if($data['licence_no']===''){
-                return json_return('F','1000','证件号码必填');
+                return json_return('F','1007','证件号码必填');
             }
             if($data['licence_type']=='工商营业执照'){
                 if(!preg_match('/^[0-9]{13}$/',$data['licence_no'])) {
-                    return json_return('F','1000','证件号码，选择工商营业执照时对应输入框，只允许输入13位数字；选择统一社会信用代码用业执照时只允许输入18位数字');
+                    return json_return('F','1007','证件号码，选择工商营业执照时对应输入框，只允许输入13位数字');
                 }
             }
-            if($data['licence_type']=='统一社会信用代码用业执照'){
+            if($data['licence_type']=='统一社会信用代码营业执照'){
                 if(!preg_match('/^[0-9]{18}$/',$data['licence_no'])) {
-                    return json_return('F','1000','证件号码，选择工商营业执照时对应输入框，只允许输入13位数字；选择统一社会信用代码用业执照时只允许输入18位数字');
+                    return json_return('F','1007','证件号码，选择统一社会信用代码营业执照时只允许输入18位数字');
                 }
             }
             if($data['licence_province_id']===''){
-                return json_return('F','1000','营业执照所在省份必选');
+                return json_return('F','1008','营业执照所在省份必选');
             }
             if($data['licence_city_id']===''){
-                return json_return('F','1000','营业执照所在城市必选');
+                return json_return('F','1009','营业执照所在城市必选');
             }
             if($data['licence_area_id']===''){
-                return json_return('F','1000','营业执照所在区县必选');
+                return json_return('F','1010','营业执照所在区县必选');
             }
             if($data['licence_address']===''){
-                return json_return('F','1000','营业执照详细地址必填');
+                return json_return('F','1011','营业执照详细地址必填');
             }
             if($data['licence_img']===''){
-                return json_return('F','1000','营业执照必传');
+                return json_return('F','1012','营业执照必传');
             }
             if($data['licence_valid_start']===''){
-                return json_return('F','1000','营业执照有效期开始日期必填');
+                return json_return('F','1013','营业执照有效期开始日期必填');
             }
             if($data['licence_valid_end']===''){
-                return json_return('F','1000','营业执照有效期结束日期必填');
+                return json_return('F','1014','营业执照有效期结束日期必填');
             }
             if($data['work_address']===''){
-                return json_return('F','1000','办公地址必填');
+                return json_return('F','1015','办公地址必填');
             }
             if($data['custom_tel']===''){
-                return json_return('F','1000','客服电话必填');
+                return json_return('F','1016','客服电话必填');
             }
             if(!preg_match('/^[0-9]+$/',$data['custom_tel'])) {
-                return json_return('F','1000','客服电话只允许输入数字');
+                return json_return('F','1016','客服电话只允许输入数字');
             }
             if($data['corporation_name']===''){
-                return json_return('F','1000','法人必填');
+                return json_return('F','1017','法人必填');
             }
-            if(!preg_match('/^.{4,8}$/',$data['corporation_name'])) {
-                return json_return('F','1000','法人字符限制4-8个字符');
+            if(mb_strlen($data['corporation_name'],'utf8')<2 || mb_strlen($data['corporation_name'],'utf8')>8){
+                return json_return('F','1027','法人字符限制2-8个字');
             }
             if($data['mobile']===''){
-                return json_return('F','1000','联系电话必填');
+                return json_return('F','1018','联系电话必填');
             }
             if(!preg_match('/^[0-9]{11}$/',$data['mobile'])) {
-                return json_return('F','1000','联系电话只允许输入11位数字');
+                return json_return('F','1018','联系电话只允许输入11位数字');
             }
             if($data['identcard_no']===''){
-                return json_return('F','1000','身份证号必填');
+                return json_return('F','1019','身份证号必填');
             }
-            if(!preg_match('/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/',$data['identcard_no'])) {
-                return json_return('F','1000','身份证号格式不正确');
+            if(!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/',$data['identcard_no'])) {
+                return json_return('F','1019','身份证号格式不正确');
             }
             if($data['identcard_front_img']===''){
-                return json_return('F','1000','身份证正面必传');
+                return json_return('F','1020','身份证正面必传');
             }
             if($data['identcard_back_img']===''){
-                return json_return('F','1000','身份证背面必传');
+                return json_return('F','1021','身份证背面必传');
             }
             if($data['businesser_name']===''){
-                return json_return('F','1000','业务负责人姓名必填');
+                return json_return('F','1022','业务负责人姓名必填');
             }
-            if(!preg_match('/^.{4,8}$/',$data['businesser_name'])) {
-                return json_return('F','1000','业务负责人姓名字符限制4-8个字符');
+            if(mb_strlen($data['businesser_name'],'utf8')<2 || mb_strlen($data['businesser_name'],'utf8')>8){
+                return json_return('F','1022','业务负责人姓名字符限制2-8个字');
             }
             if($data['businesser_tel_1']===''){
-                return json_return('F','1000','业务负责人座机区号必填');
+                return json_return('F','1023','业务负责人座机区号必填');
             }
             if(!preg_match('/^[0-9]{3,4}$/',$data['businesser_tel_1'])) {
-                return json_return('F','1000','业务负责人座机区号允许3位和4位数字');
+                return json_return('F','1023','业务负责人座机区号允许3位和4位数字');
             }
             if($data['businesser_tel_2']===''){
-                return json_return('F','1000','业务负责人电话号码必填');
+                return json_return('F','1024','业务负责人电话号码必填');
             }
             if(strlen($data['businesser_tel_1'])==3){
-                if(!preg_match('/^[0-9]{7}$/',$data['businesser_tel_2'])) {
-                    return json_return('F','1000','业务负责人电话号码，当区号时3位数字时，号码是8位，当区号是4位数字时，号码是7位');
+                if(!preg_match('/^[0-9]{8}$/',$data['businesser_tel_2'])) {
+                    return json_return('F','1024','业务负责人电话号码，当区号时3位数字时，号码是8位');
                 }
             }
             if(strlen($data['businesser_tel_1'])==4){
-                if(!preg_match('/^[0-9]{8}$/',$data['businesser_tel_2'])) {
-                    return json_return('F','1000','业务负责人电话号码，当区号时3位数字时，号码是8位，当区号是4位数字时，号码是7位');
+                if(!preg_match('/^[0-9]{7}$/',$data['businesser_tel_2'])) {
+                    return json_return('F','1024','业务负责人电话号码，当区号是4位数字时，号码是7位');
                 }
             }
             if($data['businesser_mobile']===''){
-                return json_return('F','1000','业务负责人手机号必填');
+                return json_return('F','1025','业务负责人手机号必填');
             }
             if(!preg_match('/^[0-9]{11}$/',$data['businesser_mobile'])) {
-                return json_return('F','1000','业务负责人手机号只允许输入11位数字');
+                return json_return('F','1025','业务负责人手机号只允许输入11位数字');
             }
             if($data['businesser_email']===''){
-                return json_return('F','1000','业务负责人邮箱必填');
+                return json_return('F','1026','业务负责人邮箱必填');
             }
-            if(!preg_match('/^\w[a-z]([a-z0-9]*[-_]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})$/i',$data['businesser_email'])) {
-                return json_return('F','1000','业务负责人邮箱格式不正确');
+            if(!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i',$data['businesser_email'])) {
+                return json_return('F','1026','业务负责人邮箱格式不正确');
             }
             if($data['financer_name']===''){
-                return json_return('F','1000','财务负责人姓名必填');
+                return json_return('F','1027','财务负责人姓名必填');
             }
-            if(!preg_match('/^.{4,8}$/',$data['financer_name'])) {
-                return json_return('F','1000','财务负责人姓名字符限制4-8个字符');
+            if(mb_strlen($data['financer_name'],'utf8')<2 || mb_strlen($data['financer_name'],'utf8')>8){
+                return json_return('F','1027','财务负责人姓名字符限制2-8个字');
             }
             if($data['financer_tel_1']===''){
-                return json_return('F','1000','财务负责人座机区号必填');
+                return json_return('F','1028','财务负责人座机区号必填');
             }
             if(!preg_match('/^[0-9]{3,4}$/',$data['financer_tel_1'])) {
-                return json_return('F','1000','财务负责人座机区号允许3位和4位数字');
+                return json_return('F','1028','财务负责人座机区号允许3位和4位数字');
             }
             if($data['financer_tel_2']===''){
-                return json_return('F','1000','财务负责人电话号码必填');
+                return json_return('F','1029','财务负责人电话号码必填');
             }
             if(strlen($data['financer_tel_1'])==3){
-                if(!preg_match('/^[0-9]{7}$/',$data['financer_tel_2'])) {
-                    return json_return('F','1000','财务负责人电话号码，当区号时3位数字时，号码是8位，当区号是4位数字时，号码是7位');
+                if(!preg_match('/^[0-9]{8}$/',$data['financer_tel_2'])) {
+                    return json_return('F','1029','财务负责人电话号码，当区号时3位数字时，号码是8位');
                 }
             }
             if(strlen($data['financer_tel_1'])==4){
-                if(!preg_match('/^[0-9]{8}$/',$data['financer_tel_2'])) {
-                    return json_return('F','1000','财务负责人电话号码，当区号时3位数字时，号码是8位，当区号是4位数字时，号码是7位');
+                if(!preg_match('/^[0-9]{7}$/',$data['financer_tel_2'])) {
+                    return json_return('F','1029','财务负责人电话号码，当区号是4位数字时，号码是7位');
                 }
             }
             if($data['financer_mobile']===''){
-                return json_return('F','1000','财务负责人手机号必填');
+                return json_return('F','1030','财务负责人手机号必填');
             }
             if(!preg_match('/^[0-9]{11}$/',$data['financer_mobile'])) {
-                return json_return('F','1000','财务负责人手机号只允许输入11位数字');
+                return json_return('F','1030','财务负责人手机号只允许输入11位数字');
             }
             if($data['financer_email']===''){
-                return json_return('F','1000','财务负责人邮箱必填');
+                return json_return('F','1031','财务负责人邮箱必填');
             }
-            if(!preg_match('/^\w[a-z]([a-z0-9]*[-_]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})$/i',$data['financer_email'])) {
-                return json_return('F','1000','财务负责人邮箱格式不正确');
+            if(!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i',$data['financer_email'])) {
+                return json_return('F','1031','财务负责人邮箱格式不正确');
             }
             if($data['admin_name']===''){
-                return json_return('F','1000','用户名必填');
+                return json_return('F','1032','用户名必填');
             }
             if(!preg_match('/^[A-Za-z0-9@]{3,20}$/',$data['admin_name'])) {
-                return json_return('F','1000','用户名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
+                return json_return('F','1032','用户名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
             }
             if($data['admin_password']===''){
-                return json_return('F','1000','登录密码必填');
+                return json_return('F','1033','登录密码必填');
             }
-            if(!preg_match('/^[A-Za-z0-9@_-]{8,16}$/',$data['admin_password'])) {
-                return json_return('F','1000','登录密码允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成');
+            if(!preg_match('/^[A-Za-z0-9!@#$%^&*-,.?;]{8,16}$/',$data['admin_password'])) {
+                return json_return('F','1033','密码允许大小写数字、字母、特殊字符的8-16个字符，必须有其中三项组成');
             }
             $a=preg_match('/[0-9]/', $data['admin_password']);
             $b=preg_match('/[a-zA-Z]/', $data['admin_password']);
-            $c=preg_match('/[_-]/', $data['admin_password']);
+            $c=preg_match('/[!@#$%^&*-,.?;]/', $data['admin_password']);
             if(!($a && $b && $c)){
-                return json_return('F','1000','登录密码允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成');
+                return json_return('F','1033','密码允许大小写数字、字母、特殊字符的8-16个字符，必须有其中三项组成');
             }
             if(!isset($data['imgs']) || $data['imgs']==[]){
-                return json_return('F','1000','车行照片必传');
+                return json_return('F','1034','车行照片必传');
             }
             $imgs_count=count($data['imgs']);
             if($imgs_count>4){
-                return json_return('F','1000','车行照片最多上传4张');
+                return json_return('F','1034','车行照片最多上传4张');
             }
             //处理数据
             $insert['company_name']=$data['company_name'];
@@ -382,196 +382,199 @@ class Merchant extends Admin
             }
             //验证
             if($data['company_name']===''){
-                return json_return('F','1000','公司名称必填');
+                return json_return('F','1001','公司名称必填');
             }
             if(!preg_match('/^[（）()\x{4e00}-\x{9fa5}]+$/u',$data['company_name'])) {
-                return json_return('F','1000','公司名称只允许输入汉字或中英文()，不允许输入字母、数字、及其他特殊符号');
+                return json_return('F','1001','公司名称只允许输入汉字或中英文()，不允许输入字母、数字、及其他特殊符号');
             }
             if($data['shop_name']===''){
-                return json_return('F','1000','店铺名称必填');
+                return json_return('F','1002','店铺名称必填');
             }
-            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]{8,30}$/u',$data['shop_name'])) {
-                return json_return('F','1000','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：8-30个字符');
+            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]{4,30}$/u',$data['shop_name'])) {
+                return json_return('F','1002','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：4-30个字符');
             }
             if($data['contract_no']===''){
-                return json_return('F','1000','合同编号必填');
+                return json_return('F','1003','合同编号必填');
             }
             if(!preg_match('/^[A-Za-z0-9-]{10,30}$/',$data['contract_no'])) {
-                return json_return('F','1000','合同编号允许输入大写字母、数字、- 三种字符，字符长度：10-30个字符，例：HC-JM-20180415001');
+                return json_return('F','1003','合同编号允许输入大写字母、数字、- 三种字符，字符长度：10-30个字符，例：HC-JM-20180415001');
             }
             if($data['contract_valid_start']===''){
-                return json_return('F','1000','合同有效期开始日期必选');
+                return json_return('F','1004','合同有效期开始日期必选');
             }
             if($data['contract_valid_end']===''){
-                return json_return('F','1000','合同有效期结束日期必选');
+                return json_return('F','1005','合同有效期结束日期必选');
             }
             if($data['licence_type']===''){
-                return json_return('F','1000','证件类型必选');
+                return json_return('F','1006','证件类型必选');
             }
             if($data['licence_no']===''){
-                return json_return('F','1000','证件号码必填');
+                return json_return('F','1007','证件号码必填');
             }
             if($data['licence_type']=='工商营业执照'){
                 if(!preg_match('/^[0-9]{13}$/',$data['licence_no'])) {
-                    return json_return('F','1000','证件号码，选择工商营业执照时对应输入框，只允许输入13位数字；选择统一社会信用代码用业执照时只允许输入18位数字');
+                    return json_return('F','1007','证件号码，选择工商营业执照时对应输入框，只允许输入13位数字');
                 }
             }
-            if($data['licence_type']=='统一社会信用代码用业执照'){
+            if($data['licence_type']=='统一社会信用代码营业执照'){
                 if(!preg_match('/^[0-9]{18}$/',$data['licence_no'])) {
-                    return json_return('F','1000','证件号码，选择工商营业执照时对应输入框，只允许输入13位数字；选择统一社会信用代码用业执照时只允许输入18位数字');
+                    return json_return('F','1007','证件号码，选择统一社会信用代码营业执照时只允许输入18位数字');
                 }
             }
             if($data['licence_province_id']===''){
-                return json_return('F','1000','营业执照所在省份必选');
+                return json_return('F','1008','营业执照所在省份必选');
             }
             if($data['licence_city_id']===''){
-                return json_return('F','1000','营业执照所在城市必选');
+                return json_return('F','1009','营业执照所在城市必选');
             }
             if($data['licence_area_id']===''){
-                return json_return('F','1000','营业执照所在区县必选');
+                return json_return('F','1010','营业执照所在区县必选');
             }
             if($data['licence_address']===''){
-                return json_return('F','1000','营业执照详细地址必填');
+                return json_return('F','1011','营业执照详细地址必填');
             }
             if($data['licence_img']===''){
-                return json_return('F','1000','营业执照必传');
+                return json_return('F','1012','营业执照必传');
             }
             if($data['licence_valid_start']===''){
-                return json_return('F','1000','营业执照有效期开始日期必填');
+                return json_return('F','1013','营业执照有效期开始日期必填');
             }
             if($data['licence_valid_end']===''){
-                return json_return('F','1000','营业执照有效期结束日期必填');
+                return json_return('F','1014','营业执照有效期结束日期必填');
             }
             if($data['work_address']===''){
-                return json_return('F','1000','办公地址必填');
+                return json_return('F','1015','办公地址必填');
             }
             if($data['custom_tel']===''){
-                return json_return('F','1000','客服电话必填');
+                return json_return('F','1016','客服电话必填');
             }
             if(!preg_match('/^[0-9]+$/',$data['custom_tel'])) {
-                return json_return('F','1000','客服电话只允许输入数字');
+                return json_return('F','1016','客服电话只允许输入数字');
             }
             if($data['corporation_name']===''){
-                return json_return('F','1000','法人必填');
+                return json_return('F','1017','法人必填');
             }
-            if(!preg_match('/^.{4,8}$/',$data['corporation_name'])) {
-                return json_return('F','1000','法人字符限制4-8个字符');
+            if(mb_strlen($data['corporation_name'],'utf8')<2 || mb_strlen($data['corporation_name'],'utf8')>8){
+                return json_return('F','1027','法人字符限制2-8个字');
             }
             if($data['mobile']===''){
-                return json_return('F','1000','联系电话必填');
+                return json_return('F','1018','联系电话必填');
             }
             if(!preg_match('/^[0-9]{11}$/',$data['mobile'])) {
-                return json_return('F','1000','联系电话只允许输入11位数字');
+                return json_return('F','1018','联系电话只允许输入11位数字');
             }
             if($data['identcard_no']===''){
-                return json_return('F','1000','身份证号必填');
+                return json_return('F','1019','身份证号必填');
             }
-            if(!preg_match('/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/',$data['identcard_no'])) {
-                return json_return('F','1000','身份证号格式不正确');
+            if(!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/',$data['identcard_no'])) {
+                return json_return('F','1019','身份证号格式不正确');
             }
             if($data['identcard_front_img']===''){
-                return json_return('F','1000','身份证正面必传');
+                return json_return('F','1020','身份证正面必传');
             }
             if($data['identcard_back_img']===''){
-                return json_return('F','1000','身份证背面必传');
+                return json_return('F','1021','身份证背面必传');
             }
             if($data['businesser_name']===''){
-                return json_return('F','1000','业务负责人姓名必填');
+                return json_return('F','1022','业务负责人姓名必填');
             }
-            if(!preg_match('/^.{4,8}$/',$data['businesser_name'])) {
-                return json_return('F','1000','业务负责人姓名字符限制4-8个字符');
+            if(mb_strlen($data['businesser_name'],'utf8')<2 || mb_strlen($data['businesser_name'],'utf8')>8){
+                return json_return('F','1022','业务负责人姓名字符限制2-8个字');
             }
             if($data['businesser_tel_1']===''){
-                return json_return('F','1000','业务负责人座机区号必填');
+                return json_return('F','1023','业务负责人座机区号必填');
             }
             if(!preg_match('/^[0-9]{3,4}$/',$data['businesser_tel_1'])) {
-                return json_return('F','1000','业务负责人座机区号允许3位和4位数字');
+                return json_return('F','1023','业务负责人座机区号允许3位和4位数字');
             }
             if($data['businesser_tel_2']===''){
-                return json_return('F','1000','业务负责人电话号码必填');
+                return json_return('F','1024','业务负责人电话号码必填');
             }
             if(strlen($data['businesser_tel_1'])==3){
-                if(!preg_match('/^[0-9]{7}$/',$data['businesser_tel_2'])) {
-                    return json_return('F','1000','业务负责人电话号码，当区号时3位数字时，号码是8位，当区号是4位数字时，号码是7位');
+                if(!preg_match('/^[0-9]{8}$/',$data['businesser_tel_2'])) {
+                    return json_return('F','1024','业务负责人电话号码，当区号时3位数字时，号码是8位');
                 }
             }
             if(strlen($data['businesser_tel_1'])==4){
-                if(!preg_match('/^[0-9]{8}$/',$data['businesser_tel_2'])) {
-                    return json_return('F','1000','业务负责人电话号码，当区号时3位数字时，号码是8位，当区号是4位数字时，号码是7位');
+                if(!preg_match('/^[0-9]{7}$/',$data['businesser_tel_2'])) {
+                    return json_return('F','1024','业务负责人电话号码，当区号是4位数字时，号码是7位');
                 }
             }
             if($data['businesser_mobile']===''){
-                return json_return('F','1000','业务负责人手机号必填');
+                return json_return('F','1025','业务负责人手机号必填');
             }
             if(!preg_match('/^[0-9]{11}$/',$data['businesser_mobile'])) {
-                return json_return('F','1000','业务负责人手机号只允许输入11位数字');
+                return json_return('F','1025','业务负责人手机号只允许输入11位数字');
             }
             if($data['businesser_email']===''){
-                return json_return('F','1000','业务负责人邮箱必填');
+                return json_return('F','1026','业务负责人邮箱必填');
             }
-            if(!preg_match('/^\w[a-z]([a-z0-9]*[-_]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})$/i',$data['businesser_email'])) {
-                return json_return('F','1000','业务负责人邮箱格式不正确');
+            if(!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i',$data['businesser_email'])) {
+                return json_return('F','1026','业务负责人邮箱格式不正确');
             }
             if($data['financer_name']===''){
-                return json_return('F','1000','财务负责人姓名必填');
+                return json_return('F','1027','财务负责人姓名必填');
             }
-            if(!preg_match('/^.{4,8}$/',$data['financer_name'])) {
-                return json_return('F','1000','财务负责人姓名字符限制4-8个字符');
+            if(mb_strlen($data['financer_name'],'utf8')<2 || mb_strlen($data['financer_name'],'utf8')>8){
+                return json_return('F','1027','财务负责人姓名字符限制2-8个字');
             }
             if($data['financer_tel_1']===''){
-                return json_return('F','1000','财务负责人座机区号必填');
+                return json_return('F','1028','财务负责人座机区号必填');
             }
             if(!preg_match('/^[0-9]{3,4}$/',$data['financer_tel_1'])) {
-                return json_return('F','1000','财务负责人座机区号允许3位和4位数字');
+                return json_return('F','1028','财务负责人座机区号允许3位和4位数字');
             }
             if($data['financer_tel_2']===''){
-                return json_return('F','1000','财务负责人电话号码必填');
+                return json_return('F','1029','财务负责人电话号码必填');
             }
             if(strlen($data['financer_tel_1'])==3){
-                if(!preg_match('/^[0-9]{7}$/',$data['financer_tel_2'])) {
-                    return json_return('F','1000','财务负责人电话号码，当区号时3位数字时，号码是8位，当区号是4位数字时，号码是7位');
+                if(!preg_match('/^[0-9]{8}$/',$data['financer_tel_2'])) {
+                    return json_return('F','1029','财务负责人电话号码，当区号时3位数字时，号码是8位');
                 }
             }
             if(strlen($data['financer_tel_1'])==4){
-                if(!preg_match('/^[0-9]{8}$/',$data['financer_tel_2'])) {
-                    return json_return('F','1000','财务负责人电话号码，当区号时3位数字时，号码是8位，当区号是4位数字时，号码是7位');
+                if(!preg_match('/^[0-9]{7}$/',$data['financer_tel_2'])) {
+                    return json_return('F','1029','财务负责人电话号码，当区号是4位数字时，号码是7位');
                 }
             }
             if($data['financer_mobile']===''){
-                return json_return('F','1000','财务负责人手机号必填');
+                return json_return('F','1030','财务负责人手机号必填');
             }
             if(!preg_match('/^[0-9]{11}$/',$data['financer_mobile'])) {
-                return json_return('F','1000','财务负责人手机号只允许输入11位数字');
+                return json_return('F','1030','财务负责人手机号只允许输入11位数字');
             }
             if($data['financer_email']===''){
-                return json_return('F','1000','财务负责人邮箱必填');
+                return json_return('F','1031','财务负责人邮箱必填');
             }
-            if(!preg_match('/^\w[a-z]([a-z0-9]*[-_]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})$/i',$data['financer_email'])) {
-                return json_return('F','1000','财务负责人邮箱格式不正确');
+            if(!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i',$data['financer_email'])) {
+                return json_return('F','1031','财务负责人邮箱格式不正确');
             }
             if($data['admin_name']===''){
-                return json_return('F','1000','用户名必填');
+                return json_return('F','1032','用户名必填');
             }
             if(!preg_match('/^[A-Za-z0-9@]{3,20}$/',$data['admin_name'])) {
-                return json_return('F','1000','用户名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
+                return json_return('F','1032','用户名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
             }
             if($data['admin_password']!==''){
-                if(!preg_match('/^[A-Za-z0-9@_-]{8,16}$/',$data['admin_password'])) {
-                    return json_return('F','1000','登录密码允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成');
+                if(!preg_match('/^[A-Za-z0-9!@#$%^&*-,.?;]{8,16}$/',$data['admin_password'])) {
+                    return json_return('F','1033','密码允许大小写数字、字母、特殊字符的8-16个字符，必须有其中三项组成');
                 }
                 $a=preg_match('/[0-9]/', $data['admin_password']);
                 $b=preg_match('/[a-zA-Z]/', $data['admin_password']);
-                $c=preg_match('/[_-]/', $data['admin_password']);
+                $c=preg_match('/[!@#$%^&*-,.?;]/', $data['admin_password']);
                 if(!($a && $b && $c)){
-                    return json_return('F','1000','登录密码允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成');
+                    return json_return('F','1033','密码允许大小写数字、字母、特殊字符的8-16个字符，必须有其中三项组成');
                 }
-            } 
+            }
             if(!isset($data['imgs']) || $data['imgs']==[]){
-                return json_return('F','1000','车行照片必传');
+                return json_return('F','1034','车行照片必传');
             }
             $imgs_count=count($data['imgs']);
             if($imgs_count>4){
-                return json_return('F','1000','车行照片最多上传4张');
+                return json_return('F','1034','车行照片最多上传4张');
+            }
+            if(!isset($data['state']) || $data['state']===''){
+                return json_return('F','1035','商户状态必选');
             }
             //处理数据
             $update['company_name']=$data['company_name'];

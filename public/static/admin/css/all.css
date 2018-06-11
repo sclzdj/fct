@@ -34,12 +34,18 @@
 .add_edit .con ul li span.zhi{display:inline-block;height: 34px;line-height: 34px;vertical-align: top;}
 .add_edit .con ul li input[type="text"],.add_edit .con ul li input[type="password"]{padding:0 5px;width:40%;min-width:240px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;}
 .add_edit .con ul li input[type="radio"]{vertical-align:top;line-height: 34px;display: inline-block;width: 16px;height: 16px;margin-top:9px;margin-right: 3px; }
+.add_edit .con ul li input[type="text"].error,.add_edit .con ul li input[type="password"].error{border:1px solid #c54736;}
+.add_edit .con ul li span.error{margin:3px 0px;margin-left: 40px; padding:0 5px;display:inline-block;height: 28px;line-height: 26px; font-size:12px;vertical-align: top;border:1px solid #c54736;color: #c54736;}
+.add_edit .con ul li textarea{padding:0 5px;width:40%;min-width:240px;height: 34px;line-height: 24px; border: 1px solid #ccc;height: 125px;vertical-align: top;}
+.add_edit .con ul li textarea.error{border:1px solid #c54736;}
+.add_edit .con ul li select{padding:0 5px;width:15%;min-width:200px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align: top;}
+.add_edit .con ul li select.error{border:1px solid #c54736;}
 .add_edit .con ul li button{padding:0 5px;min-width:80px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;background: #fff;}
 .add_edit .con ul li button:hover{background: #eee;}
-.add_edit .con ul li textarea{padding:0 5px;width:40%;min-width:240px;height: 34px;line-height: 24px; border: 1px solid #ccc;height: 125px;vertical-align: top;}
+.add_edit .con ul li button.error{border:1px solid #c54736;}
 .add_edit .con ul li label{font-weight: normal;font-size: 14px;cursor: pointer;line-height: 34px;margin: 0;vertical-align: top;}
-.add_edit .con ul li select{padding:0 5px;width:15%;min-width:200px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align: top;}
 .add_edit .con ul li .addimg{display: inline-block;width: 88px;height: 88px;border:1px solid #c6c6c6;cursor: pointer;}
+.add_edit .con ul li .addimg.error{border:1px solid #c54736;}
 .add_edit .con ul li .addimg img{width: 42px;height: 42px;margin:22px;}
 .add_edit .con ul li .imgone{display:inline-block;height: 88px;cursor: pointer;position: relative;margin-right: 40px;}
 .add_edit .con ul li .imgone a{display: inline-block;height: 88px;position: relative;}
@@ -53,6 +59,7 @@
 .add_edit .con ul li .imgall a{display: inline-block;height: 120px;}
 .add_edit .con ul li .imgall img{max-width: 120px;max-height: 120px;}
 .add_edit .con ul li .addimg2{display: inline-block;width: 120px;height: 120px;border:1px solid #c6c6c6;cursor: pointer;}
+.add_edit .con ul li .addimg2.error{border:1px solid #c54736;}
 .add_edit .con ul li .addallimgno{cursor: auto;opacity: 0.3;}
 .add_edit .con ul li .addimg2 img{width: 58px;height: 58px;margin:30px;}
 .add_edit .con ul li input.timepick{cursor: pointer;}

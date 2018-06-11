@@ -38,13 +38,13 @@ class Homebrand extends Admin
                 return json_return('F','1000','最多上传8张首页品牌图');
             }
             if($data['img']===''){
-                return json_return('F','1000','图片必传');
+                return json_return('F','1001','图片必传');
             }
             if($data['brand']===''){
-                return json_return('F','1000','品牌名称必填');
+                return json_return('F','1002','品牌名称必填');
             }
             if($data['brand_id']===''){
-                return json_return('F','1000','对应品牌必选');
+                return json_return('F','1003','对应品牌必选');
             }
             //处理数据
             $insert['img']=$data['img'];
@@ -62,7 +62,7 @@ class Homebrand extends Admin
             }
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
         //模板赋值
         $this->assign([
             'brand'=>$brand,
@@ -82,13 +82,13 @@ class Homebrand extends Admin
             }
             //验证
             if($data['img']===''){
-                return json_return('F','1000','图片必传');
+                return json_return('F','1001','图片必传');
             }
             if($data['brand']===''){
-                return json_return('F','1000','品牌名称必填');
+                return json_return('F','1002','品牌名称必填');
             }
             if($data['brand_id']===''){
-                return json_return('F','1000','对应品牌必选');
+                return json_return('F','1003','对应品牌必选');
             }
             //处理数据
             $update['img']=$data['img'];
@@ -109,7 +109,7 @@ class Homebrand extends Admin
         if($home_brand){
             $home_brand['created_at_str']=date('Y-m-d H:i',$home_brand['created_at']);
             //获取品牌
-            $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
+            $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
             //模板赋值
             $this->assign([
                 'home_brand'=>$home_brand,

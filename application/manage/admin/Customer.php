@@ -196,31 +196,31 @@ class Customer extends Admin
             $data = $this->request->post();
             //验证
             if($data['name']===''){
-                return json_return('F','1000','客户名称必填');
+                return json_return('F','1001','客户名称必填');
             }
             if(!preg_match('/^[\x{4e00}-\x{9fa5}]{4,8}$/u',$data['name'])) {
-                return json_return('F','1000','客户名称，只允许输入汉字，字符长度：4-8个字符');
+                return json_return('F','1001','客户名称，只允许输入汉字，字符长度：4-8个字符');
             }
             if($data['mobile']===''){
-                return json_return('F','1000','联系电话必填');
+                return json_return('F','1002','联系电话必填');
             }
             if(!preg_match('/^[0-9]{11}$/',$data['mobile'])) {
-                return json_return('F','1000','联系电话只允许输入11位数字');
+                return json_return('F','1002','联系电话只允许输入11位数字');
             }
-            if($data['sex']===''){
-                return json_return('F','1000','性别必选');
+            if(!isset($data['sex']) || $data['sex']===''){
+                return json_return('F','1003','性别必选');
             }
             if($data['sex']!='男' && $data['sex']!='女') {
-                return json_return('F','1000','性别只能男或女');
+                return json_return('F','1003','性别只能男或女');
             }
             if($data['province_id']===''){
-                return json_return('F','1000','所在省份必选');
+                return json_return('F','1004','所在省份必选');
             }
             if($data['city_id']===''){
-                return json_return('F','1000','所在城市必选');
+                return json_return('F','1005','所在城市必选');
             }
             if($data['car_source_id']=='' && $data['defind_model']===''){
-                return json_return('F','1000','意向车源必选');
+                return json_return('F','1006','意向车源必选');
             }
             $ismerchant=ismerchant();
             if($data['car_source_id']!=''){
@@ -228,19 +228,19 @@ class Customer extends Admin
 	            if($ismerchant){
 		            $map['b.id']=$ismerchant;
 		        }
-	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
+	            $carsource=db('car_sources')->alias('a')->field('a.id,a.merchant_id')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
 	            if(!$carsource){
-	            	return json_return('F','1000','选择的意向车源已不存在');
+	            	return json_return('F','1006','选择的意向车源已不存在');
 	            }
             }
             if($data['source']===''){
-                return json_return('F','1000','客户来源必选');
+                return json_return('F','1007','客户来源必选');
             }
             if($data['state']===''){
-                return json_return('F','1000','客户状态必选');
+                return json_return('F','1008','客户状态必选');
             }
             if(mb_strlen($data['remark'],'utf8')>200) {
-                return json_return('F','1000','客户简介最多200个字');
+                return json_return('F','1009','客户简介最多200个字');
             }
             //处理数据
             $insert['name']=$data['name'];
@@ -256,7 +256,7 @@ class Customer extends Admin
             $insert['source']=$data['source'];
             $insert['state']=$data['state'];
             $insert['remark']=$data['remark'];
-            $insert['merchant_id']=intval($ismerchant);
+            $insert['merchant_id']=$carsource['merchant_id'];
             $insert['created_at']=$now;
             $insert['follow_at']=$now;
             $insert['runner_id']=UID;
@@ -296,51 +296,51 @@ class Customer extends Admin
             }
             //验证
             if($data['name']===''){
-                return json_return('F','1000','客户名称必填');
+                return json_return('F','1001','客户名称必填');
             }
             if(!preg_match('/^[\x{4e00}-\x{9fa5}]{4,8}$/u',$data['name'])) {
-                return json_return('F','1000','客户名称，只允许输入汉字，字符长度：4-8个字符');
+                return json_return('F','1001','客户名称，只允许输入汉字，字符长度：4-8个字符');
             }
             if($data['mobile']===''){
-                return json_return('F','1000','联系电话必填');
+                return json_return('F','1002','联系电话必填');
             }
             if(!preg_match('/^[0-9]{11}$/',$data['mobile'])) {
-                return json_return('F','1000','联系电话只允许输入11位数字');
+                return json_return('F','1002','联系电话只允许输入11位数字');
             }
-            if($data['sex']===''){
-                return json_return('F','1000','性别必选');
+            if(!isset($data['sex']) || $data['sex']===''){
+                return json_return('F','1003','性别必选');
             }
             if($data['sex']!='男' && $data['sex']!='女') {
-                return json_return('F','1000','性别只能男或女');
+                return json_return('F','1003','性别只能男或女');
             }
             if($data['province_id']===''){
-                return json_return('F','1000','所在省份必选');
+                return json_return('F','1004','所在省份必选');
             }
             if($data['city_id']===''){
-                return json_return('F','1000','所在城市必选');
+                return json_return('F','1005','所在城市必选');
             }
             $data['car_source_id']=intval($data['car_source_id']);
             if($data['car_source_id']=='0' && $data['defind_model']===''){
-                return json_return('F','1000','意向车源必选');
+                return json_return('F','1006','意向车源必选');
             }
             if($data['car_source_id']!='0'){
             	$map=[];
 	            if($ismerchant){
 		            $map['b.id']=$ismerchant;
 		        }
-	            $carsource=db('car_sources')->alias('a')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
+	            $carsource=db('car_sources')->alias('a')->field('a.id,a.merchant_id')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
 	            if(!$carsource){
-	            	return json_return('F','1000','选择的意向车源已不存在');
+	            	return json_return('F','1006','选择的意向车源已不存在');
 	            }
             }
             if($data['source']===''){
-                return json_return('F','1000','客户来源必选');
+                return json_return('F','1007','客户来源必选');
             }
             if($data['state']===''){
-                return json_return('F','1000','客户状态必选');
+                return json_return('F','1008','客户状态必选');
             }
             if(mb_strlen($data['remark'],'utf8')>200) {
-                return json_return('F','1000','客户简介最多200个字');
+                return json_return('F','1009','客户简介最多200个字');
             }
             //处理数据
             $update['name']=$data['name'];
@@ -358,6 +358,7 @@ class Customer extends Admin
             $update['source']=$data['source'];
             $update['state']=$data['state'];
             $update['remark']=$data['remark'];
+            $update['merchant_id']=$carsource['merchant_id'];
             $rt=db('customers')->where('id',$data['id'])->update($update);
             //入库
             if ($rt!==false) {

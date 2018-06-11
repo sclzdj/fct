@@ -308,6 +308,12 @@
                         }, 1500);
                     } else {
                         Dolphin.notify(data.msg, 'danger');
+                        if(data.code==1001){
+                            $('input[name="name"]').addClass('error');
+                            $('input[name="name"]').focus();
+                            var name_li = $('input[name="name"]').parent().offset();      
+                            $("html,body").animate({scrollTop:name_li.top - "450" + "px"}, 0);
+                        }
                     }
                 },
                 error:function(xhr,status,error){
@@ -315,6 +321,9 @@
                     Dolphin.notify('服务器错误~', 'danger');
                 }
             });
+        });
+        $('body').on('blur','.add_edit .con ul li input[type="text"],.add_edit .con ul li input[type="password"],.add_edit .con ul li select,.add_edit .con ul li textarea',function(){
+            $(this).removeClass('error');
         });
     });
 </script>

@@ -41,13 +41,27 @@
                 <span class="bztips">支持扩展名：png、jpg、jpeg；大小不超过30M；小程序端像素：750*340； PC端：宽:通屏，高:400</span>
             </li>
             <li>
-                <span class="latips"><span class="required">*</span>对应品牌：</span>
-                <input type="text" name="brand" value="{$banner.brand}" placeholder="请输入对应品牌">
+                <span class="latips"><span class="required">*</span>品牌名称：</span>
+                <input type="text" name="brand" value="{$banner.brand}" placeholder="请输入品牌名称">
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>描述：</span>
                 <input type="text" name="remark" value="{$banner.remark}" placeholder="请输入描述">
                 <span class="bztips">长度不超过40个字</span>
+            </li>
+            <li {if condition='$banner.terminal eq 1'}style="display: none;"{/if} id="brand_li">
+                <span class="latips"><span class="required">*</span>对应品牌：</span>
+                <select name="brand_id">
+                    <option value="">请选择</option>
+                    {volist name="brand" id="vo"}
+                    <option value="{$vo.p_pinpai_id}" {if condition='$banner.terminal eq 0 && $banner.rate eq $vo.p_pinpai_id'}selected="selected"{/if}>{$vo.p_pinpai}</option>
+                    {/volist}
+                </select>
+            </li>
+            <li {if condition='$banner.terminal eq 0'}style="display: none;"{/if} id="url_li">
+                <span class="latips"><span class="required">*</span>链接地址：</span>
+                <input type="text" name="url" value="{if condition='$banner.terminal eq 1'}{$banner.rate}{/if}" placeholder="请输入链接地址">
+                <span class="bztips">必须是http://或https://开头</span>
             </li>
         </ul>
         <div style="clear: both;"></div>
@@ -65,6 +79,19 @@
 
 <script>
     $(function(){
+        //选择展示端
+        $('select[name="terminal"]').change(function(){
+            var val=$(this).val();
+            if(val==='0'){
+                $('#brand_li').show();
+                $('#url_li').hide();
+            }else if(val==='1'){
+                $('#url_li').show();
+                $('#brand_li').hide();
+            }else{
+                $('#brand_li,#url_li').hide();
+            }
+        });
         //单图上传
         $("body").on('click','.addoneimg',function(){
             var ralate=$(this).attr('ralate');
@@ -76,6 +103,8 @@
             $('#up_one_form_in').click();
         });
         $("body").on('change','#up_one_form_in',function(){
+            var up_len=this.files.length;
+            if(up_len<=0) return false;
             var ralate=$(this).attr('ralate');
             var suffix=$(this).attr('suffix');
             var msize=$(this).attr('msize');
@@ -138,6 +167,36 @@
                         }, 1500);
                     } else {
                         Dolphin.notify(data.msg, 'danger');
+                        if(data.code==1001){
+                            $('select[name="terminal"]').addClass('error');
+                            $('select[name="terminal"]').focus();
+                            var terminal_li = $('select[name="terminal"]').parent().offset();      
+                            $("html,body").animate({scrollTop:terminal_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1002){
+                            $('.add_edit .con ul li .addimg').addClass('error');
+                            var img_li = $('input[name="img"]').parent().offset();      
+                            $("html,body").animate({scrollTop:img_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1003){
+                            $('input[name="brand"]').addClass('error');
+                            $('input[name="brand"]').focus();
+                            var brand_li = $('input[name="brand"]').parent().offset();      
+                            $("html,body").animate({scrollTop:brand_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1004){
+                            $('input[name="remark"]').addClass('error');
+                            $('input[name="remark"]').focus();
+                            var remark_li = $('input[name="remark"]').parent().offset();      
+                            $("html,body").animate({scrollTop:remark_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1005){
+                            $('select[name="brand_id"]').addClass('error');
+                            $('select[name="brand_id"]').focus();
+                            var brand_id_li = $('select[name="brand_id"]').parent().offset();      
+                            $("html,body").animate({scrollTop:brand_id_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1006){
+                            $('input[name="url"]').addClass('error');
+                            $('input[name="url"]').focus();
+                            var url_li = $('input[name="url"]').parent().offset();      
+                            $("html,body").animate({scrollTop:url_li.top - "450" + "px"}, 0);
+                        }
                     }
                 },
                 error:function(xhr,status,error){
@@ -145,6 +204,12 @@
                     Dolphin.notify('服务器错误~', 'danger');
                 }
             });
+        });
+        $('body').on('blur','.add_edit .con ul li input[type="text"],.add_edit .con ul li input[type="password"],.add_edit .con ul li select,.add_edit .con ul li textarea',function(){
+            $(this).removeClass('error');
+        });
+        $('.content').click(function(){
+            $('.add_edit .con ul li .addimg').removeClass('error');
         });
     });
 </script>

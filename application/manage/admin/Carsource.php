@@ -93,7 +93,7 @@ class Carsource extends Admin
             $data[$key]['region_one_text']=region_text([$value['plate_province_id'],$value['plate_city_id']],false);
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -115,82 +115,82 @@ class Carsource extends Admin
             $data = $this->request->post();
             //验证
             if($data['vin_no']===''){
-                return json_return('F','1000','车架号必填');
+                return json_return('F','1001','车架号必填');
             }
             if(!preg_match('/^[A-Z0-9]{1,34}$/',$data['vin_no'])) {
-                return json_return('F','1000','车架号允许大写字母和数字组合，字符长度：34个字符，例WDBGP57B6PB127810');
+                return json_return('F','1001','车架号允许大写字母和数字组合，字符长度：34个字符，例WDBGP57B6PB127810');
             }
             if($data['brand_id']=='-1'){
-                return json_return('F','1000','车牌必选');
+                return json_return('F','1002','品牌必选');
             }
             if($data['serie_id']=='-1'){
-                return json_return('F','1000','车系必选');
+                return json_return('F','1003','车系必选');
             }
             if($data['car_id']=='-1'){
-                return json_return('F','1000','车型必选');
+                return json_return('F','1004','车型必选');
             }
             if($data['install_config']!==''){
                 if(mb_strlen($data['install_config'],'utf8')>1000) {
-                    return json_return('F','1000','加装配置最多1000个字');
+                    return json_return('F','1005','加装配置最多1000个字');
                 }
             }
             if($data['price']===''){
-                return json_return('F','1000','价格必填');
+                return json_return('F','1006','价格必填');
             }
             if(!preg_match('/^[0-9]+(\.\d{1,2})?$/',$data['price'])) {
-                return json_return('F','1000','价格只允许输入数字与符号. 格式：XXX.XX，两位小数');
+                return json_return('F','1006','价格只允许输入数字与符号. 格式：XXX.XX，两位小数');
             }
             if($data['color']===''){
-                return json_return('F','1000','车身颜色必选');
+                return json_return('F','1007','车身颜色必选');
             }
-            if($data['is_oncard']===''){
-                return json_return('F','1000','是否上牌必选');
+            if(!isset($data['is_oncard']) || $data['is_oncard']===''){
+                return json_return('F','1008','是否上牌必选');
             }
-            if($data['maintain']===''){
-                return json_return('F','1000','定期保养必选');
+            if(!isset($data['maintain']) || $data['maintain']===''){
+                return json_return('F','1009','定期保养必选');
             }
             if($data['mileage']===''){
-                return json_return('F','1000','表显里程必填');
+                return json_return('F','1010','表显里程必填');
             }
             if(!preg_match('/^[\d]{1}(\.\d{1})?$/',$data['mileage'])) {
-                return json_return('F','1000','表显里程只允许输入数字与符号. 格式：X.X');
+                return json_return('F','1010','表显里程只允许输入数字与符号. 格式：X.X');
             }
             if($data['mileage']==0){
-                return json_return('F','1000','表显里程需大于0');
+                return json_return('F','1010','表显里程需大于0');
             }
             if($data['first_plate_at']===''){
-                return json_return('F','1000','首次上牌时间必选');
+                return json_return('F','1011','首次上牌时间必选');
             }
             if($data['guid_price']!==''){
                 if(!preg_match('/^[0-9]+(\.\d{1,2})?$/',$data['guid_price'])) {
-                    return json_return('F','1000','新手指导价只允许输入数字与符号. 格式：XXX.XX，两位小数');
+                    return json_return('F','1012','新手指导价只允许输入数字与符号. 格式：XXX.XX，两位小数');
                 }
             }
             if($data['transfer_num']!==''){
                 if(!preg_match('/^[0-9]+$/',$data['transfer_num'])) {
-                    return json_return('F','1000','过户次数只允许输入数字');
+                    return json_return('F','1013','过户次数只允许输入数字');
                 }
             }
             if($data['key_num']!==''){
                 if(!preg_match('/^[0-9]+$/',$data['key_num'])) {
-                    return json_return('F','1000','钥匙数量只允许输入数字');
+                    return json_return('F','1014','钥匙数量只允许输入数字');
                 }
             }
             if($data['car_condition']===''){
-                return json_return('F','1000','车况介绍必填');
+                return json_return('F','1015','车况介绍必填');
             }
             if(mb_strlen($data['car_condition'],'utf8')>1000) {
-                return json_return('F','1000','车况介绍最多1000个字');
+                return json_return('F','1015','车况介绍最多1000个字');
             }
             if(!isset($data['imgs']) || $data['imgs']==[]){
-                return json_return('F','1000','车源图片必传');
+                return json_return('F','1016','车源图片必传');
             }
             $imgs_count=count($data['imgs']);
             if($imgs_count>15 || $imgs_count<4){
-                return json_return('F','1000','车源图片最少上传4张，最多上传15张');
+                return json_return('F','1016','车源图片最少上传4张，最多上传15张');
             }
             if(mb_strlen($data['check_result'],'utf8')>1000) {
-                return json_return('F','1000','车源检测结论最多1000个字');
+                return json_return('F','1017','车源检测结论最多1000个字');
             }
             //处理多级选项
             if(isset($data['option_ids'])){
@@ -249,7 +249,7 @@ class Carsource extends Admin
             $ismerchant=ismerchant();
             $insert['merchant_id']=intval($ismerchant);
             $insert['runner_id']=UID;
-            $car=db('cars')->field('p_pinpai,p_chexi,p_chexingmingcheng')->where('p_chexing_id',$data['car_id'])->find();
+            $car=db('cars')->field('p_pinpai,p_chexi,p_chexingmingcheng,p_pailiang_ml')->where('p_chexing_id',$data['car_id'])->find();
             if(strpos($car['p_chexingmingcheng'],$car['p_chexi']) !== false){ 
                 if(strpos($car['p_chexingmingcheng'],$car['p_pinpai']) !== false){
                     $car_name=$car['p_chexingmingcheng'];
@@ -265,6 +265,7 @@ class Carsource extends Admin
                 } 
             }
             $insert['name']=$car_name;
+            $insert['displacement']=$car['p_pailiang_ml'];
             $insert_id=db('car_sources')->insertGetId($insert);
             //入库
             if ($insert_id>0) {
@@ -283,7 +284,7 @@ class Carsource extends Admin
         //获取中国省份
         $province=db('regions')->field('id,name')->where(['parent_id'=>'1','level'=>'1'])->order('sort asc')->select();
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
         //模板赋值
         $this->assign([
             'province'=>$province,
@@ -312,82 +313,82 @@ class Carsource extends Admin
             }
             //验证
             if($data['vin_no']===''){
-                return json_return('F','1000','车架号必填');
+                return json_return('F','1001','车架号必填');
             }
             if(!preg_match('/^[A-Z0-9]{1,34}$/',$data['vin_no'])) {
-                return json_return('F','1000','车架号允许大写字母和数字组合，字符长度：34个字符，例WDBGP57B6PB127810');
+                return json_return('F','1001','车架号允许大写字母和数字组合，字符长度：34个字符，例WDBGP57B6PB127810');
             }
             if($data['brand_id']=='-1'){
-                return json_return('F','1000','车牌必选');
+                return json_return('F','1002','品牌必选');
             }
             if($data['serie_id']=='-1'){
-                return json_return('F','1000','车系必选');
+                return json_return('F','1003','车系必选');
             }
             if($data['car_id']=='-1'){
-                return json_return('F','1000','车型必选');
+                return json_return('F','1004','车型必选');
             }
             if($data['install_config']!==''){
                 if(mb_strlen($data['install_config'],'utf8')>1000) {
-                    return json_return('F','1000','加装配置最多1000个字');
+                    return json_return('F','1005','加装配置最多1000个字');
                 }
             }
             if($data['price']===''){
-                return json_return('F','1000','价格必填');
+                return json_return('F','1006','价格必填');
             }
             if(!preg_match('/^[0-9]+(\.\d{1,2})?$/',$data['price'])) {
-                return json_return('F','1000','价格只允许输入数字与符号. 格式：XXX.XX，两位小数');
+                return json_return('F','1006','价格只允许输入数字与符号. 格式：XXX.XX，两位小数');
             }
             if($data['color']===''){
-                return json_return('F','1000','车身颜色必选');
+                return json_return('F','1007','车身颜色必选');
             }
-            if($data['is_oncard']===''){
-                return json_return('F','1000','是否上牌必选');
+            if(!isset($data['is_oncard']) || $data['is_oncard']===''){
+                return json_return('F','1008','是否上牌必选');
             }
-            if($data['maintain']===''){
-                return json_return('F','1000','定期保养必选');
+            if(!isset($data['maintain']) || $data['maintain']===''){
+                return json_return('F','1009','定期保养必选');
             }
             if($data['mileage']===''){
-                return json_return('F','1000','表显里程必填');
+                return json_return('F','1010','表显里程必填');
             }
             if(!preg_match('/^[\d]{1}(\.\d{1})?$/',$data['mileage'])) {
-                return json_return('F','1000','表显里程只允许输入数字与符号. 格式：X.X');
+                return json_return('F','1010','表显里程只允许输入数字与符号. 格式：X.X');
             }
             if($data['mileage']==0){
-                return json_return('F','1000','表显里程需大于0');
+                return json_return('F','1010','表显里程需大于0');
             }
             if($data['first_plate_at']===''){
-                return json_return('F','1000','首次上牌时间必选');
+                return json_return('F','1011','首次上牌时间必选');
             }
             if($data['guid_price']!==''){
                 if(!preg_match('/^[0-9]+(\.\d{1,2})?$/',$data['guid_price'])) {
-                    return json_return('F','1000','新手指导价只允许输入数字与符号. 格式：XXX.XX，两位小数');
+                    return json_return('F','1012','新手指导价只允许输入数字与符号. 格式：XXX.XX，两位小数');
                 }
             }
             if($data['transfer_num']!==''){
                 if(!preg_match('/^[0-9]+$/',$data['transfer_num'])) {
-                    return json_return('F','1000','过户次数只允许输入数字');
+                    return json_return('F','1013','过户次数只允许输入数字');
                 }
             }
             if($data['key_num']!==''){
                 if(!preg_match('/^[0-9]+$/',$data['key_num'])) {
-                    return json_return('F','1000','钥匙数量只允许输入数字');
+                    return json_return('F','1014','钥匙数量只允许输入数字');
                 }
             }
             if($data['car_condition']===''){
-                return json_return('F','1000','车况介绍必填');
+                return json_return('F','1015','车况介绍必填');
             }
             if(mb_strlen($data['car_condition'],'utf8')>1000) {
-                return json_return('F','1000','车况介绍最多1000个字');
+                return json_return('F','1015','车况介绍最多1000个字');
             }
             if(!isset($data['imgs']) || $data['imgs']==[]){
-                return json_return('F','1000','车源图片必传');
+                return json_return('F','1016','车源图片必传');
             }
             $imgs_count=count($data['imgs']);
             if($imgs_count>15 || $imgs_count<4){
-                return json_return('F','1000','车源图片最少上传4张，最多上传15张');
+                return json_return('F','1016','车源图片最少上传4张，最多上传15张');
             }
             if(mb_strlen($data['check_result'],'utf8')>1000) {
-                return json_return('F','1000','车源检测结论最多1000个字');
+                return json_return('F','1017','车源检测结论最多1000个字');
             }
             //处理多级选项
             if(isset($data['option_ids'])){
@@ -439,7 +440,7 @@ class Carsource extends Admin
             $update['imgs']=implode(',', $data['imgs']);
             $update['check_result']=$data['check_result'];
             $update['option_ids']=implode(',', $new_option_ids);
-            $car=db('cars')->field('p_pinpai,p_chexi,p_chexingmingcheng')->where('p_chexing_id',$data['car_id'])->find();
+            $car=db('cars')->field('p_pinpai,p_chexi,p_chexingmingcheng,p_pailiang_ml')->where('p_chexing_id',$data['car_id'])->find();
             if(strpos($car['p_chexingmingcheng'],$car['p_chexi']) !== false){ 
                 if(strpos($car['p_chexingmingcheng'],$car['p_pinpai']) !== false){
                     $car_name=$car['p_chexingmingcheng'];
@@ -455,6 +456,7 @@ class Carsource extends Admin
                 } 
             }
             $update['name']=$car_name;
+            $update['displacement']=$car['p_pailiang_ml'];
             $rt=db('car_sources')->where('id',$data['id'])->update($update);
             //入库
             if ($rt!==false) {
@@ -499,9 +501,9 @@ class Carsource extends Admin
         $province=db('regions')->field('id,name')->where(['parent_id'=>'1','level'=>'1'])->order('sort asc')->select();
         $city=db('regions')->field('id,name')->where(['parent_id'=>$car_source['plate_province_id'],'level'=>'2'])->order('sort asc')->select();
         //获取车型
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
-        $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$car_source['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
-        $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$car_source['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$car_source['brand_id'],'is_show'=>'1'])->select();
+        $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$car_source['serie_id'],'is_show'=>'1'])->select();
         foreach ($car as $k => $v) {
             $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
         }

@@ -27,7 +27,7 @@
             <li>
                 <span class="latips"><span class="required">*</span>店铺名称：</span>
                 <input type="text" name="shop_name" value="{$merchant.shop_name}" placeholder="请输入店铺名称">
-                <span class="bztips">允许输入汉字、字母、数字，不允许特殊字符输入，长度：8-30个字</span>
+                <span class="bztips">允许输入汉字、字母、数字，不允许特殊字符输入，长度：4-30个字</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>合同编号：</span>
@@ -111,7 +111,7 @@
             <li>
                 <span class="latips"><span class="required">*</span>法人姓名：</span>
                 <input type="text" name="corporation_name" value="{$merchant.corporation_name}" placeholder="请输入法人姓名">
-                <span class="bztips">字符限制4-8个字符</span>
+                <span class="bztips">字符限制2-8个字</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>联系电话：</span>
@@ -168,7 +168,7 @@
             <li>
                 <span class="latips"><span class="required">*</span>业务负责人：</span>
                 <input type="text" name="businesser_name" value="{$merchant.businesser_name}" placeholder="请输入业务负责人">
-                <span class="bztips">字符限制4-8个字符</span>
+                <span class="bztips">字符限制2-8个字</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>业务负责人座机：</span>
@@ -178,18 +178,18 @@
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>业务负责人手机号：</span>
-                <input type="text" name="businesser_mobile" value="{$merchant.businesser_mobile}" placeholder="请输入业务负责人">
+                <input type="text" name="businesser_mobile" value="{$merchant.businesser_mobile}" placeholder="请输入业务负责人手机号">
                 <span class="bztips">只允许输入11位数字</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>业务负责人邮箱：</span>
-                <input type="text" name="businesser_email" value="{$merchant.businesser_email}" placeholder="请输入业务负责人">
+                <input type="text" name="businesser_email" value="{$merchant.businesser_email}" placeholder="请输入业务负责人邮箱">
                 <span class="bztips">需符合邮箱标准格式</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>财务负责人：</span>
-                <input type="text" name="financer_name" value="{$merchant.financer_name}" placeholder="请输入业务负责人">
-                <span class="bztips">字符限制4-8个字符</span>
+                <input type="text" name="financer_name" value="{$merchant.financer_name}" placeholder="请输入财务负责人">
+                <span class="bztips">字符限制2-8个字</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>财务负责人座机：</span>
@@ -199,12 +199,12 @@
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>财务负责人手机号：</span>
-                <input type="text" name="financer_mobile" value="{$merchant.financer_mobile}" placeholder="请输入业务负责人">
+                <input type="text" name="financer_mobile" value="{$merchant.financer_mobile}" placeholder="请输入财务手机号">
                 <span class="bztips">只允许输入11位数字</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>财务负责人邮箱：</span>
-                <input type="text" name="financer_email" value="{$merchant.financer_email}" placeholder="请输入业务负责人">
+                <input type="text" name="financer_email" value="{$merchant.financer_email}" placeholder="请输入财务负责人邮箱">
                 <span class="bztips">需符合邮箱标准格式</span>
             </li>
         </ul>
@@ -225,7 +225,7 @@
             <li>
                 <span class="latips">登录密码：</span>
                 <input type="text" name="admin_password" value="" placeholder="请输入登录密码，留空则不修改">
-                <span class="bztips">允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成</span>
+                <span class="bztips">允许大小写数字、字母、特殊字符的8-16个字符，必须有其中三项组成</span>
             </li>
         </ul>
         <div style="clear: both;"></div>
@@ -298,7 +298,7 @@
         });
         $("body").on('change','#up_many_form_in',function(){
             var up_len=this.files.length;
-            if(up_len==0){
+            if(up_len<=0){
                 $('#up_many_form_in').attr('suffix','');
                 $('#up_many_form_in').attr('msize','');
                 return false;
@@ -359,6 +359,10 @@
             $('#up_one_form_in').click();
         });
         $("body").on('change','#up_one_form_in',function(){
+            var up_len=this.files.length;
+            if(up_len<=0){
+                return false;
+            }
             var ralate=$(this).attr('ralate');
             var suffix=$(this).attr('suffix');
             var msize=$(this).attr('msize');
@@ -416,31 +420,6 @@
             $('.addallimgno').attr('title','点击上传');
             $('.addallimgno').removeClass('addallimgno');
         });
-        //提交
-        $('#edit_form_submit').click(function(){
-            Dolphin.loading();
-            $.ajax({
-                type:'post',
-                url:'{:url("manage/merchant/edit")}',
-                data:$('#edit_form').serializeArray(),
-                dataType:'JSON',
-                success:function(data){
-                    Dolphin.loading('hide');
-                    if (data.code==200) {
-                        Dolphin.notify(data.msg, 'success');
-                        setTimeout(function () {
-                            location.href = '{:url("manage/merchant/edit",["id"=>$merchant["id"]])}';
-                        }, 1500);
-                    } else {
-                        Dolphin.notify(data.msg, 'danger');
-                    }
-                },
-                error:function(xhr,status,error){
-                    Dolphin.loading('hide');
-                    Dolphin.notify('服务器错误~', 'danger');
-                }
-            });
-        });
         //查出城市
         $('#select_province').change(function(){
             var val=$(this).val();
@@ -497,6 +476,210 @@
                     }
                 });
             }
+        });
+        //提交
+        $('#edit_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/merchant/edit")}',
+                data:$('#edit_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/merchant/edit",["id"=>$merchant["id"]])}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                        if(data.code==1001){
+                            $('input[name="company_name"]').addClass('error');
+                            $('input[name="company_name"]').focus();
+                            var company_name_li = $('input[name="company_name"]').parent().offset();      
+                            $("html,body").animate({scrollTop:company_name_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1002){
+                            $('input[name="shop_name"]').addClass('error');
+                            $('input[name="shop_name"]').focus();
+                            var shop_name_li = $('input[name="shop_name"]').parent().offset();      
+                            $("html,body").animate({scrollTop:shop_name_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1003){
+                            $('input[name="contract_no"]').addClass('error');
+                            $('input[name="contract_no"]').focus();
+                            var contract_no_li = $('input[name="contract_no"]').parent().offset();      
+                            $("html,body").animate({scrollTop:contract_no_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1004){
+                            $('input[name="contract_valid_start"]').addClass('error');
+                            $('input[name="contract_valid_start"]').focus();
+                            var contract_valid_start_li = $('input[name="contract_valid_start"]').parent().offset();      
+                            $("html,body").animate({scrollTop:contract_valid_start_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1005){
+                            $('input[name="contract_valid_end"]').addClass('error');
+                            $('input[name="contract_valid_end"]').focus();
+                            var contract_valid_end_li = $('input[name="contract_valid_end"]').parent().offset();      
+                            $("html,body").animate({scrollTop:contract_valid_end_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1006){
+                            $('select[name="licence_type"]').addClass('error');
+                            $('select[name="licence_type"]').focus();
+                            var licence_type_li = $('select[name="licence_type"]').parent().offset();      
+                            $("html,body").animate({scrollTop:licence_type_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1007){
+                            $('input[name="licence_no"]').addClass('error');
+                            $('input[name="licence_no"]').focus();
+                            var licence_no_li = $('input[name="licence_no"]').parent().offset();      
+                            $("html,body").animate({scrollTop:licence_no_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1008){
+                            $('select[name="licence_province_id"]').addClass('error');
+                            $('select[name="licence_province_id"]').focus();
+                            var licence_province_id_li = $('select[name="licence_province_id"]').parent().offset();      
+                            $("html,body").animate({scrollTop:licence_province_id_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1009){
+                            $('select[name="licence_city_id"]').addClass('error');
+                            $('select[name="licence_city_id"]').focus();
+                            var licence_city_id_li = $('select[name="licence_city_id"]').parent().offset();      
+                            $("html,body").animate({scrollTop:licence_city_id_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1010){
+                            $('select[name="licence_area_id"]').addClass('error');
+                            $('select[name="licence_area_id"]').focus();
+                            var licence_area_id_li = $('select[name="licence_area_id"]').parent().offset();      
+                            $("html,body").animate({scrollTop:licence_area_id_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1011){
+                            $('input[name="licence_address"]').addClass('error');
+                            $('input[name="licence_address"]').focus();
+                            var licence_address_li = $('input[name="licence_address"]').parent().offset();      
+                            $("html,body").animate({scrollTop:licence_address_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1012){
+                            $('input[name="licence_img"]').parent().find('.addimg').addClass('error');
+                            var licence_img_li = $('input[name="licence_img"]').parent().offset();      
+                            $("html,body").animate({scrollTop:licence_img_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1013){
+                            $('input[name="licence_valid_start"]').addClass('error');
+                            $('input[name="licence_valid_start"]').focus();
+                            var licence_valid_start_li = $('input[name="licence_valid_start"]').parent().offset();      
+                            $("html,body").animate({scrollTop:licence_valid_start_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1014){
+                            $('input[name="licence_valid_end"]').addClass('error');
+                            $('input[name="licence_valid_end"]').focus();
+                            var licence_valid_end_li = $('input[name="licence_valid_end"]').parent().offset();      
+                            $("html,body").animate({scrollTop:licence_valid_end_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1015){
+                            $('input[name="work_address"]').addClass('error');
+                            $('input[name="work_address"]').focus();
+                            var work_address_li = $('input[name="work_address"]').parent().offset();      
+                            $("html,body").animate({scrollTop:work_address_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1016){
+                            $('input[name="custom_tel"]').addClass('error');
+                            $('input[name="custom_tel"]').focus();
+                            var custom_tel_li = $('input[name="custom_tel"]').parent().offset();      
+                            $("html,body").animate({scrollTop:custom_tel_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1017){
+                            $('input[name="corporation_name"]').addClass('error');
+                            $('input[name="corporation_name"]').focus();
+                            var corporation_name_li = $('input[name="corporation_name"]').parent().offset();      
+                            $("html,body").animate({scrollTop:corporation_name_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1018){
+                            $('input[name="mobile"]').addClass('error');
+                            $('input[name="mobile"]').focus();
+                            var mobile_li = $('input[name="mobile"]').parent().offset();      
+                            $("html,body").animate({scrollTop:mobile_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1019){
+                            $('input[name="identcard_no"]').addClass('error');
+                            $('input[name="identcard_no"]').focus();
+                            var identcard_no_li = $('input[name="identcard_no"]').parent().offset();      
+                            $("html,body").animate({scrollTop:identcard_no_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1020){
+                            $('input[name="identcard_front_img"]').parent().find('.addimg').addClass('error');
+                            var identcard_front_img_li = $('input[name="identcard_front_img"]').parent().offset();      
+                            $("html,body").animate({scrollTop:identcard_front_img_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1021){
+                            $('input[name="identcard_back_img"]').parent().find('.addimg').addClass('error');
+                            var identcard_back_img_li = $('input[name="identcard_back_img"]').parent().offset();      
+                            $("html,body").animate({scrollTop:identcard_back_img_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1022){
+                            $('input[name="businesser_name"]').addClass('error');
+                            $('input[name="businesser_name"]').focus();
+                            varbusinesser_name_li = $('input[name="businesser_name"]').parent().offset();      
+                            $("html,body").animate({scrollTop:businesser_name_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1023){
+                            $('input[name="businesser_tel_1"]').addClass('error');
+                            $('input[name="businesser_tel_1"]').focus();
+                            var businesser_tel_1_li = $('input[name="businesser_tel_1"]').parent().offset();      
+                            $("html,body").animate({scrollTop:businesser_tel_1_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1024){
+                            $('input[name="businesser_tel_2"]').addClass('error');
+                            $('input[name="businesser_tel_2"]').focus();
+                            var businesser_tel_2_li = $('input[name="businesser_tel_2"]').parent().offset();      
+                            $("html,body").animate({scrollTop:businesser_tel_2_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1025){
+                            $('input[name="businesser_mobile"]').addClass('error');
+                            $('input[name="businesser_mobile"]').focus();
+                            var businesser_mobile_li = $('input[name="businesser_mobile"]').parent().offset();      
+                            $("html,body").animate({scrollTop:businesser_mobile_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1026){
+                            $('input[name="businesser_email"]').addClass('error');
+                            $('input[name="businesser_email"]').focus();
+                            var businesser_email_li = $('input[name="businesser_email"]').parent().offset();      
+                            $("html,body").animate({scrollTop:businesser_email_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1027){
+                            $('input[name="financer_name"]').addClass('error');
+                            $('input[name="financer_name"]').focus();
+                            var financer_name_li = $('input[name="financer_name"]').parent().offset();      
+                            $("html,body").animate({scrollTop:financer_name_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1028){
+                            $('input[name="financer_tel_1"]').addClass('error');
+                            $('input[name="financer_tel_1"]').focus();
+                            var financer_tel_1_li = $('input[name="financer_tel_1"]').parent().offset();      
+                            $("html,body").animate({scrollTop:financer_tel_1_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1029){
+                            $('input[name="financer_tel_2"]').addClass('error');
+                            $('input[name="financer_tel_2"]').focus();
+                            var financer_tel_2_li = $('input[name="financer_tel_2"]').parent().offset();      
+                            $("html,body").animate({scrollTop:financer_tel_2_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1030){
+                            $('input[name="financer_mobile"]').addClass('error');
+                            $('input[name="financer_mobile"]').focus();
+                            var financer_mobile_li = $('input[name="financer_mobile"]').parent().offset();      
+                            $("html,body").animate({scrollTop:financer_mobile_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1031){
+                            $('input[name="financer_email"]').addClass('error');
+                            $('input[name="financer_email"]').focus();
+                            var financer_email_li = $('input[name="financer_email"]').parent().offset();      
+                            $("html,body").animate({scrollTop:financer_email_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1032){
+                            $('input[name="admin_name"]').addClass('error');
+                            $('input[name="admin_name"]').focus();
+                            var admin_name_li = $('input[name="admin_name"]').parent().offset();      
+                            $("html,body").animate({scrollTop:admin_name_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1033){
+                            $('input[name="admin_password"]').addClass('error');
+                            $('input[name="admin_password"]').focus();
+                            var admin_password_li = $('input[name="admin_password"]').parent().offset();      
+                            $("html,body").animate({scrollTop:admin_password_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1034){
+                            $('.add_edit .con ul li .addimg2').addClass('error');
+                            var imgs_li = $('.add_edit .con ul li .addimg2').parent().prev().offset();      
+                            $("html,body").animate({scrollTop:imgs_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1035){
+                            $('input[name="state"]:last').parent().after('<span class="error">！必须选择</span>');
+                            var state_li = $('input[name="state"]:last').parent().parent().offset();      
+                            $("html,body").animate({scrollTop:state_li.top - "450" + "px"}, 0);
+                        }
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        $('body').on('blur','.add_edit .con ul li input[type="text"],.add_edit .con ul li input[type="password"],.add_edit .con ul li select,.add_edit .con ul li textarea',function(){
+            $(this).removeClass('error');
+        });
+        $('.content').click(function(){
+            $('.add_edit .con ul li .addimg').removeClass('error');
+            $('.add_edit .con ul li .addimg2').removeClass('error');
+            $('.add_edit .con ul li span.error').remove();
         });
     });
 </script>

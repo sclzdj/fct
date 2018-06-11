@@ -101,6 +101,8 @@ UE.Editor.prototype.getActionUrl = function(action) {
             $('#up_one_form_in').click();
         });
         $("body").on('change','#up_one_form_in',function(){
+            var up_len=this.files.length;
+            if(up_len<=0) return false;
             var ralate=$(this).attr('ralate');
             var suffix=$(this).attr('suffix');
             var msize=$(this).attr('msize');
@@ -168,6 +170,32 @@ UE.Editor.prototype.getActionUrl = function(action) {
                         }, 1500);
                     } else {
                         Dolphin.notify(data.msg, 'danger');
+                        if(data.code==1001){
+                            $('input[name="title"]').addClass('error');
+                            $('input[name="title"]').focus();
+                            var title_li = $('input[name="title"]').parent().offset();      
+                            $("html,body").animate({scrollTop:title_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1002){
+                            $('input[name="writer"]').addClass('error');
+                            $('input[name="writer"]').focus();
+                            var writer_li = $('input[name="writer"]').parent().offset();      
+                            $("html,body").animate({scrollTop:writer_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1003){
+                            $('.add_edit .con ul li .addimg').addClass('error');
+                            var img_li = $('input[name="img"]').parent().offset();      
+                            $("html,body").animate({scrollTop:img_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1004){
+                            $('textarea[name="describe"]').addClass('error');
+                            $('textarea[name="describe"]').focus();
+                            var describe_li = $('textarea[name="describe"]').parent().offset();      
+                            $("html,body").animate({scrollTop:describe_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1005){
+                            UE.getEditor('editor').focus();
+                        }else if(data.code==1006){
+                            $('input[name="ground_at"]').addClass('error');
+                            var ground_at_li = $('input[name="ground_at"]').parent().offset();      
+                            $("html,body").animate({scrollTop:ground_at_li.top - "450" + "px"}, 0);
+                        }
                     }
                 },
                 error:function(xhr,status,error){
@@ -175,6 +203,12 @@ UE.Editor.prototype.getActionUrl = function(action) {
                     Dolphin.notify('服务器错误~', 'danger');
                 }
             });
+        });
+        $('body').on('blur','.add_edit .con ul li input[type="text"],.add_edit .con ul li input[type="password"],.add_edit .con ul li select,.add_edit .con ul li textarea',function(){
+            $(this).removeClass('error');
+        });
+        $('.content').click(function(){
+            $('.add_edit .con ul li .addimg').removeClass('error');
         });
     });
 </script>

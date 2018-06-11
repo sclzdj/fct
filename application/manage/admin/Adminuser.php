@@ -65,49 +65,49 @@ class Adminuser extends Admin
 		if ($this->request->isPost()) {
             $data = $this->request->post();
             if($data['username']===''){
-                return json_return('F','1000','登录名必填');
+                return json_return('F','1001','登录名必填');
             }
             if(!preg_match('/^[A-Za-z0-9@]{3,20}$/',$data['username'])) {
-                return json_return('F','1000','登录名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
+                return json_return('F','1001','登录名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
             }
             if($data['password0']===''){
-                return json_return('F','1000','登录密码必填');
+                return json_return('F','1002','登录密码必填');
+            }
+            if(!preg_match('/^[A-Za-z0-9!@#$%^&*-,.?;]{8,16}$/',$data['password0'])) {
+                return json_return('F','1002','登录密码允许大小写数字、字母、特殊字符的8-16个字符，必须有其中三项组成');
+            }
+            $a=preg_match('/[0-9]/', $data['password0']);
+            $b=preg_match('/[a-zA-Z]/', $data['password0']);
+            $c=preg_match('/[!@#$%^&*-,.?;]/', $data['password0']);
+            if(!($a && $b && $c)){
+                return json_return('F','1002','登录密码允许大小写数字、字母、特殊字符的8-16个字符，必须有其中三项组成');
             }
             if($data['password']===''){
-                return json_return('F','1000','确认登录密码必填');
+                return json_return('F','1003','确认登录密码必填');
             }
             if($data['password0']!==$data['password']){
-                return json_return('F','1000','两次密码输入不一致');
-            }
-            if(!preg_match('/^[A-Za-z0-9@_-]{8,16}$/',$data['password'])) {
-                return json_return('F','1000','登录密码允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成');
-            }
-            $a=preg_match('/[0-9]/', $data['password']);
-            $b=preg_match('/[a-zA-Z]/', $data['password']);
-            $c=preg_match('/[_-]/', $data['password']);
-            if(!($a && $b && $c)){
-                return json_return('F','1000','登录密码允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成');
+                return json_return('F','1003','两次密码输入不一致');
             }
             if($data['nickname']===''){
-                return json_return('F','1000','姓名必填');
+                return json_return('F','1004','姓名必填');
             }
             if(!preg_match('/^[\x{4e00}-\x{9fa5}]{2,8}$/u',$data['nickname'])) {
-                return json_return('F','1000','姓名只允许输入汉字，限制2-8个字符');
+                return json_return('F','1004','姓名只允许输入汉字，限制2-8个字符');
             }
             if($data['job']===''){
-                return json_return('F','1000','职位必填');
+                return json_return('F','1005','职位必填');
             }
-            if(!preg_match('/^.{4,8}$/',$data['job'])) {
-                return json_return('F','1000','职位限制4-8个字符');
+            if(mb_strlen($data['job'],'utf8')<2 || mb_strlen($data['job'],'utf8')>8) {
+                return json_return('F','1005','职位限制2-8个字符');
             }
             if($data['mobile']===''){
-                return json_return('F','1000','手机号必填');
+                return json_return('F','1006','手机号必填');
             }
             if(!preg_match('/^[0-9]{11}$/',$data['mobile'])) {
-                return json_return('F','1000','手机号只允许输入11位数字');
+                return json_return('F','1006','手机号只允许输入11位数字');
             }
             if($data['role']===''){
-                return json_return('F','1000','角色必选');
+                return json_return('F','1007','角色必选');
             }
             $ismerchant=ismerchant();
             if($ismerchant){
@@ -120,7 +120,7 @@ class Adminuser extends Admin
                 $new_roles[]=$v['id'];
             }
             if(!in_array($data['role'], $new_roles)){
-                return json_return('F','1000','角色不存在');
+                return json_return('F','1007','角色不存在');
             }
             $insert=[];
             $insert['username']=$data['username'];
@@ -166,48 +166,48 @@ class Adminuser extends Admin
                 return json_return('F','1000','请求错误');
             }
             if($data['username']===''){
-                return json_return('F','1000','登录名必填');
+                return json_return('F','1001','登录名必填');
             }
             if(!preg_match('/^[A-Za-z0-9@]{3,20}$/',$data['username'])) {
-                return json_return('F','1000','登录名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
+                return json_return('F','1001','登录名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
             }
             if($data['password0']!==''){
+                if(!preg_match('/^[A-Za-z0-9!@#$%^&*-,.?;]{8,16}$/',$data['password0'])) {
+                    return json_return('F','1002','登录密码允许大小写数字、字母、特殊字符的8-16个字符，必须有其中三项组成');
+                }
+                $a=preg_match('/[0-9]/', $data['password0']);
+                $b=preg_match('/[a-zA-Z]/', $data['password0']);
+                $c=preg_match('/[!@#$%^&*-,.?;]/', $data['password0']);
+                if(!($a && $b && $c)){
+                    return json_return('F','1002','登录密码允许大小写数字、字母、特殊字符的8-16个字符，必须有其中三项组成');
+                }
                 if($data['password']===''){
-                    return json_return('F','1000','确认登录密码必填');
+                    return json_return('F','1003','确认登录密码必填');
                 }
                 if($data['password0']!==$data['password']){
-                    return json_return('F','1000','两次密码输入不一致');
-                }
-                if(!preg_match('/^[A-Za-z0-9@_-]{8,16}$/',$data['password'])) {
-                    return json_return('F','1000','登录密码允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成');
-                }
-                $a=preg_match('/[0-9]/', $data['password']);
-                $b=preg_match('/[a-zA-Z]/', $data['password']);
-                $c=preg_match('/[_-]/', $data['password']);
-                if(!($a && $b && $c)){
-                    return json_return('F','1000','登录密码允许大小写数字、字母、特殊字符(_和-)的8-16个字符，必须有其中三项组成');
+                    return json_return('F','1003','两次密码输入不一致');
                 }
             } 
             if($data['nickname']===''){
-                return json_return('F','1000','姓名必填');
+                return json_return('F','1004','姓名必填');
             }
             if(!preg_match('/^[\x{4e00}-\x{9fa5}]{2,8}$/u',$data['nickname'])) {
-                return json_return('F','1000','姓名只允许输入汉字，限制2-8个字符');
+                return json_return('F','1004','姓名只允许输入汉字，限制2-8个字符');
             }
             if($data['job']===''){
-                return json_return('F','1000','职位必填');
+                return json_return('F','1005','职位必填');
             }
-            if(!preg_match('/^.{4,8}$/',$data['job'])) {
-                return json_return('F','1000','职位限制4-8个字符');
+            if(mb_strlen($data['job'],'utf8')<2 || mb_strlen($data['job'],'utf8')>8) {
+                return json_return('F','1005','职位限制2-8个字符');
             }
             if($data['mobile']===''){
-                return json_return('F','1000','手机号必填');
+                return json_return('F','1006','手机号必填');
             }
             if(!preg_match('/^[0-9]{11}$/',$data['mobile'])) {
-                return json_return('F','1000','手机号只允许输入11位数字');
+                return json_return('F','1006','手机号只允许输入11位数字');
             }
             if($data['role']===''){
-                return json_return('F','1000','角色必选');
+                return json_return('F','1007','角色必选');
             }
             $ismerchant=ismerchant();
             if($ismerchant){

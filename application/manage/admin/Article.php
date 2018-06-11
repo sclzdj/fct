@@ -60,16 +60,16 @@ class Article extends Admin
 		if ($this->request->isPost()) {
             $data = $this->request->post();
             if($data['title']===''){
-                return json_return('F','1000','文章标题必填');
+                return json_return('F','1001','文章标题必填');
             }
             if(mb_strlen($data['title'],'utf8')>40) {
-                return json_return('F','1000','文章标题最多40个字');
+                return json_return('F','1001','文章标题最多40个字');
             }
             if($data['writer']===''){
-                return json_return('F','1000','作者必填');
+                return json_return('F','1002','作者必填');
             }
-            if(mb_strlen($data['writer'],'utf8')>40) {
-                return json_return('F','1000','作者最多8个字');
+            if(mb_strlen($data['writer'],'utf8')>8) {
+                return json_return('F','1002','作者最多8个字');
             }
             if($data['ground_at']===''){
                 $data['ground_at']=$now;
@@ -77,17 +77,17 @@ class Article extends Admin
                 $data['ground_at']=strtotime($data['ground_at'].' 00:00:00');
             }
             if($data['img']===''){
-                return json_return('F','1000','图片必传');
+                return json_return('F','1003','图片必传');
             }
             if($data['describe']===''){
-                return json_return('F','1000','描述必填');
+                return json_return('F','1004','描述必填');
             }
             if(mb_strlen($data['describe'],'utf8')>200) {
-                return json_return('F','1000','描述最多200个字');
+                return json_return('F','1004','描述最多200个字');
             }
             if(strip_tags($_POST['content'])!==''){
                 if(mb_strlen(strip_tags($_POST['content']),'utf8')>3000) {
-                    return json_return('F','1000','正文最多3000个字');
+                    return json_return('F','1005','正文最多3000个字');
                 }
             }
             $insert=[];
@@ -121,33 +121,33 @@ class Article extends Admin
                 return json_return('F','500','请求错误');
             }
             if($data['title']===''){
-                return json_return('F','1000','文章标题必填');
+                return json_return('F','1001','文章标题必填');
             }
             if(mb_strlen($data['title'],'utf8')>40) {
-                return json_return('F','1000','文章标题最多40个字');
+                return json_return('F','1001','文章标题最多40个字');
             }
             if($data['writer']===''){
-                return json_return('F','1000','作者必填');
+                return json_return('F','1002','作者必填');
             }
-            if(mb_strlen($data['writer'],'utf8')>40) {
-                return json_return('F','1000','作者最多8个字');
+            if(mb_strlen($data['writer'],'utf8')>8) {
+                return json_return('F','1002','作者最多8个字');
             }
             if($data['ground_at']===''){
-                return json_return('F','1000','上架日期必选');
+                return json_return('F','1006','上架日期必选');
             }
             if($data['img']===''){
-                return json_return('F','1000','图片必传');
+                return json_return('F','1003','图片必传');
             }
             if($data['describe']===''){
-                return json_return('F','1000','描述必填');
+                return json_return('F','1004','描述必填');
             }
             if(mb_strlen($data['describe'],'utf8')>200) {
-                return json_return('F','1000','描述最多200个字');
+                return json_return('F','1004','描述最多200个字');
             }
             $data['ground_at']=strtotime($data['ground_at'].' 00:00:00');
             if(strip_tags($_POST['content'])!==''){
                 if(mb_strlen(strip_tags($_POST['content']),'utf8')>3000) {
-                    return json_return('F','1000','正文最多3000个字');
+                    return json_return('F','1005','正文最多3000个字');
                 }
             }
             $update=[];

@@ -31,13 +31,13 @@ class Iframe extends Common
         }
         if($filter['brand_id']!==''){
             $map['a.brand_id']=$filter['brand_id'];
-            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'is_show'=>'1'])->select();
         }else{
             $serie=[];
         }
         if($filter['serie_id']!==''){
             $map['a.serie_id']=$filter['serie_id'];
-            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'is_show'=>'1'])->select();
             foreach ($car as $k => $v) {
                 $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
             }
@@ -68,7 +68,7 @@ class Iframe extends Common
             $data[$key]['price']=number_format($value['price'],2,'.','');
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -159,13 +159,13 @@ class Iframe extends Common
         }
         if($filter['brand_id']!==''){
             $map['a.brand_id']=$filter['brand_id'];
-            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'is_show'=>'1'])->select();
         }else{
             $serie=[];
         }
         if($filter['serie_id']!==''){
             $map['a.serie_id']=$filter['serie_id'];
-            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'is_show'=>'1'])->select();
             foreach ($car as $k => $v) {
                 $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
             }
@@ -197,7 +197,7 @@ class Iframe extends Common
             $data[$key]['price']=number_format($value['price'],2,'.','');
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -230,13 +230,13 @@ class Iframe extends Common
         }
         if($filter['brand_id']!==''){
             $map['a.brand_id']=$filter['brand_id'];
-            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'is_show'=>'1'])->select();
         }else{
             $serie=[];
         }
         if($filter['serie_id']!==''){
             $map['a.serie_id']=$filter['serie_id'];
-            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'is_show'=>'1'])->select();
             foreach ($car as $k => $v) {
                 $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
             }
@@ -276,7 +276,7 @@ class Iframe extends Common
             $data[$key]['price']=number_format($value['price'],2,'.','');
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -309,13 +309,13 @@ class Iframe extends Common
         }
         if($filter['brand_id']!==''){
             $map['a.brand_id']=$filter['brand_id'];
-            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'p_chexi_id'=>['neq',''],'p_chexi'=>['neq','']])->select();
+            $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$filter['brand_id'],'is_show'=>'1'])->select();
         }else{
             $serie=[];
         }
         if($filter['serie_id']!==''){
             $map['a.serie_id']=$filter['serie_id'];
-            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'p_chexing_id'=>['neq',''],'p_chexingmingcheng'=>['neq','']])->select();
+            $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$filter['serie_id'],'is_show'=>'1'])->select();
             foreach ($car as $k => $v) {
                 $car[$k]['p_chexingmingcheng_jx']=str_replace([$v['p_pinpai'],$v['p_chexi']], ['',''], $v['p_chexingmingcheng']);
             }
@@ -355,7 +355,7 @@ class Iframe extends Common
             $data[$key]['price']=number_format($value['price'],2,'.','');
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['p_pinpai_id'=>['neq',''],'p_pinpai'=>['neq','']])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,

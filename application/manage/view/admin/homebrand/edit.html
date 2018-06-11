@@ -72,6 +72,8 @@
             $('#up_one_form_in').click();
         });
         $("body").on('change','#up_one_form_in',function(){
+            var up_len=this.files.length;
+            if(up_len<=0) return false;
             var ralate=$(this).attr('ralate');
             var suffix=$(this).attr('suffix');
             var msize=$(this).attr('msize');
@@ -134,6 +136,21 @@
                         }, 1500);
                     } else {
                         Dolphin.notify(data.msg, 'danger');
+                        if(data.code==1001){
+                            $('.add_edit .con ul li .addimg').addClass('error');
+                            var img_li = $('input[name="img"]').parent().offset();      
+                            $("html,body").animate({scrollTop:img_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1002){
+                            $('input[name="brand"]').addClass('error');
+                            $('input[name="brand"]').focus();
+                            var brand_li = $('input[name="brand"]').parent().offset();      
+                            $("html,body").animate({scrollTop:brand_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1003){
+                            $('select[name="brand_id"]').addClass('error');
+                            $('select[name="brand_id"]').focus();
+                            var brand_id_li = $('select[name="brand_id"]').parent().offset();      
+                            $("html,body").animate({scrollTop:brand_id_li.top - "450" + "px"}, 0);
+                        }
                     }
                 },
                 error:function(xhr,status,error){
@@ -141,6 +158,12 @@
                     Dolphin.notify('服务器错误~', 'danger');
                 }
             });
+        });
+        $('body').on('blur','.add_edit .con ul li input[type="text"],.add_edit .con ul li input[type="password"],.add_edit .con ul li select,.add_edit .con ul li textarea',function(){
+            $(this).removeClass('error');
+        });
+        $('.content').click(function(){
+            $('.add_edit .con ul li .addimg').removeClass('error');
         });
     });
 </script>

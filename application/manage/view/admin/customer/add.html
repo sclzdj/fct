@@ -98,6 +98,7 @@
     $(function(){
         //选择车源
         $('#select_source').click(function(){
+            $(this).removeClass('error');
             $('#iframe_big_box').attr('isshow','1');
             $('html,body').css({'overflow':'hidden','height':'100%'});
             $('#iframe_big_box').show();
@@ -126,31 +127,6 @@
             var len = $(this).val().length;
             $(this).parent().find('.numtips b').html(len);
         });
-        //提交
-        $('#add_form_submit').click(function(){
-            Dolphin.loading();
-            $.ajax({
-                type:'post',
-                url:'{:url("manage/customer/add")}',
-                data:$('#add_form').serializeArray(),
-                dataType:'JSON',
-                success:function(data){
-                    Dolphin.loading('hide');
-                    if (data.code==200) {
-                        Dolphin.notify(data.msg, 'success');
-                        setTimeout(function () {
-                            location.href = '{:url("manage/customer/add")}';
-                        }, 1500);
-                    } else {
-                        Dolphin.notify(data.msg, 'danger');
-                    }
-                },
-                error:function(xhr,status,error){
-                    Dolphin.loading('hide');
-                    Dolphin.notify('服务器错误~', 'danger');
-                }
-            });
-        });
         //查出城市
         $('#select_province').change(function(){
             var val=$(this).val();
@@ -178,6 +154,83 @@
                     }
                 });
             }
+        });
+        //提交
+        $('#add_form_submit').click(function(){
+            Dolphin.loading();
+            $.ajax({
+                type:'post',
+                url:'{:url("manage/customer/add")}',
+                data:$('#add_form').serializeArray(),
+                dataType:'JSON',
+                success:function(data){
+                    Dolphin.loading('hide');
+                    if (data.code==200) {
+                        Dolphin.notify(data.msg, 'success');
+                        setTimeout(function () {
+                            location.href = '{:url("manage/customer/add")}';
+                        }, 1500);
+                    } else {
+                        Dolphin.notify(data.msg, 'danger');
+                        if(data.code==1001){
+                            $('input[name="name"]').addClass('error');
+                            $('input[name="name"]').focus();
+                            var name_li = $('input[name="name"]').parent().offset();      
+                            $("html,body").animate({scrollTop:name_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1002){
+                            $('input[name="mobile"]').addClass('error');
+                            $('input[name="mobile"]').focus();
+                            var mobile_li = $('input[name="mobile"]').parent().offset();      
+                            $("html,body").animate({scrollTop:mobile_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1003){
+                            $('input[name="sex"]:last').parent().after('<span class="error">！必须选择</span>');
+                            var sex_li = $('input[name="sex"]:last').parent().parent().offset();      
+                            $("html,body").animate({scrollTop:sex_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1004){
+                            $('select[name="province_id"]').addClass('error');
+                            $('select[name="province_id"]').focus();
+                            var province_id_li = $('select[name="province_id"]').parent().offset();      
+                            $("html,body").animate({scrollTop:province_id_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1005){
+                            $('select[name="city_id"]').addClass('error');
+                            $('select[name="city_id"]').focus();
+                            var city_id_li = $('select[name="city_id"]').parent().offset();      
+                            $("html,body").animate({scrollTop:city_id_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1006){
+                            $('#select_source').addClass('error');
+                            var select_source_li = $('#select_source').parent().offset();      
+                            $("html,body").animate({scrollTop:select_source_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1007){
+                            $('select[name="source"]').addClass('error');
+                            $('select[name="source"]').focus();
+                            var source_li = $('select[name="source"]').parent().offset();      
+                            $("html,body").animate({scrollTop:source_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1008){
+                            $('select[name="state"]').addClass('error');
+                            $('select[name="state"]').focus();
+                            var state_li = $('select[name="state"]').parent().offset();      
+                            $("html,body").animate({scrollTop:state_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1009){
+                            $('textarea[name="remark"]').addClass('error');
+                            $('textarea[name="remark"]').focus();
+                            var remark_li = $('textarea[name="remark"]').parent().offset();      
+                            $("html,body").animate({scrollTop:remark_li.top - "450" + "px"}, 0);
+                        }
+                    }
+                },
+                error:function(xhr,status,error){
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                }
+            });
+        });
+        $('body').on('blur','.add_edit .con ul li input[type="text"],.add_edit .con ul li input[type="password"],.add_edit .con ul li select,.add_edit .con ul li textarea',function(){
+            $(this).removeClass('error');
+        });
+        $('.content').click(function(){
+            $('.add_edit .con ul li .addimg').removeClass('error');
+            $('.add_edit .con ul li button').removeClass('error');
+            $('.add_edit .con ul li span.error').remove();
         });
     });
 </script>
