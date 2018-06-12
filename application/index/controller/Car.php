@@ -85,11 +85,11 @@ class Car extends Common
                 $pix['attr']=[];
                 foreach ($value['attr'] as $k => $v) {
                     $zix=[];
-                    if($car[$k]!=='' && $car[$k]!='-' && $car[$k]!='●' && $car[$k]!='○'){
+                    //if($car[$k]!=='' && $car[$k]!='-' && $car[$k]!='●' && $car[$k]!='○'){
                         $zix['name']=$v;
                         $zix['value']=$car[$k];
                         $pix['attr'][]=$zix;
-                    }
+                    //}
                 }
                 if($pix['attr']){
                     $data[]=$pix;
