@@ -359,16 +359,18 @@
 .car_box .con ul{list-style: none;padding: 0;margin: 0;}
 .car_box .con li{list-style: none;padding: 0;margin: 0; float: left;width: 33%;height: 30px;line-height: 30px;font-size: 14px;padding: 0 2%;}
 .car_box .con li.chang{width: 100%;height: auto;}
+.car_box .con h5{font-size: 14px;display: inline-block;padding:0 20px;height: 40px;line-height: 40px;margin:20px 15px;width: 200px;background: #f9f9f9;text-align: center; }
+.car_box .con h5:first-child{margin-top: 0px;}
 </style>
 <div class="car_box">
     <div class="con">
-        <div class="add_edit" style="margin-top: 10px;margin-bottom: 10px;">
-            <div class="title" style="height: 40px;line-height: 40px;">参数详情</div>
+        <div class="add_edit" style="margin-top: 0px;margin-bottom: 10px;">
+            <div class="title">参数详情</div>
             <div style="clear: both;"></div>
         </div>
-        <ul>
-            
-        </ul>
+        <div class="attr">
+
+        </div>
         <div style="clear: both;"></div>
         <div style="padding: 20px auto; text-align: center;margin-top: 20px;">
             <a href="javascript:;" class="btn btn-minw btn-primary rbt close_car">关&nbsp;闭</a>
@@ -396,7 +398,7 @@
             Dolphin.loading();
             $.ajax({
                 type:'post',
-                url:'{:url("index/car/look")}',
+                url:'{:url("index/car/categorylook")}',
                 data:{id:car_id},
                 dataType:'JSON',
                 success:function(data){
@@ -404,13 +406,13 @@
                     if (data.code==200) {
                         var html='';
                         $(data.data).each(function(k,v){
-                            var chang='';
-                            if(v.type){
-                                chang=' class="chang"';
-                            }
-                            html+='<li'+chang+'>'+v.name+'：'+v.value+'</li>';
+                            html+='<h5>'+v.title+'</h5><ul>';
+                            $(v.attr).each(function(_k,_v){
+                                html+='<li>'+_v.name+'：'+_v.value+'</li>';
+                            });
+                            html+='</ul><div style="clear: both;"></div>';
                         });
-                        $('.car_box .con ul').html(html);
+                        $('.car_box .con .attr').html(html);
                         $('.car_box').show();
                     } else {
                         Dolphin.notify(data.msg, 'danger');

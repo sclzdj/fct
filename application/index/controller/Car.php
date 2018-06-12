@@ -71,4 +71,34 @@ class Car extends Common
         }
         return json($data);
     }
+    //查看车型（已分类）
+    public function categorylook(){
+        $car_attr=db('configs')->where('name','car_attr_category')->value('value');
+        $car_attr=json_decode($car_attr,true);
+        $id=input('param.id');
+        $car=db('cars')->where(['p_chexing_id'=>$id])->find();
+        if($car){
+            $data=[];
+            foreach ($car_attr as $key => $value) {
+                $pix=[];
+                $pix['title']=$value['title'];
+                $pix['attr']=[];
+                foreach ($value['attr'] as $k => $v) {
+                    $zix=[];
+                    if($car[$k]!=='' && $car[$k]!='-' && $car[$k]!='●' && $car[$k]!='○'){
+                        $zix['name']=$v;
+                        $zix['value']=$car[$k];
+                        $pix['attr'][]=$zix;
+                    }
+                }
+                if($pix['attr']){
+                    $data[]=$pix;
+                }
+            }
+            $data=['code'=>'200','msg'=>'请求成功','data'=>$data];
+        }else{
+            $data=['code'=>'500','msg'=>'请求错误'];
+        }
+        return json($data);
+    }
 }
