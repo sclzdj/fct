@@ -15,6 +15,7 @@
 .menu_auth{display: inline-block;border: 1px solid #ccc;padding: 10px 10px;vertical-align: middle;width: 100%;}
 .menu_auth .menu_auth_li{height: 30px;line-height: 30px;padding: 0 10px;vertical-align: middle;}
 .menu_auth .menu_auth_li img{height: 18px; width: 18px;line-height: 30px;display: inline-block;cursor: pointer;vertical-align: middle;}
+.menu_auth .menu_auth_li img.menu_none{cursor: default;}
 .menu_auth .menu_auth_li label{cursor: pointer; display: inline-block;vertical-align: middle;height: 30px;line-height: 30px;}
 .menu_auth .menu_auth_li input[type="checkbox"]{height: 18px;width: 18px;line-height: 30px;display: inline-block;vertical-align: middle;margin:0;}
 .menu_auth .menu_auth_li span.menu_title{height: 30px;line-height: 30px;display: inline-block;vertical-align: middle;}
@@ -62,7 +63,7 @@
                         {if condition='$pix'}
                         <img src="__ADMIN_IMG__/finecar/golle-down.png" class="menu_down" title="点击收起">
                         {else/}
-                        <img src="__ADMIN_IMG__/finecar/golle-none.png">
+                        <img src="__ADMIN_IMG__/finecar/golle-none.png" class="menu_none">
                         {/if}
                         <label>
                             <input type="checkbox" name="menu_auth[]" value="{$vo.id}" {if condition='in_array($vo.id,$admin_role.menu_auth)'}checked="checked"{/if}>
@@ -239,12 +240,12 @@
                 img_menu_down.prop('src','__ADMIN_IMG__/finecar/golle-right.png');
                 img_menu_down.addClass('menu_up');
                 img_menu_down.removeClass('menu_down');
+                img_menu_down.prop('title','点击展开');
                 var level=parseInt($(this).attr('level'));
                 if(level>1){
                     $(this).hide();
                 }
             });
-            $('.menu_auth').css('width',(menu_auth_width+22)+'px');
         });
         //全部展开
         $('body').on('click','.auth_btn_all .auth_btn_down',function(){
@@ -253,6 +254,7 @@
                 img_menu_up.prop('src','__ADMIN_IMG__/finecar/golle-down.png');
                 img_menu_up.addClass('menu_down');
                 img_menu_up.removeClass('menu_up');
+                img_menu_up.prop('title','点击收起');
                 var level=parseInt($(this).attr('level'));
                 if(level>1){
                     $(this).show();
@@ -274,6 +276,7 @@
             _this.prop('src','__ADMIN_IMG__/finecar/golle-right.png');
             _this.addClass('menu_up');
             _this.removeClass('menu_down');
+            _this.prop('title','点击展开');
         });
         //展开
         $('body').on('click','.menu_auth .menu_auth_li img.menu_up',function(){
@@ -291,6 +294,7 @@
             _this.prop('src','__ADMIN_IMG__/finecar/golle-down.png');
             _this.addClass('menu_down');
             _this.removeClass('menu_up');
+            _this.prop('title','点击收起');
         });
         //提交
         $('#edit_form_submit').click(function(){

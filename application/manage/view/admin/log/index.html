@@ -119,7 +119,7 @@
                 {$vo.id}                                    
             </td>
             <td>
-                {if condition='$vo.username==""'}
+                {if condition='$vo.username!==""'}
                     {$vo.username}
                 {else/}
                     <div style="color: #ccc;font-size: 10px;">该账户已删除</div>

@@ -703,4 +703,41 @@ class Carsource extends Admin
             return json_return('F','500','请求错误');
         }
     }
+    //打印价签
+    public function printig($id=''){
+        $car_source=db('car_sources')->where('id',$id)->find();
+        if($car_source){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($car_source['merchant_id']!=$ismerchant){
+                    return $this->error('请求错误');
+                }
+            }
+            $car_source['attr']=db('cars')->where('p_chexing_id',$car_source['car_id'])->find();
+            if($car_source['plate_city_id']>0){
+                $car_source['region_text']=db('regions')->where('id',$car_source['plate_city_id'])->value('name');
+            }else if($car_source['plate_province_id']>0){
+                $car_source['region_text']=db('regions')->where('id',$car_source['plate_province_id'])->value('name');
+            }else{
+                $car_source['region_text']='';
+            }
+            $car_source['created_at_str']=date('Y-m-d H:i',$car_source['created_at']);
+            $car_source['audit_at_str']=date('Y-m-d H:i',$car_source['audit_at']);
+            $car_source['price']=number_format($car_source['price']/100,2,'.','');
+            $car_source['guid_price']=number_format($car_source['guid_price']/100,2,'.','');
+            if($car_source['imgs']===''){
+                $car_source['imgs']=[];
+            }else{
+                $car_source['imgs']=explode(',', $car_source['imgs']);
+            }
+            //模板赋值
+            $this->assign([
+                'car_source'=>$car_source,
+            ]);
+            //渲染模板
+            return $this->fetch();
+        }else{
+            return $this->error('请求错误');
+        }
+    }
 }
