@@ -18,7 +18,7 @@
 
 
 <div class="add_edit">
-    <div class="con">
+    <div class="con" {if condition='!count($data)'}style="padding: 0;"{/if}>
         {php}
             $ismeunshow_move=ismeunshow("manage/homebrand/move");
             $ismeunshow_edit=ismeunshow("manage/homebrand/edit");

@@ -96,7 +96,9 @@ class Index extends Home
             die;
         } 
     }
+    //好车显示
     public function filtercar(){
+        die;
         set_time_limit(0);
         db('brands')->where('id','neq','0')->update(['is_show'=>'0']);
         db('series')->where('id','neq','0')->update(['is_show'=>'0']);
@@ -123,6 +125,56 @@ class Index extends Home
             }else{
                 db('brands')->where('id',$b['id'])->update(['is_show'=>'0']);
             }    
+        }
+        die('执行完成');
+    }
+    //精简品牌
+    public function easybrand(){
+        die;
+        set_time_limit(0);
+        $easy=['阿斯顿·马丁','阿尔法·罗密欧','保时捷','宝马','奔驰','宾利','巴博斯','保斐利','布加迪','大众','道奇','法拉利','丰田','福特','GMC','悍马','红旗','捷豹','柯尼塞克','柯尼塞格','凯迪拉克','劳斯莱斯','兰博基尼','雷克萨斯','路特斯','路虎','猎豹','林肯','雷诺','玛莎拉蒂','迈凯伦','迈巴赫','摩根','MINI','讴歌','乔治·巴顿','帕加尼','日产','Smart','世爵','特斯拉','沃尔沃','英菲尼迪','依维柯'];
+        $data=[];
+        $ids=[];
+        foreach ($easy as $k => $v) {
+            $brand=db('brands')->field('id,p_pinpai_id,p_pinpai,is_show')->where(" ( `p_pinpai` LIKE '%{$v}%' ) ")->select();
+            if($brand){
+                if($brand[0]['is_show']=='1'){
+                    $ids[]=$brand[0]['id'];
+                }
+            }
+            $data[$v]=$brand;
+        }
+        db('brands')->where('id','neq','0')->update(['is_show'=>'0']);
+        db('brands')->where('id','in',$ids)->update(['is_show'=>'1']);
+        /*dump($data);
+        dump($ids);
+        dump(db('brands')->where('is_show','1')->select());*/
+        die('执行完成');
+    }
+    //清空数据
+    public function cleardata(){
+        die;
+        set_time_limit(0);
+        //菜单表
+        db('admin_menu')->where('id','>=','335')->delete();
+        db()->query('alter table '.config('database.prefix').'admin_menu auto_increment=335');
+        //角色表
+        db('admin_role')->where('id','>=','4')->delete();
+        db()->query('alter table '.config('database.prefix').'admin_role auto_increment=4');
+        //账号表
+        db('admin_user')->where('id','>=','3')->delete();
+        db()->query('alter table '.config('database.prefix').'admin_user auto_increment=3');
+        //配置表
+        db('configs')->where('id','>=','5')->delete();
+        db()->query('alter table '.config('database.prefix').'configs auto_increment=5');
+        //贷款利率表
+        db('lending_rates')->where('id','>=','4')->delete();
+        db()->query('alter table '.config('database.prefix').'lending_rates auto_increment=4');
+        //下列表全部清空
+        $table=['admin_action','admin_log','articles','banners','car_sources','customers','evaluates','feedbacks','guess_likes','home_brands','logs','merchants','orders','sellcars','today_recomments','users','user_collect'];
+        foreach ($table as $k => $v) {
+            db($v)->where('id','neq','0')->delete();
+            db()->query('alter table '.config('database.prefix').$v.' auto_increment=1');
         }
         die('执行完成');
     }

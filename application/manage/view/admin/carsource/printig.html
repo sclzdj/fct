@@ -12,10 +12,10 @@
 	<style>
 	@page { size: landscape; }  
 	body{padding:0;margin: 0 auto;text-align: center;}
-	.print_box{width: 1250px; height: 896px;display: inline-block;}
+	.print_box{width: 1250px; display: inline-block;}
 	.print_box .top{height: 85px;background: #fff;text-align: center;}
 	.print_box .top img.img_top{height: 79px;margin: 3px auto;}
-	.print_box .con{height: 745px;}
+	.print_box .con{}
 	.print_box .con .t{height: 121px;background: #ffe600;padding:11px 0;overflow: hidden;}
 	.print_box .con .t .title{height: 61px;line-height:61px; text-align: center; width: 100%;overflow: hidden;font-size: 40px;font-weight: bold;color: #212425;}
 	.print_box .con .m{height: 480px;overflow: hidden;}
@@ -54,15 +54,9 @@
 					</div>
 				</div>
 				<div class="attr">
-					<li>发动机参数</li>
-					<li>后备轮胎参数</li>
-					<li>轮胎参数</li>
-					<li>投影仪参数</li>
-					<li>大灯参数</li>
-					<li>发动机参数</li>
-					<li>牵制尹立新参数</li>
-					<li>摄像头参数</li>
-					<li>混包参数</li>
+					{volist name="car_source.configs" id="vo"}
+					<li>{$vo}</li>
+					{/volist}
 				</div>
 			</div>
 		</div>
@@ -90,6 +84,7 @@
 		</div>
 	</div>
 </div>
+<div style="clear: both;"></div>
 <!--endprint-->
 <script language=javascript>
     function doPrint() { 

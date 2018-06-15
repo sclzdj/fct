@@ -54,13 +54,13 @@
                 <select name="brand_id">
                     <option value="">请选择</option>
                     {volist name="brand" id="vo"}
-                    <option value="{$vo.p_pinpai_id}" {if condition='$banner.terminal eq 0 && $banner.rate eq $vo.p_pinpai_id'}selected="selected"{/if}>{$vo.p_pinpai}</option>
+                    <option value="{$vo.p_pinpai_id}" {if condition='$banner.terminal eq 0 && $banner.relate eq $vo.p_pinpai_id'}selected="selected"{/if}>{$vo.p_pinpai}</option>
                     {/volist}
                 </select>
             </li>
             <li {if condition='$banner.terminal eq 0'}style="display: none;"{/if} id="url_li">
                 <span class="latips"><span class="required">*</span>链接地址：</span>
-                <input type="text" name="url" value="{if condition='$banner.terminal eq 1'}{$banner.rate}{/if}" placeholder="请输入链接地址">
+                <input type="text" name="url" value="{if condition='$banner.terminal eq 1'}{$banner.relate}{/if}" placeholder="请输入链接地址">
                 <span class="bztips">必须是http://或https://开头</span>
             </li>
         </ul>

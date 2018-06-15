@@ -35,7 +35,7 @@ class Adminmenu extends Admin
 		$now=time(); 
 		if ($this->request->isPost()) {
             $data = $this->request->post();
-            if(!isSupper() && $data['pid']<=320 && $data['pid']!=236) return json_return('F','500','封装好的权限只有开发者可操作！请在‘好车’权限上添加顶级权限在进行其他操作');
+            if(!isSupper() && $data['pid']<=334 && $data['pid']!=236) return json_return('F','500','封装好的权限只有开发者可操作！请在‘好车’权限上添加顶级权限在进行其他操作');
             if($data['pid']>0){
                 $admin_menu=db('admin_menu')->find($data['pid']);
                 if(!$admin_menu){
@@ -104,7 +104,7 @@ class Adminmenu extends Admin
         $now=time(); 
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            if(!isSupper() && $data['id']<=320) return json_return('F','500','封装好的权限只有开发者可操作！请在‘好车’权限上添加顶级权限在进行其他操作');
+            if(!isSupper() && $data['id']<=334) return json_return('F','500','封装好的权限只有开发者可操作！请在‘好车’权限上添加顶级权限在进行其他操作');
             if($data['id']>0){
                 $admin_menu=db('admin_menu')->find($data['id']);
                 if(!$admin_menu){
@@ -149,7 +149,7 @@ class Adminmenu extends Admin
     //删除
     public function delete($record=[]){
         $id=input('param.id');
-        if(!isSupper() && $id<=320) return json_return('F','500','封装好的权限只有开发者可操作！请在‘好车’权限上添加顶级权限在进行其他操作');
+        if(!isSupper() && $id<=334) return json_return('F','500','封装好的权限只有开发者可操作！请在‘好车’权限上添加顶级权限在进行其他操作');
         $admin_menu=db('admin_menu')->find($id);
         if(!$admin_menu){
             return json_return('F','500','请求错误');

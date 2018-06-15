@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>跳转提示 | {:config('web_site_title')} - DolphinPHP</title>
+    <title>跳转提示 | {:config('web_site_title')} </title>
 
     <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
@@ -42,11 +42,11 @@
 <!-- END Error Content -->
 
 <!-- Error Footer -->
-<div class="content pulldown text-muted text-center">
+<!-- <div class="content pulldown text-muted text-center">
     极简 · 极速 · 极致<br>
     海豚PHP，让开发更简单！<br>
     由 <a class="link-effect" href="http://www.dolphinphp.com">DolphinPHP</a> 强力驱动 <a class="link-effect" href="http://www.zrthink.com">卓锐软件</a> 倾情奉献
-</div>
+</div> -->
 <!-- END Error Footer -->
 
 <script type="text/javascript">

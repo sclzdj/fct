@@ -53,7 +53,7 @@ class Car extends Common
             $car_attr_en=json_decode($car_attr_en,true);
             $data=[];
             foreach ($car_attr_en as $k => $v) {
-                if($car[$v]!=='' && $car[$v]!='-' && $car[$v]!='●'){
+                if($car[$v]!==''){
                     $pix=[];
                     if($v=='p_waiguanyanse' || $v=='p_neishiyanse'){
                         $pix['type']=1;
@@ -62,6 +62,7 @@ class Car extends Common
                     }
                     $pix['name']=$car_attr_cn[$k];
                     $pix['value']=$car[$v];
+                    $pix['value']=str_replace(['-','●','○'],['无','标配','选装'],$pix['value']);
                     $data[]=$pix;
                 }
             }
@@ -85,11 +86,12 @@ class Car extends Common
                 $pix['attr']=[];
                 foreach ($value['attr'] as $k => $v) {
                     $zix=[];
-                    //if($car[$k]!=='' && $car[$k]!='-' && $car[$k]!='●' && $car[$k]!='○'){
+                    if($car[$k]!==''){
                         $zix['name']=$v;
                         $zix['value']=$car[$k];
+                        $zix['value']=str_replace(['-','●','○'],['无','标配','选装'],$zix['value']);
                         $pix['attr'][]=$zix;
-                    //}
+                    }
                 }
                 if($pix['attr']){
                     $data[]=$pix;

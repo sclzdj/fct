@@ -730,6 +730,74 @@ class Carsource extends Admin
             }else{
                 $car_source['imgs']=explode(',', $car_source['imgs']);
             }
+            $car=db('cars')->where(['p_chexing_id'=>$car_source['car_id']])->find();
+            $car_attr=db('configs')->where('name','car_attr_category')->value('value');
+            $car_attr=json_decode($car_attr,true);
+            $wb_attr=[];
+            $waibu=[];
+            foreach ($car_attr[4]['attr'] as $k => $v) {
+                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
+                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
+                        $v=str_replace('/后','',$v);
+                    }
+                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
+                        $v=str_replace('前/','',$v);
+                    }
+                    if(mb_strlen($v,'utf8')<=7){
+                        if(count($wb_attr)>=3){
+                            $waibu[]=$v;
+                        }else{
+                            $wb_attr[]=$v;
+                        }
+                    }
+                }
+            }
+            $nb_attr=[];
+            $neibu=[];
+            foreach ($car_attr[5]['attr'] as $k => $v) {
+                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
+                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
+                        $v=str_replace('/后','',$v);
+                    }
+                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
+                        $v=str_replace('前/','',$v);
+                    }
+                    if(mb_strlen($v,'utf8')<=7){
+                        if(count($nb_attr)>=3){
+                            $neibu[]=$v;
+                        }else{
+                            $nb_attr[]=$v;
+                        }
+                    }
+                }
+            }
+            $fz_attr=[];
+            $fuzhu=[];
+            foreach ($car_attr[6]['attr'] as $k => $v) {
+                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
+                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
+                        $v=str_replace('/后','',$v);
+                    }
+                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
+                        $v=str_replace('前/','',$v);
+                    }
+                    if(mb_strlen($v,'utf8')<=7){
+                        if(count($fz_attr)>=3){
+                            $fuzhu[]=$v;
+                        }else{
+                            $fz_attr[]=$v;
+                        }
+                    }
+                }
+            }
+            $attr=array_merge($wb_attr,$nb_attr,$fz_attr);
+            $count_attr=count($attr);
+            if($count_attr<9){
+                $attr_yu=array_merge($waibu,$neibu,$fuzhu);
+                $yu=array_slice($attr_yu, 0,9-$count_attr);
+                $attr=array_merge($attr,$yu);
+            }
+            $car_source['configs']=$attr;
             //模板赋值
             $this->assign([
                 'car_source'=>$car_source,

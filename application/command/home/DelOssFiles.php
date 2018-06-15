@@ -21,6 +21,7 @@ class DelOssFiles extends Command
     }
     protected function execute(Input $input, Output $output)
     {
+        set_time_limit(0);
         //放执行代码
         $now=time();
         //设置正在执行状态

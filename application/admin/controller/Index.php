@@ -16,6 +16,8 @@ use think\helper\Hash;
 use think\Db;
 use app\common\builder\ZBuilder;
 use app\user\model\User as UserModel;
+use app\admin\model\Menu as MenuModel;
+use app\user\model\Role as RoleModel;
 
 /**
  * 后台默认控制器
@@ -28,6 +30,18 @@ class Index extends Admin
      * @author 蔡伟明 <314013107@qq.com>
      * @return string
      */
+    protected function _initialize()
+    {
+        if(session('user_auth.role')>0 && session('user_auth.role')!='1' && request()->action()=='index'){
+            $default_module = RoleModel::where('id', session('user_auth.role'))->value('default_module');
+            $menu = MenuModel::get($default_module);
+            $menu_url = explode('/', $menu['url_value']);
+            role_auth();
+            $url = action('admin/ajax/getSidebarMenu', ['module_id' => $default_module, 'module' => $menu['module'], 'controller' => $menu_url[1]]);
+            header("Location:".$url);die;
+        } 
+        parent::_initialize();
+    }
     public function index()
     {
         $admin_pass = Db::name('admin_user')->where('id', 1)->value('password');
