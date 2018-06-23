@@ -21,11 +21,17 @@
     <div class="con">
     <div class='tab_con' id="con1">
         <ul>
-            <li>
-                <span class="latips">行驶证图片：</span>
-                <input type="hidden" name="driving_img" value="" class="driving_img">
-                <div class="addimg addoneimg" title="点击上传" ralate="driving_img" suffix='png,jpg,jpeg' msize='3145728'><img src="__ADMIN_IMG__/add.png"></div>
-                <span class="bztips">支持扩展名：png,jpg,jpeg，大小不超过3M</span>
+            <li class="li_cert_imgs">
+                <span class="latips">证件图片：</span>
+                <div style="display: inline-block;max-width: 70%;">
+                <div class="sortable">
+                </div>
+                <div style="clear: both;"></div>
+                <div class="addimg2 addallimg" title="点击上传" suffix='png,jpg,jpeg' msize='31457280' relate="cert_imgs" num="5"><img src="__ADMIN_IMG__/add.png"></div>
+                </div>
+            </li>
+            <li style="width: 100%;line-height: 20px;font-size: 12px;color: #999;margin:20px 10px;padding-left: 170px;">
+                提示：1.本地上传图片大小不超过30M，图片格式支持png,jpg,jpeg；2.您最多可上传5张图片；3.点击图片可以预览，拖拽图片可移动位置
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>车架号：</span>
@@ -163,13 +169,13 @@
                 <textarea name="car_condition" maxlength="1000" placeholder="请输入车况介绍" class="numtext"></textarea>
                 <span class="numtips">已输入<b>0</b>/1000个字</span>
             </li>
-            <li>
+            <li class="li_imgs">
                 <span class="latips"><span class="required">*</span>车源图片：</span>
                 <div style="display: inline-block;max-width: 70%;">
-                <div id="sortable">
+                <div class="sortable">
                 </div>
                 <div style="clear: both;"></div>
-                <div class="addimg2 addallimg" title="点击上传" suffix='png,jpg,jpeg' msize='31457280'><img src="__ADMIN_IMG__/add.png"></div>
+                <div class="addimg2 addallimg" title="点击上传" suffix='png,jpg,jpeg' msize='31457280' relate="imgs" num="15"><img src="__ADMIN_IMG__/add.png"></div>
                 </div>
             </li>
             <li style="width: 100%;line-height: 20px;font-size: 12px;color: #999;margin:20px 10px;padding-left: 170px;">
@@ -265,7 +271,7 @@
 </form>
 
 <form style="display: none;" id='up_one_form' enctype="multipart/form-data"><input type="file" name="file" id="up_one_form_in" ralate="" suffix="" msize=""></form>
-<form style="display: none;" id='up_many_form' enctype="multipart/form-data"><input type="file" name="file[]" id='up_many_form_in' multiple="multiple" suffix='' msize=''></form>
+<form style="display: none;" id='up_many_form' enctype="multipart/form-data"><input type="file" name="file[]" id='up_many_form_in' multiple="multiple" suffix='' msize='' relate='' num=''></form>
 
 <style>
 .car_box{position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background-color: rgba(0,0,0,0.4);display: none;  z-index: 9999;}
@@ -354,8 +360,12 @@
         $("body").on('click','.addallimg',function(){
             var suffix=$(this).attr('suffix');
             var msize=$(this).attr('msize');
+            var relate=$(this).attr('relate');
+            var num=$(this).attr('num');
             $('#up_many_form_in').attr('suffix',suffix);
             $('#up_many_form_in').attr('msize',msize);
+            $('#up_many_form_in').attr('relate',relate);
+            $('#up_many_form_in').attr('num',num);
             $('#up_many_form_in').click();
         });
         $("body").on('change','#up_many_form_in',function(){
@@ -363,10 +373,14 @@
             if(up_len<=0){
                 $('#up_many_form_in').attr('suffix','');
                 $('#up_many_form_in').attr('msize','');
+                $('#up_many_form_in').attr('relate','');
+                $('#up_many_form_in').attr('num','');
                 return false;
             }
-            var len=$('#sortable .imgall').length;
-            var max_len=15;
+            var relate=$(this).attr('relate');
+            var num=$(this).attr('num');
+            var len=$('.li_'+relate+' .sortable .imgall').length;
+            var max_len=num;
             if (max_len-len<up_len) {
                 Dolphin.notify('你最多还只能上传'+(max_len-len)+'张', 'danger');
                 return false;
@@ -386,17 +400,19 @@
                     Dolphin.loading('hide');
                     $('#up_many_form_in').attr('suffix','');
                     $('#up_many_form_in').attr('msize','');
+                    $('#up_many_form_in').attr('relate','');
+                    $('#up_many_form_in').attr('num','');
                     if (data.code==200) {
                         var html='';
                         $(data.data).each(function(k,v){
-                            html+='<div class="imgall"><img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除"><img src="'+v+'" onclick="window.open(\''+v+'\');" target="_blank" title="点击查看大图，拖拽调整顺序"><input type="hidden" name="imgs[]" value="'+v+'"></div>';
+                            html+='<div class="imgall"><img src="__ADMIN_IMG__/delimg.jpg" alt="删除按钮" class="delimg" title="点击删除"><img src="'+v+'" onclick="window.open(\''+v+'\');" target="_blank" title="点击查看大图，拖拽调整顺序"><input type="hidden" name="'+relate+'[]" value="'+v+'"></div>';
                         });
-                        $('#sortable').append(html);
-                        var new_len=$('#sortable .imgall').length;
+                        $('.li_'+relate+' .sortable').append(html);
+                        var new_len=$('.li_'+relate+' .sortable .imgall').length;
                         if(new_len>=max_len){
-                            $('.addallimg').addClass('addallimgno');
-                            $('.addallimg').attr('title','');
-                            $('.addallimg').removeClass('addallimg');
+                            $('.li_'+relate+' .addallimg').addClass('addallimgno');
+                            $('.li_'+relate+' .addallimg').attr('title','');
+                            $('.li_'+relate+' .addallimg').removeClass('addallimg');
                         }
                     } else {
                         Dolphin.notify(data.msg, 'danger');
@@ -406,6 +422,8 @@
                     Dolphin.loading('hide');
                     $('#up_many_form_in').attr('suffix','');
                     $('#up_many_form_in').attr('msize','');
+                    $('#up_many_form_in').attr('relate','');
+                    $('#up_many_form_in').attr('num','');
                     Dolphin.notify('服务器错误~', 'danger');
                 }
             });
@@ -461,8 +479,8 @@
         });
 
         //拖拽排序
-        $( "#sortable" ).sortable();
-        $( "#sortable" ).disableSelection();
+        $( ".sortable" ).sortable();
+        $( ".sortable" ).disableSelection();
 
         //单图删除
         $("body").on('click','.add_edit .con ul li .imgone a img.delimg',function(){
@@ -778,8 +796,8 @@
                             $("html,body").animate({scrollTop:car_condition_li.top - "450" + "px"}, 0);
                         }else if(data.code==1016){
                             $('.add_edit .tab ul li:first').click();
-                            $('.add_edit .con ul li .addimg2').addClass('error');
-                            var imgs_li = $('.add_edit .con ul li .addimg2').parent().prev().offset();      
+                            $('.add_edit .con ul li.li_imgs .addimg2').addClass('error');
+                            var imgs_li = $('.add_edit .con ul li.li_imgs .addimg2').parent().prev().offset();      
                             $("html,body").animate({scrollTop:imgs_li.top - "450" + "px"}, 0);
                         }else if(data.code==1017){
                             $('.add_edit .tab ul li:last').click();
@@ -787,6 +805,11 @@
                             $('textarea[name="check_result"]').focus();
                             var check_result_li = $('textarea[name="car_condition"]').parent().offset();      
                             $("html,body").animate({scrollTop:check_result_li.top - "450" + "px"}, 0);
+                        }else if(data.code==1018){
+                            $('.add_edit .tab ul li:first').click();
+                            $('.add_edit .con ul li.li_cert_imgs .addimg2').addClass('error');
+                            var cert_imgs_li = $('.add_edit .con ul li.li_cert_imgs .addimg2').parent().prev().offset();      
+                            $("html,body").animate({scrollTop:cert_imgs_li.top - "450" + "px"}, 0);
                         }
                     }
                 },

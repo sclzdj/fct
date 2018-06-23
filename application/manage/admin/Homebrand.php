@@ -32,6 +32,7 @@ class Homebrand extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             //验证
             $count=db('home_brands')->count('id');
             if($count>=8){
@@ -76,6 +77,7 @@ class Homebrand extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             $home_brand=db('home_brands')->find($data['id']);
             if(!$home_brand){
                 return json_return('F','500','请求错误');

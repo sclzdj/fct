@@ -22,6 +22,7 @@ class Order extends Admin
             'paid_at_start'=>input('param.paid_at_start',''),
             'paid_at_end'=>input('param.paid_at_end',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['sn']!==''){
@@ -121,6 +122,7 @@ class Order extends Admin
         if ($this->request->isPost()) {
             $ismerchant=ismerchant();
             $data = $this->request->post();
+            $data=fortrim($data);
             //验证
             if($data['customer_id']==''){
                 return json_return('F','1001','成交客户必选');
@@ -244,8 +246,10 @@ class Order extends Admin
         $now=time();
         // 保存数据
         if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $data=fortrim($data);
             $ismerchant=ismerchant();
-            $order=db('orders')->where('state','0')->find($id);
+            $order=db('orders')->where('state','0')->where('id',$data['id'])->find();
             if(!$order){
                 return json_return('F','500','请求错误');
             }
@@ -254,7 +258,6 @@ class Order extends Admin
                     return json_return('F','500','请求错误');
                 }
             }
-            $data = $this->request->post();
             //验证
             if($data['paid_type']===''){
                 return json_return('F','1001','付款方式必选');

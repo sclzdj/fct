@@ -132,7 +132,8 @@
                     if (data.code==200) {
                         Dolphin.notify(data.msg, 'success');
                         setTimeout(function () {
-                            location.href = '{:url("manage/homebrand/edit",["id"=>$home_brand["id"]])}';
+                            location.href = '{:url("manage/homebrand/index")}';
+                            //location.href = '{:url("manage/homebrand/edit",["id"=>$home_brand["id"]])}';
                         }, 1500);
                     } else {
                         Dolphin.notify(data.msg, 'danger');

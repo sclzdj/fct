@@ -23,7 +23,7 @@
             <li>
                 <span class="latips"><span class="required">*</span>店铺名称：</span>
                 <input type="text" name="shop_name" value="" placeholder="请输入店铺名称">
-                <span class="bztips">允许输入汉字、字母、数字，不允许特殊字符输入，长度：4-30个字</span>
+                <span class="bztips">允许输入汉字、字母、数字，不允许特殊字符输入，长度：8-30个字</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>合同编号：</span>
@@ -359,10 +359,10 @@
         });
         //查出城市
         $('#select_province').change(function(){
+            $('#select_area').html('<option value="">请选择区县</option>');
             var val=$(this).val();
             if(val===''){
                 $('#select_city').html('<option value="">请选择城市</option>');
-                $('#select_area').html('<option value="">请选择区县</option>');
             }else{
                 $.ajax({
                     type:'GET',
@@ -537,7 +537,7 @@
                         }else if(data.code==1022){
                             $('input[name="businesser_name"]').addClass('error');
                             $('input[name="businesser_name"]').focus();
-                            varbusinesser_name_li = $('input[name="businesser_name"]').parent().offset();      
+                            var businesser_name_li = $('input[name="businesser_name"]').parent().offset();      
                             $("html,body").animate({scrollTop:businesser_name_li.top - "450" + "px"}, 0);
                         }else if(data.code==1023){
                             $('input[name="businesser_tel_1"]').addClass('error');

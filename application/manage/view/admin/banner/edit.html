@@ -163,7 +163,8 @@
                     if (data.code==200) {
                         Dolphin.notify(data.msg, 'success');
                         setTimeout(function () {
-                            location.href = '{:url("manage/banner/edit",["id"=>$banner["id"]])}';
+                            location.href = '{:url("manage/banner/index")}';
+                            //location.href = '{:url("manage/banner/edit",["id"=>$banner["id"]])}';
                         }, 1500);
                     } else {
                         Dolphin.notify(data.msg, 'danger');

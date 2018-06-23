@@ -18,6 +18,7 @@ class User extends Admin
         	'register_at_start'=>input('param.register_at_start',''),
         	'register_at_end'=>input('param.register_at_end',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['mobile']!==''){

@@ -21,6 +21,7 @@ class Merchant extends Admin
         	'created_at_start'=>input('param.created_at_start',''),
         	'created_at_end'=>input('param.created_at_end',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['admin_name']!==''){
@@ -113,6 +114,7 @@ class Merchant extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             //验证
             if($data['company_name']===''){
                 return json_return('F','1001','公司名称必填');
@@ -123,8 +125,8 @@ class Merchant extends Admin
             if($data['shop_name']===''){
                 return json_return('F','1002','店铺名称必填');
             }
-            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]{4,30}$/u',$data['shop_name'])) {
-                return json_return('F','1002','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：4-30个字符');
+            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]{8,30}$/u',$data['shop_name'])) {
+                return json_return('F','1002','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：8-30个字符');
             }
             if($data['contract_no']===''){
                 return json_return('F','1003','合同编号必填');
@@ -137,6 +139,9 @@ class Merchant extends Admin
             }
             if($data['contract_valid_end']===''){
                 return json_return('F','1005','合同有效期结束日期必选');
+            }
+            if(strtotime($data['contract_valid_end']." 00:00:00")-strtotime($data['contract_valid_start']." 00:00:00")<=0){
+                return json_return('F','1005','合同有效期结束日期必须大于开始日期');
             }
             if($data['licence_type']===''){
                 return json_return('F','1006','证件类型必选');
@@ -174,6 +179,9 @@ class Merchant extends Admin
             }
             if($data['licence_valid_end']===''){
                 return json_return('F','1014','营业执照有效期结束日期必填');
+            }
+            if(strtotime($data['licence_valid_end']." 00:00:00")-strtotime($data['licence_valid_start']." 00:00:00")<=0){
+                return json_return('F','1014','营业执照有效期结束日期必须大于开始日期');
             }
             if($data['work_address']===''){
                 return json_return('F','1015','办公地址必填');
@@ -376,6 +384,7 @@ class Merchant extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             $merchant=db('merchants')->find($data['id']);
             if(!$merchant){
                 return json_return('F','500','请求错误');
@@ -390,8 +399,8 @@ class Merchant extends Admin
             if($data['shop_name']===''){
                 return json_return('F','1002','店铺名称必填');
             }
-            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]{4,30}$/u',$data['shop_name'])) {
-                return json_return('F','1002','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：4-30个字符');
+            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]{8,30}$/u',$data['shop_name'])) {
+                return json_return('F','1002','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：8-30个字符');
             }
             if($data['contract_no']===''){
                 return json_return('F','1003','合同编号必填');
@@ -404,6 +413,9 @@ class Merchant extends Admin
             }
             if($data['contract_valid_end']===''){
                 return json_return('F','1005','合同有效期结束日期必选');
+            }
+            if(strtotime($data['contract_valid_end']." 00:00:00")-strtotime($data['contract_valid_start']." 00:00:00")<=0){
+                return json_return('F','1005','合同有效期结束日期必须大于开始日期');
             }
             if($data['licence_type']===''){
                 return json_return('F','1006','证件类型必选');
@@ -441,6 +453,9 @@ class Merchant extends Admin
             }
             if($data['licence_valid_end']===''){
                 return json_return('F','1014','营业执照有效期结束日期必填');
+            }
+            if(strtotime($data['licence_valid_end']." 00:00:00")-strtotime($data['licence_valid_start']." 00:00:00")<=0){
+                return json_return('F','1014','营业执照有效期结束日期必须大于开始日期');
             }
             if($data['work_address']===''){
                 return json_return('F','1015','办公地址必填');

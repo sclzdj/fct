@@ -186,7 +186,8 @@
                     if (data.code==200) {
                         Dolphin.notify(data.msg, 'success');
                         setTimeout(function () {
-                            location.href = '{:url("manage/order/edit",["id"=>$order["id"]])}';
+                            location.href = '{:url("manage/order/index")}';
+                            //location.href = '{:url("manage/order/edit",["id"=>$order["id"]])}';
                         }, 1500);
                     } else {
                         Dolphin.notify(data.msg, 'danger');

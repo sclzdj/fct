@@ -136,6 +136,11 @@
             </td>
         </tr>
         {/volist}
+        {if condition="!count($data)"}
+        <tr>
+            <td colspan="7"><div style="color: #ccc;height: 80px;line-height: 80px;text-align: center;font-size: 20px;">！暂无数据</div></td>
+        </tr>
+        {/if}
         </tbody>
     </table>
 </div>

@@ -26,7 +26,7 @@ class File extends Home
         }
         $type=input('param.type','file');
         $multiple=input('param.multiple','0');
-        $size=(int)input('param.size',3*1024*1024);
+        $size=(int)input('param.msize',3*1024*1024);
         $suffix=input('param.suffix','');
         if(!in_array($type, ['image','file'])){
             return json_text_return('F','1000','上传类型错误！');

@@ -10,9 +10,9 @@ $.fn.datepicker.dates['cn'] = {   //切换为中文显示
 };    
  $('.timepick').datepicker({  
     autoclose: true, //自动关闭  
-    beforeShowDay: $.noop,    //在显示日期之前调用的函数  
+    //beforeShowDay: $.noop,    //在显示日期之前调用的函数  
     calendarWeeks: false,     //是否显示今年是第几周  
-    clearBtn: false,          //显示清除按钮  
+    clearBtn: true,          //显示清除按钮  
     daysOfWeekDisabled: [],   //星期几不可选  
     endDate: Infinity,        //日历结束日期  
     forceParse: true,         //是否强制转换不符合格式的字符串  
@@ -29,7 +29,6 @@ $.fn.datepicker.dates['cn'] = {   //切换为中文显示
     weekStart: 1,   //星期几是开始 
     minViewMode: 0,
     maxViewMode: 4,
-    clearBtn: false,
     multidate: false,
     multidateSeparator: ',',
     daysOfWeekHighlighted: [],

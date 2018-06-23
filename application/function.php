@@ -155,18 +155,16 @@ if(!function_exists('menu_auth')){
         
         //车商
         if($ismerchant){
-            $menu_auth=db('admin_role')->where('id','2')->value('');
-            eval('$menus='.$menu_auth.';');
-            $manage_auth=$menus;
+            $menu_auth=db('admin_role')->where('id','2')->value('menu_auth');
+            eval('$manage_auth='.$menu_auth.';');
         }else{
             //管理员
             $menu_auth=db('admin_role')->where('id','3')->value('menu_auth');
-            eval('$menus='.$menu_auth.';');
-            $manage_auth=$menus;
+            eval('$manage_auth='.$menu_auth.';');
         }
         //具体权限
-        $menu_auth=db('admin_role')->where('id',$role)->value('menu_auth');
-        eval('$menus='.$menu_auth.';');
+        $menus=db('admin_role')->where('id',$role)->value('menu_auth');
+        eval('$menus='.$menus.';');
         foreach ($menus as $k => $v) {
             if(!in_array($v,$manage_auth)){
                 unset($menus[$k]);
@@ -327,6 +325,17 @@ if(!function_exists('cateSort')){
         return $arr;
     }
 }
+//反复过滤空格
+if(!function_exists('fortrim')){
+    function fortrim($data)  {
+        if(is_array($data)){
+            return array_map('fortrim', $data);
+        }else{
+            return trim($data);
+        }
+    }
+}
+//加上mb_strlen
 if(!function_exists('mb_strlen')){
     function mb_strlen($str,$encoding="utf8")  {
         $step = $encoding=="utf8"?2:1;

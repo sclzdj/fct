@@ -16,6 +16,7 @@ class Adminrole extends Admin
         $filter=[
             'name'=>input('param.name',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['name']!==''){
@@ -53,6 +54,7 @@ class Adminrole extends Admin
 		$now=time(); 
 		if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             if($data['name']===''){
                 return json_return('F','1001','角色名称必填');
             }
@@ -150,6 +152,7 @@ class Adminrole extends Admin
         $now=time(); 
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             $ismerchant=ismerchant();
             $admin_role=db('admin_role')->find($data['id']);
             if(!$admin_role){

@@ -18,6 +18,7 @@ class Feedback extends Admin
         	'feedback_at_start'=>input('param.feedback_at_start',''),
         	'feedback_at_end'=>input('param.feedback_at_end',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['mobile']!==''){

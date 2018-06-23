@@ -64,6 +64,23 @@ class Publics extends Common
             if ($uid) {
                 // 记录行为
                 action_log('user_signin', 'admin_user', $uid, $uid);
+                //判断商户账号是否已冻结
+                $role=session('user_auth.role');
+                if($role!=1 && $uid!=2){
+                    if ($role==2) {
+                        $merchant=db('merchants')->field('id,state')->where('admin_id',$uid)->find();
+                            if(!$merchant) $this->error('所属商户已丢失，不能登录后台');
+                            if($merchant['state']==0) $this->error('所属商户已冻结，不能登录后台');
+                    }else{
+                        $merchant_id=db('admin_role')->where('id',$role)->value('merchant_id');
+                        if($merchant_id>0){
+                            $merchant=db('merchants')->field('id,state')->where('id',$merchant_id)->find();
+                            if(!$merchant) $this->error('所属商户已丢失，不能登录后台');
+                            if($merchant['state']==0) $this->error('所属商户已冻结，不能登录后台');
+                        }
+                    }
+                }
+                //记录日志
                 record_log(request()->module(),request()->controller(),'登录');
                 $this->jumpUrl();
             } else {

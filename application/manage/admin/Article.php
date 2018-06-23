@@ -18,6 +18,7 @@ class Article extends Admin
             'ground_at_start'=>input('param.ground_at_start',''),
             'ground_at_end'=>input('param.ground_at_end',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['title']!==''){
@@ -59,6 +60,7 @@ class Article extends Admin
 		$now=time(); 
 		if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             if($data['title']===''){
                 return json_return('F','1001','文章标题必填');
             }
@@ -116,6 +118,7 @@ class Article extends Admin
         $now=time(); 
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             $article=db('articles')->find($data['id']);
             if(!$article){
                 return json_return('F','500','请求错误');

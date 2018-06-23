@@ -98,7 +98,7 @@ class Index extends Home
     }
     //好车显示
     public function filtercar(){
-        die;
+        //die;
         set_time_limit(0);
         db('brands')->where('id','neq','0')->update(['is_show'=>'0']);
         db('series')->where('id','neq','0')->update(['is_show'=>'0']);
@@ -130,7 +130,7 @@ class Index extends Home
     }
     //精简品牌
     public function easybrand(){
-        die;
+        //die;
         set_time_limit(0);
         $easy=['阿斯顿·马丁','阿尔法·罗密欧','保时捷','宝马','奔驰','宾利','巴博斯','保斐利','布加迪','大众','道奇','法拉利','丰田','福特','GMC','悍马','红旗','捷豹','柯尼塞克','柯尼塞格','凯迪拉克','劳斯莱斯','兰博基尼','雷克萨斯','路特斯','路虎','猎豹','林肯','雷诺','玛莎拉蒂','迈凯伦','迈巴赫','摩根','MINI','讴歌','乔治·巴顿','帕加尼','日产','Smart','世爵','特斯拉','沃尔沃','英菲尼迪','依维柯'];
         $data=[];
@@ -146,9 +146,47 @@ class Index extends Home
         }
         db('brands')->where('id','neq','0')->update(['is_show'=>'0']);
         db('brands')->where('id','in',$ids)->update(['is_show'=>'1']);
-        /*dump($data);
+        dump($data);
         dump($ids);
-        dump(db('brands')->where('is_show','1')->select());*/
+        dump(db('brands')->where('is_show','1')->select());
+        die('执行完成');
+    }
+    //精简车系
+    public function easyserie(){
+        //die;
+        set_time_limit(0);
+        $serie=db('series')->field('p_chexi_id')->where(['is_show'=>'1'])->select();dump(count($serie));
+        $p_chexi_id=[];
+        foreach ($serie as $k => $v) {
+            $p_chexi_id[]=$v['p_chexi_id'];
+        }
+        $brand=db('brands')->field('p_pinpai_id')->where(['is_show'=>'1'])->select();
+        $p_pinpai_id=[];
+        foreach ($brand as $k => $v) {
+            $p_pinpai_id[]=$v['p_pinpai_id'];
+        }
+        db('series')->where('id','neq','0')->update(['is_show'=>'0']);
+        db('series')->where('p_pinpai_id','in',$p_pinpai_id)->where('p_chexi_id','in',$p_chexi_id)->update(['is_show'=>'1']);
+        $serie=db('series')->field('p_chexi_id')->where(['is_show'=>'1'])->select();dump(count($serie));
+        die('执行完成');
+    }
+    //精简车型
+    public function easycar(){
+        //die;
+        set_time_limit(0);
+        $car=db('cars')->field('p_chexing_id')->where(['is_show'=>'1'])->select();dump(count($car));
+        $p_chexing_id=[];
+        foreach ($car as $k => $v) {
+            $p_chexing_id[]=$v['p_chexing_id'];
+        }
+        $serie=db('series')->field('p_chexi_id')->where(['is_show'=>'1'])->select();
+        $p_chexi_id=[];
+        foreach ($serie as $k => $v) {
+            $p_chexi_id[]=$v['p_chexi_id'];
+        }
+        db('cars')->where('id','neq','0')->update(['is_show'=>'0']);
+        db('cars')->where('p_chexi_id','in',$p_chexi_id)->where('p_chexing_id','in',$p_chexing_id)->update(['is_show'=>'1']);
+        $car=db('cars')->field('p_chexing_id')->where(['is_show'=>'1'])->select();dump(count($car));
         die('执行完成');
     }
     //清空数据

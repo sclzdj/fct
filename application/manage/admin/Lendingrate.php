@@ -29,6 +29,7 @@ class Lendingrate extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             $lending_rate=db('lending_rates')->find($data['id']);
             if(!$lending_rate){
                 return json_return('F','500','请求错误');

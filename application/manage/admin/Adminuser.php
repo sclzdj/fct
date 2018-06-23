@@ -18,6 +18,7 @@ class Adminuser extends Admin
             'nickname'=>input('param.nickname',''),
             'mobile'=>input('param.mobile',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['username']!==''){
@@ -64,6 +65,7 @@ class Adminuser extends Admin
 		$now=time(); 
 		if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             if($data['username']===''){
                 return json_return('F','1001','登录名必填');
             }
@@ -154,6 +156,7 @@ class Adminuser extends Admin
         $now=time(); 
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             $ismerchant=ismerchant();
             if($ismerchant){
                 $admin_id=db('merchants')->where('id',$ismerchant)->value('admin_id');

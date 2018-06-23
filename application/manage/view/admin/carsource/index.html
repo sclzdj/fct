@@ -156,13 +156,17 @@
                     <a href="{:url('manage/carsource/look',['id'=>$vo['id']])}">详情</a>
                 {/if} 
                 {if condition='$ismeunshow_printig'}
-                    <a href="{:url('manage/carsource/printig',['id'=>$vo['id']])}" target="_blank">打印价签</a>
+                    <a href="javascript:;" onclick="printig({$vo.id});">打印价签</a>
                 {/if} 
             </td>
         </tr>
     </table>
 </div>
 {/volist}
+<iframe src="" frameborder="0" name="iframe_printig" id="iframe_printig" style="display: none;"></iframe>
+{if condition="!count($data)"}
+<div class="lit" style="color: #ccc;line-height: 80px;text-align: center;font-size: 20px;">！暂无数据</div>
+{/if}
 
 {if condition='count($data) > 1'}
 <div class="list_pi_run">
@@ -183,6 +187,11 @@
 <div style="margin-bottom: 40px;"></div>
     
 <script type="text/javascript">
+    //打印价签
+    function printig(id){
+        var url="{:url('manage/carsource/printig',[],false)}/id/"+id;
+        $('#iframe_printig').prop('src',url);
+    }
     //上架，下架，退库
     function carsource_update_stock_state(id,stock_state){
         var tips='';
@@ -312,9 +321,9 @@
         //查出车系
         $('#select_brand').change(function(){
             var val=$(this).val();
+            $('#select_car').html('<option value="">全部车型</option>');
             if(val===''){
                 $('#select_serie').html('<option value="">全部车系</option>');
-                $('#select_car').html('<option value="">全部车型</option>');
             }else{
                 $.ajax({
                     type:'GET',

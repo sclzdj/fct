@@ -22,6 +22,7 @@ class Customer extends Admin
             'follow_at_start'=>input('param.follow_at_start',''),
             'follow_at_end'=>input('param.follow_at_end',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['name']!==''){
@@ -31,10 +32,10 @@ class Customer extends Admin
             $map['a.state']=$filter['state'];
         }
         if($filter['source']!==''){
-            $map['c.source']=$filter['source'];
+            $map['a.source']=$filter['source'];
         }
         if($filter['merchant_id']!==''){
-            $map['c.merchant_id']=$filter['merchant_id'];
+            $map['a.merchant_id']=$filter['merchant_id'];
         }
         if($filter['mobile']!==''){
             $map['a.mobile']=['like','%'.$filter['mobile'].'%'];
@@ -194,12 +195,13 @@ class Customer extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             //验证
             if($data['name']===''){
                 return json_return('F','1001','客户名称必填');
             }
-            if(!preg_match('/^[\x{4e00}-\x{9fa5}]{4,8}$/u',$data['name'])) {
-                return json_return('F','1001','客户名称，只允许输入汉字，字符长度：4-8个字符');
+            if(!preg_match('/^[\x{4e00}-\x{9fa5}]{2,8}$/u',$data['name'])) {
+                return json_return('F','1001','客户名称，只允许输入汉字，字符长度：2-8个字符');
             }
             if($data['mobile']===''){
                 return json_return('F','1002','联系电话必填');
@@ -284,6 +286,7 @@ class Customer extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             $customer=db('customers')->find($data['id']);
             if(!$customer){
                 return json_return('F','500','请求错误');
@@ -298,8 +301,8 @@ class Customer extends Admin
             if($data['name']===''){
                 return json_return('F','1001','客户名称必填');
             }
-            if(!preg_match('/^[\x{4e00}-\x{9fa5}]{4,8}$/u',$data['name'])) {
-                return json_return('F','1001','客户名称，只允许输入汉字，字符长度：4-8个字符');
+            if(!preg_match('/^[\x{4e00}-\x{9fa5}]{2,8}$/u',$data['name'])) {
+                return json_return('F','1001','客户名称，只允许输入汉字，字符长度：2-8个字符');
             }
             if($data['mobile']===''){
                 return json_return('F','1002','联系电话必填');

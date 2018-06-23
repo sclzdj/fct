@@ -38,6 +38,7 @@ class Banner extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             //验证
             if($data['terminal']===''){
                 return json_return('F','1001','展示端必选');
@@ -103,6 +104,7 @@ class Banner extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             $banner=db('banners')->find($data['id']);
             if(!$banner){
                 return json_return('F','500','请求错误');

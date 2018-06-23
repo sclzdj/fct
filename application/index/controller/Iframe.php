@@ -24,6 +24,7 @@ class Iframe extends Common
             'car_id'=>input('param.car_id',''),
             'shop_name'=>input('param.shop_name',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['sn']!==''){
@@ -57,7 +58,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.driving_img,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -65,7 +66,7 @@ class Iframe extends Common
         //处理数据
         foreach ($data as $key => $value) {
             $data[$key]['audit_at_str']=date('Y-m-d H:i',$value['audit_at']);
-            $data[$key]['price']=number_format($value['price'],2,'.','');
+            $data[$key]['price']=number_format($value['price']/100,2,'.','');
         }
         //获取品牌
         $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
@@ -91,6 +92,7 @@ class Iframe extends Common
             'name'=>input('param.name',''),
             'mobile'=>input('param.mobile',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['name']!==''){
@@ -152,6 +154,7 @@ class Iframe extends Common
             'car_id'=>input('param.car_id',''),
             'shop_name'=>input('param.shop_name',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['sn']!==''){
@@ -186,7 +189,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.driving_img,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -194,7 +197,7 @@ class Iframe extends Common
         //处理数据
         foreach ($data as $key => $value) {
             $data[$key]['audit_at_str']=date('Y-m-d H:i',$value['audit_at']);
-            $data[$key]['price']=number_format($value['price'],2,'.','');
+            $data[$key]['price']=number_format($value['price']/100,2,'.','');
         }
         //获取品牌
         $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
@@ -223,6 +226,7 @@ class Iframe extends Common
             'car_id'=>input('param.car_id',''),
             'shop_name'=>input('param.shop_name',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['sn']!==''){
@@ -265,7 +269,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.driving_img,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -273,7 +277,7 @@ class Iframe extends Common
         //处理数据
         foreach ($data as $key => $value) {
             $data[$key]['audit_at_str']=date('Y-m-d H:i',$value['audit_at']);
-            $data[$key]['price']=number_format($value['price'],2,'.','');
+            $data[$key]['price']=number_format($value['price']/100,2,'.','');
         }
         //获取品牌
         $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
@@ -302,6 +306,7 @@ class Iframe extends Common
             'car_id'=>input('param.car_id',''),
             'shop_name'=>input('param.shop_name',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['sn']!==''){
@@ -344,7 +349,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.driving_img,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -352,7 +357,7 @@ class Iframe extends Common
         //处理数据
         foreach ($data as $key => $value) {
             $data[$key]['audit_at_str']=date('Y-m-d H:i',$value['audit_at']);
-            $data[$key]['price']=number_format($value['price'],2,'.','');
+            $data[$key]['price']=number_format($value['price']/100,2,'.','');
         }
         //获取品牌
         $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();

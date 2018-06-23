@@ -13,7 +13,7 @@ class Todayrecomment extends Admin
 	//今日好车推荐列表
 	public function index(){
         //查出数据
-        $data=db('today_recomments')->alias('a')->field('a.*,b.sn,b.driving_img,b.name,b.brand_id,b.serie_id,b.car_id,b.plate_province_id,b.plate_city_id,b.first_plate_at,b.mileage,b.price,b.imgs,b.audit_at,c.shop_name')->join('car_sources b','a.car_source_id=b.id','LEFT')->join('merchants c','b.merchant_id=c.id','LEFT')->order('a.sort asc,a.created_at desc')->select();
+        $data=db('today_recomments')->alias('a')->field('a.*,b.sn,b.name,b.brand_id,b.serie_id,b.car_id,b.plate_province_id,b.plate_city_id,b.first_plate_at,b.mileage,b.price,b.imgs,b.audit_at,c.shop_name')->join('car_sources b','a.car_source_id=b.id','LEFT')->join('merchants c','b.merchant_id=c.id','LEFT')->order('a.sort asc,a.created_at desc')->select();
         //处理数据
         foreach ($data as $key => $value) {
         	$data[$key]['created_at_str']=date('Y-m-d H:i',$value['created_at']);
@@ -107,6 +107,7 @@ class Todayrecomment extends Admin
     public function savetag(){
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             $today_recomment=db('today_recomments')->where('id',$data['id'])->find();
             if(!$today_recomment){
                 return json_return('F','500','请求错误');

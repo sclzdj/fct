@@ -18,6 +18,7 @@ class Evaluate extends Admin
         	'evaluate_at_start'=>input('param.evaluate_at_start',''),
         	'evaluate_at_end'=>input('param.evaluate_at_end',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['mobile']!==''){

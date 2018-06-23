@@ -245,9 +245,9 @@ $(function(){
     //查出车系
     $('#select_brand').change(function(){
         var val=$(this).val();
+        $('#select_car').html('<option value="">全部车型</option>');
         if(val===''){
             $('#select_serie').html('<option value="">全部车系</option>');
-            $('#select_car').html('<option value="">全部车型</option>');
         }else{
             $.ajax({
                 type:'GET',

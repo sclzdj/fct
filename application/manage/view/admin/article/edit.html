@@ -166,7 +166,8 @@ UE.Editor.prototype.getActionUrl = function(action) {
                     if (data.code==200) {
                         Dolphin.notify(data.msg, 'success');
                         setTimeout(function () {
-                            location.href = '{:url("manage/article/edit",["id"=>$article["id"]])}';
+                            location.href = '{:url("manage/article/index")}';
+                            //location.href = '{:url("manage/article/edit",["id"=>$article["id"]])}';
                         }, 1500);
                     } else {
                         Dolphin.notify(data.msg, 'danger');

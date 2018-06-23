@@ -18,6 +18,7 @@ class Sellcar extends Admin
         	'submit_at_start'=>input('param.submit_at_start',''),
         	'submit_at_end'=>input('param.submit_at_end',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['mobile']!==''){

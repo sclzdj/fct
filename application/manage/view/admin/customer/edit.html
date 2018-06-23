@@ -18,7 +18,7 @@
             <li>
                 <span class="latips"><span class="required">*</span>客户姓名：</span>
                 <input type="text" name="name" value="{$customer.name}" placeholder="请输入客户姓名">
-                <span class="bztips">只允许输入汉字，字符长度：4-8个字符</span>
+                <span class="bztips">只允许输入汉字，字符长度：2-8个字符</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>联系电话：</span>
@@ -164,7 +164,8 @@
                     if (data.code==200) {
                         Dolphin.notify(data.msg, 'success');
                         setTimeout(function () {
-                            location.href = '{:url("manage/customer/edit",["id"=>$customer["id"]])}';
+                            location.href = '{:url("manage/customer/index")}';
+                            //location.href = '{:url("manage/customer/edit",["id"=>$customer["id"]])}';
                         }, 1500);
                     } else {
                         Dolphin.notify(data.msg, 'danger');

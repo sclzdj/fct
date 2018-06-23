@@ -35,6 +35,7 @@ class Adminmenu extends Admin
 		$now=time(); 
 		if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             if(!isSupper() && $data['pid']<=334 && $data['pid']!=236) return json_return('F','500','封装好的权限只有开发者可操作！请在‘好车’权限上添加顶级权限在进行其他操作');
             if($data['pid']>0){
                 $admin_menu=db('admin_menu')->find($data['pid']);
@@ -104,6 +105,7 @@ class Adminmenu extends Admin
         $now=time(); 
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             if(!isSupper() && $data['id']<=334) return json_return('F','500','封装好的权限只有开发者可操作！请在‘好车’权限上添加顶级权限在进行其他操作');
             if($data['id']>0){
                 $admin_menu=db('admin_menu')->find($data['id']);

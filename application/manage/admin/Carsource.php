@@ -25,6 +25,7 @@ class Carsource extends Admin
             'audit_at_end'=>input('param.audit_at_end',''),
             'stock_state'=>input('param.stock_state',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['sn']!==''){
@@ -77,7 +78,7 @@ class Carsource extends Admin
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.driving_img,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -113,7 +114,14 @@ class Carsource extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             //验证
+            if(isset($data['cert_imgs']) && $data['cert_imgs']!=[]){
+                $cert_imgs_count=count($data['cert_imgs']);
+                if($cert_imgs_count>5){
+                    return json_return('F','1018','证件图片最多上传5张');
+                }
+            }
             if($data['vin_no']===''){
                 return json_return('F','1001','车架号必填');
             }
@@ -217,7 +225,7 @@ class Carsource extends Admin
             }
             $new_option_ids=array_unique($new_option_ids);
             //处理数据
-            $insert['driving_img']=$data['driving_img'];
+            $insert['cert_imgs']=(isset($data['cert_imgs']) && $data['cert_imgs']!=[])?implode(',', $data['cert_imgs']):'';
             $insert['vin_no']=$data['vin_no'];
             $insert['brand_id']=$data['brand_id'];
             $insert['serie_id']=$data['serie_id'];
@@ -301,6 +309,7 @@ class Carsource extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data=fortrim($data);
             $car_source=db('car_sources')->find($data['id']);
             if(!$car_source){
                 return json_return('F','500','请求错误');
@@ -312,6 +321,12 @@ class Carsource extends Admin
                 }
             }
             //验证
+            if(isset($data['cert_imgs']) && $data['cert_imgs']!=[]){
+                $cert_imgs_count=count($data['cert_imgs']);
+                if($cert_imgs_count>5){
+                    return json_return('F','1018','证件图片最多上传5张');
+                }
+            }
             if($data['vin_no']===''){
                 return json_return('F','1001','车架号必填');
             }
@@ -415,7 +430,7 @@ class Carsource extends Admin
             }
             $new_option_ids=array_unique($new_option_ids);
             //处理数据
-            $update['driving_img']=$data['driving_img'];
+            $update['cert_imgs']=(isset($data['cert_imgs']) && $data['cert_imgs']!=[])?implode(',', $data['cert_imgs']):'';
             $update['vin_no']=$data['vin_no'];
             $update['brand_id']=$data['brand_id'];
             $update['serie_id']=$data['serie_id'];
@@ -487,6 +502,11 @@ class Carsource extends Admin
         $car_source['install_config_len']=mb_strlen($car_source['install_config'],'utf8');
         $car_source['car_condition_len']=mb_strlen($car_source['car_condition'],'utf8');
         $car_source['check_result_len']=mb_strlen($car_source['check_result'],'utf8');
+        if($car_source['cert_imgs']===''){
+            $car_source['cert_imgs']=[];
+        }else{
+            $car_source['cert_imgs']=explode(',', $car_source['cert_imgs']);
+        }
         if($car_source['imgs']===''){
             $car_source['imgs']=[];
         }else{
@@ -539,11 +559,17 @@ class Carsource extends Admin
             $car_source['option']=db('check_report_options')->field('id,name,parent_id')->where('level','in','1,2,3')->where('id','in',$car_source['option_ids'])->order('sort asc')->select();
             $car_source['option']=get_arr_tree($car_source['option']);
             $car_source['admin_name']=(string)db('admin_user')->where('id',$car_source['runner_id'])->value('username');
+            if($car_source['cert_imgs']===''){
+                $car_source['cert_imgs']=[];
+            }else{
+                $car_source['cert_imgs']=explode(',', $car_source['cert_imgs']);
+            }
             if($car_source['imgs']===''){
                 $car_source['imgs']=[];
             }else{
                 $car_source['imgs']=explode(',', $car_source['imgs']);
-            }//获取颜色配置
+            }
+            //获取颜色配置
             $colorpick=config('colorpick');
             //模板赋值
             $this->assign([
@@ -703,6 +729,209 @@ class Carsource extends Admin
             return json_return('F','500','请求错误');
         }
     }
+/*    //打印价签
+    public function printig($id=''){
+        $car_source=db('car_sources')->where('id',$id)->find();
+        if($car_source){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($car_source['merchant_id']!=$ismerchant){
+                    return $this->error('请求错误');
+                }
+            }
+            $car_source['attr']=db('cars')->where('p_chexing_id',$car_source['car_id'])->find();
+            if($car_source['plate_city_id']>0){
+                $car_source['region_text']=db('regions')->where('id',$car_source['plate_city_id'])->value('name');
+            }else if($car_source['plate_province_id']>0){
+                $car_source['region_text']=db('regions')->where('id',$car_source['plate_province_id'])->value('name');
+            }else{
+                $car_source['region_text']='';
+            }
+            $car_source['created_at_str']=date('Y-m-d H:i',$car_source['created_at']);
+            $car_source['audit_at_str']=date('Y-m-d H:i',$car_source['audit_at']);
+            $car_source['price']=number_format($car_source['price']/100,2,'.','');
+            $car_source['guid_price']=number_format($car_source['guid_price']/100,2,'.','');
+            if($car_source['imgs']===''){
+                $car_source['imgs']=[];
+            }else{
+                $car_source['imgs']=explode(',', $car_source['imgs']);
+            }
+            $car=db('cars')->where(['p_chexing_id'=>$car_source['car_id']])->find();
+            $car_attr=db('configs')->where('name','car_attr_category')->value('value');
+            $car_attr=json_decode($car_attr,true);
+            $wb_attr=[];
+            $waibu=[];
+            foreach ($car_attr[4]['attr'] as $k => $v) {
+                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
+                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
+                        $v=str_replace('/后','',$v);
+                    }
+                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
+                        $v=str_replace('前/','',$v);
+                    }
+                    if(mb_strlen($v,'utf8')<=7){
+                        if(count($wb_attr)>=3){
+                            $waibu[]=$v;
+                        }else{
+                            $wb_attr[]=$v;
+                        }
+                    }
+                }
+            }
+            $nb_attr=[];
+            $neibu=[];
+            foreach ($car_attr[5]['attr'] as $k => $v) {
+                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
+                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
+                        $v=str_replace('/后','',$v);
+                    }
+                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
+                        $v=str_replace('前/','',$v);
+                    }
+                    if(mb_strlen($v,'utf8')<=7){
+                        if(count($nb_attr)>=3){
+                            $neibu[]=$v;
+                        }else{
+                            $nb_attr[]=$v;
+                        }
+                    }
+                }
+            }
+            $fz_attr=[];
+            $fuzhu=[];
+            foreach ($car_attr[6]['attr'] as $k => $v) {
+                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
+                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
+                        $v=str_replace('/后','',$v);
+                    }
+                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
+                        $v=str_replace('前/','',$v);
+                    }
+                    if(mb_strlen($v,'utf8')<=7){
+                        if(count($fz_attr)>=3){
+                            $fuzhu[]=$v;
+                        }else{
+                            $fz_attr[]=$v;
+                        }
+                    }
+                }
+            }
+            $attr=array_merge($wb_attr,$nb_attr,$fz_attr);
+            $count_attr=count($attr);
+            if($count_attr<9){
+                $attr_yu=array_merge($waibu,$neibu,$fuzhu);
+                $yu=array_slice($attr_yu, 0,9-$count_attr);
+                $attr=array_merge($attr,$yu);
+            }
+            $car_source['configs']=$attr;
+            //模板赋值
+            $p_huanbaobiaozhun_html=$car_source['attr']['p_huanbaobiaozhun']?$car_source['attr']['p_huanbaobiaozhun']:'<span style="color: #ccc;">暂无</span>';
+            $p_pailiang_ml_html=$car_source['attr']['p_pailiang_ml']?$car_source['attr']['p_pailiang_ml']:'<span style="color: #ccc;">暂无</span>';
+            $region_text_html=$car_source['region_text']?$car_source['region_text']:'<span style="color: #ccc;">暂无</span>';
+            $configs_html='';
+            foreach ($car_source['configs'] as $k => $v) {
+                //$configs_html.="<li>".$v."</li>";
+            }
+            $host_url=config('finecar.host_url');
+            $html=<<<STR
+<!DOCTYPE html>
+<!--[if IE 9]>         <html class="ie9 no-focus" lang="zh"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-focus" lang="zh"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>后台 | 车源管理 | 打印价签</title>
+    <meta name="description" content="">
+    <meta name="author" content="caiweiming">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=0">
+    <style>
+    @page { size: landscape; }  
+    body{padding:0;margin: 0 auto;text-align: center;}
+    .print_box{width: 1250px; display: inline-block;}
+    .print_box .top{height: 85px;background: #fff;text-align: center;}
+    .print_box .top img.img_top{height: 79px;margin: 3px auto;}
+    .print_box .con{}
+    .print_box .con .t{height: 121px;background: #ffe600;padding:11px 0;overflow: hidden;}
+    .print_box .con .t .title{height: 61px;line-height:61px; text-align: center; width: 100%;overflow: hidden;font-size: 40px;font-weight: bold;color: #212425;}
+    .print_box .con .m{height: 480px;overflow: hidden;}
+    .print_box .con .m .img{height: 480px;width: 700px;float: left;background: #d8d8d8;}
+    .print_box .con .m .img img{height: 480px;width: 700px;border:none;}
+    .print_box .con .m .neirong{height: 380px;width: 490px;padding: 50px 30px; background: #212425;overflow: hidden;}
+    .print_box .con .m .neirong .attr{text-align: left;padding: 50px 0;}
+    .print_box .con .m .neirong .attr li{width: 163px;float: left;line-height: 65px;font-size: 20px;overflow: hidden;list-style: none;color: #fff;}
+    .print_box .con .b{height: 83px;background: #ffe600;padding: 30px 1%;overflow: hidden;text-align: center;}
+    .print_box .con .b table.table{max-width: 98%;display: inline-block;height: 83px;overflow: hidden;}
+    .print_box .con .b table.table th{height:50px;line-height: 50px;font-size: 20px;text-align: left;color: #212425;padding: 0 30px;border-right: 1px solid #9d900f;overflow: hidden;}
+    .print_box .con .b table.table td{height:33px;line-height: 33px;font-size: 18px;text-align: left;color: #212425;padding: 0 30px;border-right: 1px solid #9d900f;overflow: hidden;}
+    </style>
+</head>
+<body>
+<div class="print_box">
+    <div class="top">
+        <img src="{$host_url}/static/admin/img/finecar/print_top.jpg" class="img_top">
+    </div>
+    <div class="con">
+        <div class="t">
+            <div class="title">{$car_source['attr']['p_pinpai']}</div>
+            <div class="title" style="font-size: 34px;">{$car_source['name']}</div>
+        </div>
+        <div class="m">
+            <div class="img">
+                <img src="{$car_source['imgs'][0]}">
+            </div>
+            <div class="neirong">
+                <div style="text-align: left;">
+                    <div style="display: table-cell; max-width: 365px;color: #ffe600;font-size: 60px;font-weight: bold;overflow: hidden;vertical-align: bottom;height:86px;">{$car_source['price']}&nbsp;</div>
+                    <div style="display: table-cell;vertical-align: bottom;">
+                        <img src="{$host_url}/static/admin/img/finecar/print_price.png" style="width: 60px;height: 30px;"><br>
+                        <span style="color: #ffe600;font-size: 30px;font-weight: bold;">万元</span>
+                    </div>
+                </div>
+                <div class="attr">
+                    {$configs_html}
+                </div>
+            </div>
+        </div>
+        <div class="b">
+            <table class="table" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th>{$car_source['mileage']}万公里</th>
+                    <th>{$car_source['transfer_num']}次过户</th>
+                    <th>{$p_huanbaobiaozhun_html}</th>
+                    <th>{$p_pailiang_ml_html}</th>
+                    <th>{$car_source['maintain']}</th>
+                    <th>{$car_source['first_plate_at']}</th>
+                    <th style="border-right:none;">{$region_text_html}</th>
+                </tr>
+                <tr>
+                    <td>表现里程</td>
+                    <td>过户次数</td>
+                    <td>排放标准</td>
+                    <td>排量</td>
+                    <td>定期保养</td>
+                    <td>首次上牌</td>
+                    <td style="border-right:none;">上牌地点</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+STR;
+            import('tcpdf.tcpdf', EXTEND_PATH,'.php');
+            date_default_timezone_set('Asia/Shanghai'); 
+            $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false); 
+$pdf->AddPage();  
+$pdf->lastPage();  $pdf->Ln(4);  
+
+            $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);   
+            $pdf->Output('report_new.pdf', 'D');        
+        }else{
+            return $this->error('请求错误');
+        }
+    }*/
     //打印价签
     public function printig($id=''){
         $car_source=db('car_sources')->where('id',$id)->find();

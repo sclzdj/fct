@@ -19,6 +19,7 @@ class Log extends Admin
         	'created_at_start'=>input('param.created_at_start',''),
         	'created_at_end'=>input('param.created_at_end',''),
         ];
+        $filter=fortrim($filter);
         //整理筛选参数
         $map=[];
         if($filter['username']!==''){
