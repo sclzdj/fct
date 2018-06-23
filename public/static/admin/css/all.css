@@ -1,4 +1,4 @@
-.content input[type="text"],.content input[type="password"],.content select,.content textarea{border:1px;}
+.content input[type="text"],.content input[type="password"],.content select,.content textarea{border:1px solid #c6c6c6;}
 .datepicker{cursor: pointer;}
 .filter_search{background: #fff;margin-bottom: 30px;padding: 20px 1%;}
 .filter_search form .blo{display: inline-block;float: left;margin-right: 30px;margin-top: 5px;margin-bottom: 5px;}

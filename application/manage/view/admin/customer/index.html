@@ -209,15 +209,17 @@
                 {$vo.follow_at_str}                                    
             </td>
             <td>
-                {if condition='$ismeunshow_deliver'}
-                    <a href="javascript:;" class="deliver" merchant_id="{$vo.merchant_id}" customer_id="{$vo.id}">转交</a>&nbsp;
-                {/if}
                 {if condition='$ismeunshow_edit'}
                     <a href="{:url('manage/customer/edit',['id'=>$vo['id']])}">修改</a>&nbsp;
                 {/if}
                 {if condition='$ismeunshow_look'}
-                    <a href="{:url('manage/customer/look',['id'=>$vo['id']])}">详情</a>
-                {/if}                            
+                    <a href="{:url('manage/customer/look',['id'=>$vo['id']])}">详情</a>&nbsp;
+                {/if}   
+                {if condition='$ismeunshow_deliver'}
+                    {if condition='$vo.car_source_id eq 0'}
+                        <a href="javascript:;" class="deliver" merchant_id="{$vo.merchant_id}" customer_id="{$vo.id}">转交</a>
+                    {/if}
+                {/if}                         
             </td>
         </tr>
         {/volist}
@@ -230,7 +232,7 @@
     </table>
 </div>
 
-<div style="text-align: center;margin:20px auto;">
+<div style="text-align: right;margin:20px auto;">
     {notempty name="page"}
         {$page}  
     {/notempty}

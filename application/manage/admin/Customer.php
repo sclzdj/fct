@@ -233,7 +233,11 @@ class Customer extends Admin
 	            $carsource=db('car_sources')->alias('a')->field('a.id,a.merchant_id')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
 	            if(!$carsource){
 	            	return json_return('F','1006','选择的意向车源已不存在');
-	            }
+	            }else{
+                    $in_merchant_id=$carsource['merchant_id'];
+                }
+            }else{
+                $in_merchant_id=(int)$ismerchant;
             }
             if($data['source']===''){
                 return json_return('F','1007','客户来源必选');
@@ -258,7 +262,7 @@ class Customer extends Admin
             $insert['source']=$data['source'];
             $insert['state']=$data['state'];
             $insert['remark']=$data['remark'];
-            $insert['merchant_id']=$carsource['merchant_id'];
+            $insert['merchant_id']=$in_merchant_id;
             $insert['created_at']=$now;
             $insert['follow_at']=$now;
             $insert['runner_id']=UID;
@@ -334,7 +338,11 @@ class Customer extends Admin
 	            $carsource=db('car_sources')->alias('a')->field('a.id,a.merchant_id')->join('merchants b','a.merchant_id=b.id','LEFT')->where($map)->where('a.id',$data['car_source_id'])->find();
 	            if(!$carsource){
 	            	return json_return('F','1006','选择的意向车源已不存在');
-	            }
+	            }else{
+                    $in_merchant_id=$carsource['merchant_id'];
+                }
+            }else{
+                $in_merchant_id=(int)$ismerchant;
             }
             if($data['source']===''){
                 return json_return('F','1007','客户来源必选');
@@ -361,7 +369,7 @@ class Customer extends Admin
             $update['source']=$data['source'];
             $update['state']=$data['state'];
             $update['remark']=$data['remark'];
-            $update['merchant_id']=$carsource['merchant_id'];
+            $update['merchant_id']=$in_merchant_id;
             $rt=db('customers')->where('id',$data['id'])->update($update);
             //入库
             if ($rt!==false) {
@@ -452,7 +460,7 @@ class Customer extends Admin
     //转交
     public function deliver(){
         $data = $this->request->post();
-    	$customer=db('customers')->where('id',$data['id'])->find();
+    	$customer=db('customers')->where('id',$data['id'])->where('car_source_id','0')->find();
         if($customer){
         	$merchant=db('merchants')->where('id',$data['merchant_id'])->find();
         	if($merchant){

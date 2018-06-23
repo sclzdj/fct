@@ -30,7 +30,7 @@ class DelOssFiles extends Command
         $imgs=[
             'articles'=>['img','content'],
             'banners'=>['img'],
-            'car_sources'=>['driving_img','imgs'],
+            'car_sources'=>['cert_imgs','imgs'],
             'merchants'=>['licence_img','identcard_front_img','identcard_back_img','imgs'],
             'orders'=>['contract_img'],
             'sellcars'=>['imgs'],
