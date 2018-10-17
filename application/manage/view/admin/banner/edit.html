@@ -38,7 +38,7 @@
                 {else/}
                 <div class="addimg addoneimg" title="点击上传" ralate="img" suffix='png,jpg,jpeg' msize='3145728'><img src="__ADMIN_IMG__/add.png"></div>
                 {/if}
-                <span class="bztips">支持扩展名：png、jpg、jpeg；大小不超过30M；小程序端像素：750*340； PC端：宽:通屏，高:400</span>
+                <span class="bztips">支持扩展名：png、jpg、jpeg；大小不超过30M；小程序端像素：750*380； PC端：宽:通屏，高:400</span>
             </li>
             <li>
                 <span class="latips"><span class="required">*</span>品牌名称：</span>
@@ -163,7 +163,7 @@
                     if (data.code==200) {
                         Dolphin.notify(data.msg, 'success');
                         setTimeout(function () {
-                            location.href = '{:url("manage/banner/index")}';
+                            location.href = '{:url("manage/banner/index","",false)}'+'/terminal/'+data.data.terminal;
                             //location.href = '{:url("manage/banner/edit",["id"=>$banner["id"]])}';
                         }, 1500);
                     } else {

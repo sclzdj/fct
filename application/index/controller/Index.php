@@ -64,7 +64,7 @@ class Index extends Home
     }
     public function test(){
         //echo '<form action="'.url('index/file/upload',['type'=>'image','multiple'=>'0']).'" method="post" enctype="multipart/form-data"><input type="file" name="file"><input type="submit" value="提交"></form>';
-        //echo '<form action="'.url('index/file/upload',['type'=>'image','multiple'=>'1']).'" method="post" enctype="multipart/form-data"><input type="file" name="file[]" multiple="multiple"><input type="submit" value="提交"></form>';
+        echo '<form action="'.url('index/file/upload',['type'=>'image','multiple'=>'1']).'" method="post" enctype="multipart/form-data"><input type="file" name="file[]" multiple="multiple"><input type="submit" value="提交"></form>';
     }
     public function nocar(){
         return false;
@@ -195,26 +195,49 @@ class Index extends Home
         set_time_limit(0);
         //菜单表
         db('admin_menu')->where('id','>=','335')->delete();
-        db()->query('alter table '.config('database.prefix').'admin_menu auto_increment=335');
+        db()->execute('alter table '.config('database.prefix').'admin_menu auto_increment=335');
         //角色表
         db('admin_role')->where('id','>=','4')->delete();
-        db()->query('alter table '.config('database.prefix').'admin_role auto_increment=4');
+        db()->execute('alter table '.config('database.prefix').'admin_role auto_increment=4');
         //账号表
         db('admin_user')->where('id','>=','3')->delete();
-        db()->query('alter table '.config('database.prefix').'admin_user auto_increment=3');
+        db()->execute('alter table '.config('database.prefix').'admin_user auto_increment=3');
         //配置表
         db('configs')->where('id','>=','5')->delete();
-        db()->query('alter table '.config('database.prefix').'configs auto_increment=5');
+        db()->execute('alter table '.config('database.prefix').'configs auto_increment=5');
         //贷款利率表
         db('lending_rates')->where('id','>=','4')->delete();
-        db()->query('alter table '.config('database.prefix').'lending_rates auto_increment=4');
+        db()->execute('alter table '.config('database.prefix').'lending_rates auto_increment=4');
         //下列表全部清空
         $table=['admin_action','admin_log','articles','banners','car_sources','customers','evaluates','feedbacks','guess_likes','home_brands','logs','merchants','orders','sellcars','today_recomments','users','user_collect'];
         foreach ($table as $k => $v) {
             db($v)->where('id','neq','0')->delete();
-            db()->query('alter table '.config('database.prefix').$v.' auto_increment=1');
+            db()->execute('alter table '.config('database.prefix').$v.' auto_increment=1');
         }
         die('执行完成');
+    }
+    //开启某个品牌
+    public function onbrand($p_pinpai=''){
+        die;
+        //$brand=db('brands')->where('p_pinpai','like','%'.$p_pinpai.'%')->where('is_show','0')->select();dump($brand);die;
+        $brand=db('brands')->where('p_pinpai',$p_pinpai)->where('is_show','0')->find();
+        $serie=db('series')->where('p_pinpai_id',$brand['p_pinpai_id'])->where('p_chexi','neq','')->select();
+        foreach ($serie as $key => $value) {
+            $car=db('cars')->where('p_chexi_id',$value['p_chexi_id'])->where('p_chexingmingcheng','neq','')->select();
+            if($car){
+                db('cars')->where('p_chexi_id',$value['p_chexi_id'])->update(['is_show'=>'1']);
+                db('series')->where('p_chexi_id',$value['p_chexi_id'])->update(['is_show'=>'1']);
+                db('brands')->where('p_pinpai_id',$brand['p_pinpai_id'])->update(['is_show'=>'1']);
+            }
+        }
+        die('执行完成');
+    }
+    //关闭某个品牌
+    public function offbrand($p_pinpai_id=''){
+        die;
+        db('cars')->where('p_pinpai_id',$p_pinpai_id)->update(['is_show'=>'0']);
+        db('series')->where('p_pinpai_id',$p_pinpai_id)->update(['is_show'=>'0']);
+        db('brands')->where('p_pinpai_id',$p_pinpai_id)->update(['is_show'=>'0']);
     }
 }
  

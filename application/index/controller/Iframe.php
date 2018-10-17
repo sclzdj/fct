@@ -58,7 +58,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->where('a.stock_state','neq','4')->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -69,7 +69,7 @@ class Iframe extends Common
             $data[$key]['price']=number_format($value['price']/100,2,'.','');
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -189,7 +189,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->where('a.stock_state','neq','4')->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -200,7 +200,7 @@ class Iframe extends Common
             $data[$key]['price']=number_format($value['price']/100,2,'.','');
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -269,7 +269,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->where('a.stock_state','neq','4')->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -280,7 +280,7 @@ class Iframe extends Common
             $data[$key]['price']=number_format($value['price']/100,2,'.','');
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -349,7 +349,7 @@ class Iframe extends Common
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->where('a.stock_state','neq','4')->order($order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -360,7 +360,7 @@ class Iframe extends Common
             $data[$key]['price']=number_format($value['price']/100,2,'.','');
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -374,6 +374,117 @@ class Iframe extends Common
         ]);
         //渲染模板
         return $this->fetch();
+    }
+    //打印车源价签
+    public function carsourcePrintig($id=''){
+        $car_source=db('car_sources')->where('id',$id)->find();
+        if($car_source){
+            $ismerchant=ismerchant();
+            if($ismerchant){
+                if($car_source['merchant_id']!=$ismerchant){
+                    return $this->error('请求错误');
+                }
+            }
+            $car_source['attr']=db('cars')->where('p_chexing_id',$car_source['car_id'])->find();
+            if($car_source['plate_city_id']>0){
+                $car_source['region_text']=db('regions')->where('id',$car_source['plate_city_id'])->value('name');
+            }else if($car_source['plate_province_id']>0){
+                $car_source['region_text']=db('regions')->where('id',$car_source['plate_province_id'])->value('name');
+            }else{
+                $car_source['region_text']='';
+            }
+            $car_source['created_at_str']=date('Y-m-d H:i',$car_source['created_at']);
+            $car_source['audit_at_str']=date('Y-m-d H:i',$car_source['audit_at']);
+            if($car_source['first_plate_at']!=''){
+                $first_plate_at=explode('-',$car_source['first_plate_at']);
+                $car_source['first_plate_at']=$first_plate_at[0].'-'.$first_plate_at[1];
+            }else{
+                $car_source['first_plate_at']='未上牌';
+            }
+            $car_source['price']=number_format($car_source['price']/100,2,'.','');
+            $car_source['guid_price']=number_format($car_source['guid_price']/100,2,'.','');
+            if($car_source['imgs']===''){
+                $car_source['imgs']=[];
+            }else{
+                $car_source['imgs']=explode(',', $car_source['imgs']);
+            }
+            $car=db('cars')->where(['p_chexing_id'=>$car_source['car_id']])->find();
+            $car_attr=db('configs')->where('name','car_attr_category')->value('value');
+            $car_attr=json_decode($car_attr,true);
+            $wb_attr=[];
+            $waibu=[];
+            foreach ($car_attr[4]['attr'] as $k => $v) {
+                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
+                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
+                        $v=str_replace('/后','',$v);
+                    }
+                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
+                        $v=str_replace('前/','',$v);
+                    }
+                    if(mb_strlen($v,'utf8')<=7){
+                        if(count($wb_attr)>=3){
+                            $waibu[]=$v;
+                        }else{
+                            $wb_attr[]=$v;
+                        }
+                    }
+                }
+            }
+            $nb_attr=[];
+            $neibu=[];
+            foreach ($car_attr[5]['attr'] as $k => $v) {
+                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
+                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
+                        $v=str_replace('/后','',$v);
+                    }
+                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
+                        $v=str_replace('前/','',$v);
+                    }
+                    if(mb_strlen($v,'utf8')<=7){
+                        if(count($nb_attr)>=3){
+                            $neibu[]=$v;
+                        }else{
+                            $nb_attr[]=$v;
+                        }
+                    }
+                }
+            }
+            $fz_attr=[];
+            $fuzhu=[];
+            foreach ($car_attr[6]['attr'] as $k => $v) {
+                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
+                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
+                        $v=str_replace('/后','',$v);
+                    }
+                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
+                        $v=str_replace('前/','',$v);
+                    }
+                    if(mb_strlen($v,'utf8')<=7){
+                        if(count($fz_attr)>=3){
+                            $fuzhu[]=$v;
+                        }else{
+                            $fz_attr[]=$v;
+                        }
+                    }
+                }
+            }
+            $attr=array_merge($wb_attr,$nb_attr,$fz_attr);
+            $count_attr=count($attr);
+            if($count_attr<9){
+                $attr_yu=array_merge($waibu,$neibu,$fuzhu);
+                $yu=array_slice($attr_yu, 0,9-$count_attr);
+                $attr=array_merge($attr,$yu);
+            }
+            $car_source['configs']=$attr;
+            //模板赋值
+            $this->assign([
+                'car_source'=>$car_source,
+            ]);
+            //渲染模板
+            return $this->fetch();
+        }else{
+            return $this->error('请求错误');
+        }
     }
 }
  

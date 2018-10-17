@@ -21,7 +21,7 @@ class Banner extends Admin
             if($value['terminal']=='0'){
                 $data[$key]['relate_str']=db('brands')->where('p_pinpai_id',$value['relate'])->value('p_pinpai');
             }else{
-                $data[$key]['relate_str']="<a href='".$value['relate']."' target='_blank'>查看</a>";
+                $data[$key]['relate_str']="<a href='".$value['relate']."' target='_blank' title='点击将打开链接：".$value['relate']."'>查看</a>";
             }
         }
         //模板赋值
@@ -70,6 +70,9 @@ class Banner extends Admin
                 if($data['url']===''){
                     return json_return('F','1006','链接地址必填');
                 }
+                if(!(preg_match('/^http:\/\/.+$/',$data['url']) || preg_match('/^https:\/\/.+$/',$data['url']))) {
+                    return json_return('F','1006','链接地址必须是http://或者https://开头，再跟上地址');
+                }
                 $relate=$data['url'];
             }
             //处理数据
@@ -90,7 +93,7 @@ class Banner extends Admin
             }
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
         //模板赋值
         $this->assign([
             'brand'=>$brand,
@@ -140,6 +143,9 @@ class Banner extends Admin
                 if($data['url']===''){
                     return json_return('F','1006','链接地址必填');
                 }
+                if(!(preg_match('/^http:\/\/.+$/',$data['url']) || preg_match('/^https:\/\/.+$/',$data['url']))) {
+                    return json_return('F','1006','链接地址必须是http://或者https://开头，再跟上地址');
+                }
                 $relate=$data['url'];
             }
             //处理数据
@@ -154,7 +160,7 @@ class Banner extends Admin
                 if($rt>0){
                     record_log(request()->module(),request()->controller(),'修改Banner');
                 }
-                return json_return('T','','修改Banner成功');
+                return json_return('T',['terminal'=>$data['terminal']],'修改Banner成功');
             } else {
                 return json_return('F','500','修改Banner失败');
             }
@@ -163,7 +169,7 @@ class Banner extends Admin
         if($banner){
             $banner['created_at_str']=date('Y-m-d H:i',$banner['created_at']);
             //获取品牌
-            $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+            $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
             //模板赋值
             $this->assign([
                 'banner'=>$banner,

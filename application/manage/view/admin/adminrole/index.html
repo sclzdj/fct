@@ -65,6 +65,11 @@
                 <th>
                     角色名称  
                 </th>
+                {if condition="!ismerchant()"}
+                <th>
+                    所属商户  
+                </th>
+                {/if}
                 <th>
                     创建时间
                     <span>
@@ -119,6 +124,11 @@
             <td>
                 {$vo.name}                                    
             </td>
+            {if condition="!ismerchant()"}
+            <td>
+                {$vo.merchant}                                    
+            </td>
+            {/if}
             <td>
                 {$vo.create_time_str}                                    
             </td>

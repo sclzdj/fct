@@ -103,7 +103,7 @@ class Merchant extends Admin
         if (! file_exists ( $file_dir . $file_name )) {    
             return $this->error('文件未生成成功，请重试');
         } else {    
-            record_log(request()->module(),request()->controller(),'导出');
+            record_log(request()->module(),request()->controller(),'导出商户列表');
             header('Location:'.config('finecar.host_url').'/'.$file_dir.$file_name);
             die;
         } 
@@ -125,8 +125,8 @@ class Merchant extends Admin
             if($data['shop_name']===''){
                 return json_return('F','1002','店铺名称必填');
             }
-            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]{8,30}$/u',$data['shop_name'])) {
-                return json_return('F','1002','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：8-30个字符');
+            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]+$/u',$data['shop_name'])) {
+                return json_return('F','1002','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入');
             }
             if($data['contract_no']===''){
                 return json_return('F','1003','合同编号必填');
@@ -295,6 +295,9 @@ class Merchant extends Admin
             }
             if(!preg_match('/^[A-Za-z0-9@]{3,20}$/',$data['admin_name'])) {
                 return json_return('F','1032','用户名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
+            }
+            if(db('admin_user')->where('username',$data['admin_name'])->find()){
+                return json_return('F','1032','用户名已有');
             }
             if($data['admin_password']===''){
                 return json_return('F','1033','登录密码必填');
@@ -399,8 +402,8 @@ class Merchant extends Admin
             if($data['shop_name']===''){
                 return json_return('F','1002','店铺名称必填');
             }
-            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]{8,30}$/u',$data['shop_name'])) {
-                return json_return('F','1002','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入，字符长度：8-30个字符');
+            if(!preg_match('/^[A-Za-z0-9\x{4e00}-\x{9fa5}]+$/u',$data['shop_name'])) {
+                return json_return('F','1002','店铺名称允许输入汉字、字母、数字，不允许特殊字符输入');
             }
             if($data['contract_no']===''){
                 return json_return('F','1003','合同编号必填');
@@ -569,6 +572,9 @@ class Merchant extends Admin
             }
             if(!preg_match('/^[A-Za-z0-9@]{3,20}$/',$data['admin_name'])) {
                 return json_return('F','1032','用户名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
+            }
+            if(db('admin_user')->where('username',$data['admin_name'])->where('id','neq',$merchant['admin_id'])->find()){
+                return json_return('F','1032','用户名已有');
             }
             if($data['admin_password']!==''){
                 if(!preg_match('/^[A-Za-z0-9!@#$%^&*-,.?;]{8,16}$/',$data['admin_password'])) {

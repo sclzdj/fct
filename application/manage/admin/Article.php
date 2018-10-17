@@ -157,8 +157,8 @@ class Article extends Admin
             $update['title']=$data['title'];
             $update['writer']=$data['writer'];
             $update['ground_at']=$data['ground_at'];
-            $insert['img']=$data['img'];
-            $insert['describe']=$data['describe'];
+            $update['img']=$data['img'];
+            $update['describe']=$data['describe'];
             $update['content']=$_POST['content'];
             $rt=db('articles')->where('id',$data['id'])->update($update);
             if($rt!==false){

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!--[if IE 9]>         <html class="ie9 no-focus" lang="zh"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-focus" lang="zh"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>后台 | 车源管理 | 打印价签</title>
+    <meta name="description" content="">
+    <meta name="author" content="caiweiming">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=0">
+	<style type="text/css">
+	body{padding:0;margin: 0 auto;text-align: center;}
+	.print_box{width: 1250px; display: inline-block;padding:10px 0px;}
+	.print_box .top{height: 85px;background: #fff;text-align: center;}
+	.print_box .top img.img_top{height: 79px;margin: 3px auto;}
+	.print_box .con{}
+	.print_box .con .t{height: 121px;background: #ffe600;padding:11px 0;overflow: hidden;}
+	.print_box .con .t .title{height: 61px;line-height:61px; text-align: center; width: 100%;overflow: hidden;font-size: 40px;font-weight: bold;color: #212425;}
+	.print_box .con .m{height: 480px;overflow: hidden;}
+	.print_box .con .m .img{height: 480px;width: 700px;float: left;background: #d8d8d8;}
+	.print_box .con .m .img img{height: 480px;width: 700px;border:none;}
+	.print_box .con .m .neirong{height: 380px;width: 490px;padding: 50px 30px; background: #212425;overflow: hidden;}
+	.print_box .con .m .neirong .attr{text-align: left;padding: 50px 0;}
+	.print_box .con .m .neirong .attr li{width: 163px;float: left;line-height: 65px;font-size: 20px;overflow: hidden;list-style: none;color: #fff;}
+	.print_box .con .b{height: 83px;background: #ffe600;padding: 30px 1%;overflow: hidden;text-align: center;}
+	.print_box .con .b table.table{max-width: 98%;display: inline-block;height: 83px;overflow: hidden;}
+	.print_box .con .b table.table th{height:50px;line-height: 50px;font-size: 20px;text-align: left;color: #212425;padding: 0 30px;border-right: 1px solid #9d900f;overflow: hidden;}
+	.print_box .con .b table.table td{height:33px;line-height: 33px;font-size: 18px;text-align: left;color: #212425;padding: 0 30px;border-right: 1px solid #9d900f;overflow: hidden;}
+	.clickpr{display: block;text-align: center;margin-top: 20px;}
+	.clickpr a{display: inline-block; height: 34px;line-height: 34px;width:110px;text-align: center;color: #fff;background: #5c90d2;font-size: 12px;text-decoration: none;}
+	</style>
+	<style type="text/css"  media="print">
+	@page { size: landscape; /* auto is the initial value */
+      		margin: 0mm; /* this affects the margin in the printer settings */
+    }  
+	body{padding:0;margin: 0 auto;text-align: center;}
+	.print_box{width: 1250px; display: inline-block;padding:10px 20px;}
+	.print_box .top{height: 85px;background: #fff;text-align: center;}
+	.print_box .top img.img_top{height: 79px;margin: 3px auto;}
+	.print_box .con{}
+	.print_box .con .t{height: 121px;background: #ffe600;padding:11px 0;overflow: hidden;}
+	.print_box .con .t .title{height: 61px;line-height:61px; text-align: center; width: 100%;overflow: hidden;font-size: 40px;font-weight: bold;color: #212425;}
+	.print_box .con .m{height: 480px;overflow: hidden;}
+	.print_box .con .m .img{height: 480px;width: 700px;float: left;background: #d8d8d8;}
+	.print_box .con .m .img img{height: 480px;width: 700px;border:none;}
+	.print_box .con .m .neirong{height: 380px;width: 490px;padding: 50px 30px; background: #212425;overflow: hidden;}
+	.print_box .con .m .neirong .attr{text-align: left;padding: 50px 0;}
+	.print_box .con .m .neirong .attr li{width: 163px;float: left;line-height: 65px;font-size: 20px;overflow: hidden;list-style: none;color: #fff;}
+	.print_box .con .b{height: 83px;background: #ffe600;padding: 30px 1%;overflow: hidden;text-align: center;}
+	.print_box .con .b table.table{max-width: 98%;display: inline-block;height: 83px;overflow: hidden;}
+	.print_box .con .b table.table th{height:50px;line-height: 50px;font-size: 20px;text-align: left;color: #212425;padding: 0 30px;border-right: 1px solid #9d900f;overflow: hidden;}
+	.print_box .con .b table.table td{height:33px;line-height: 33px;font-size: 18px;text-align: left;color: #212425;padding: 0 30px;border-right: 1px solid #9d900f;overflow: hidden;}
+	.clickpr{display: none;}
+	</style>
+	<script src="__ADMIN_JS__/core/jquery.min.js?v={:config('asset_version')}"></script>
+</head>
+<body>
+<!--startprint-->
+<div class="print_box">
+	<div class="top">
+		<img src="__ADMIN_IMG__/finecar/print_top.jpg" class="img_top">
+	</div>
+	<div class="con">
+		<div class="t">
+			<div class="title">{$car_source.attr.p_pinpai}</div>
+			<div class="title" style="font-size: 34px;">{$car_source.name}</div>
+		</div>
+		<div class="m">
+			<div class="img">
+				<img src="{$car_source.imgs.0}">
+			</div>
+			<div class="neirong">
+				<div style="text-align: left;">
+					<div style="display: table-cell; max-width: 365px;color: #ffe600;font-size: 60px;font-weight: bold;overflow: hidden;vertical-align: bottom;height:86px;">{$car_source.price}&nbsp;</div>
+					<div style="display: table-cell;vertical-align: bottom;">
+						<img src="__ADMIN_IMG__/finecar/print_price.png" style="width: 60px;height: 30px;"><br>
+						<span style="color: #ffe600;font-size: 30px;font-weight: bold;">万元</span>
+					</div>
+				</div>
+				<div class="attr">
+					{volist name="car_source.configs" id="vo"}
+					<li>{$vo}</li>
+					{/volist}
+				</div>
+			</div>
+		</div>
+		<div class="b">
+			<table class="table" cellpadding="0" cellspacing="0">
+				<tr>
+					<th>{$car_source.mileage}万公里</th>
+					<th>{$car_source.transfer_num}次过户</th>
+					<th>{if condition='$car_source.attr.p_huanbaobiaozhun'}{$car_source.attr.p_huanbaobiaozhun}{else/}<span style="color: #ccc;">暂无</span>{/if}</th>
+					<th>{if condition='$car_source.attr.p_pailiang_ml'}{$car_source.attr.p_pailiang_ml}ML{else/}<span style="color: #ccc;">暂无</span>{/if}</th>
+					<th>{$car_source.maintain}</th>
+					<th>{$car_source.first_plate_at}</th>
+					<th style="border-right:none;">{if condition='$car_source.region_text'}{$car_source.region_text}{else/}<span style="color: #ccc;">暂无</span>{/if}</th>
+				</tr>
+				<tr>
+					<td>表显里程</td>
+					<td>过户次数</td>
+					<td>排放标准</td>
+					<td>排量</td>
+					<td>定期保养</td>
+					<td>首次上牌</td>
+					<td style="border-right:none;">上牌地点</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<!--endprint-->
+<div class="clickpr">
+	<a href="javascript:;" id="on_print">打印预览</a>
+</div>
+<script language=javascript>
+$(function(){
+	$('#on_print').click(function(){
+		$.ajax({
+	        type:'post',
+	        url:'{:url("manage/carsource/printig")}',
+	        dataType:'JSON',
+	        success:function(data){
+	            doPrint();
+	        },
+	        error:function(xhr,status,error){
+	            alert('服务器错误~');
+	        }
+	    });
+	});
+});
+function doPrint() { 
+    bdhtml=window.document.body.innerHTML; 
+    sprnstr="<!--startprint-->"; //开始打印标识字符串有17个字符
+    eprnstr="<!--endprint-->"; //结束打印标识字符串
+    prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17); //从开始打印标识之后的内容
+    prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr)); //截取开始标识和结束标识之间的内容
+    window.document.body.innerHTML=prnhtml; //把需要打印的指定内容赋给body.innerHTML
+    if(getExplorer() == "IE"){
+        pagesetup_null();
+    }
+    window.print(); //调用浏览器的打印功能打印指定区域
+    window.document.body.innerHTML=bdhtml;//重新给页面内容赋值；
+}
+
+function pagesetup_null(){                
+    var hkey_root,hkey_path,hkey_key;
+    hkey_root="HKEY_CURRENT_USER";
+    hkey_path="\\Software\\Microsoft\\Internet Explorer\\PageSetup\\";
+    try{
+        var RegWsh = new ActiveXObject("WScript.Shell");
+        hkey_key="header";
+        RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"");
+        hkey_key="footer";
+        RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"");
+    }catch(e){}
+}
+
+function getExplorer() {
+    var explorer = window.navigator.userAgent ;
+    //ie 
+    if (explorer.indexOf("MSIE") >= 0) {
+        return "IE";
+    }
+    //firefox 
+    else if (explorer.indexOf("Firefox") >= 0) {
+        return "Firefox";
+    }
+    //Chrome
+    else if(explorer.indexOf("Chrome") >= 0){
+        return "Chrome";
+    }
+    //Opera
+    else if(explorer.indexOf("Opera") >= 0){
+        return "Opera";
+    }
+    //Safari
+    else if(explorer.indexOf("Safari") >= 0){
+        return "Safari";
+    }
+}
+</script>
+</body>
+</html>
+
+
+    

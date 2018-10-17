@@ -68,7 +68,7 @@ class Customer extends Admin
         //处理数据
         foreach ($data as $key => $value) {
             $data[$key]['created_at_str']=date('Y-m-d H:i',$value['created_at']);
-            $data[$key]['follow_at_str']=date('Y-m-d H:i',$value['follow_at']);
+            $data[$key]['follow_at_str']=$value['follow_at']>0?date('Y-m-d H:i',$value['follow_at']):'';
             if($data[$key]['car_source_id']>0){
             	$map=[];
 	            if($ismerchant){
@@ -112,7 +112,7 @@ class Customer extends Admin
           '意向产品'=>'string',//text
           '所属车商'=>'string',//text
           '录入人'=>'string',//text
-          '跟进时间'=>'string',//text
+          '最后跟进时间'=>'string',//text
         );
         $data = db('customers')->alias('a')->field('a.id,a.name,a.state,a.source,a.car_source_id,a.defind_model,a.merchant_id,a.mobile,a.follow_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where(session('user_index_export_map'))->order(session('user_index_export_order'))->select();
         $new_data=[];
@@ -120,7 +120,7 @@ class Customer extends Admin
         //处理数据
         foreach ($data as $key => $value) {
         	$value['created_at_str']=date('Y-m-d H:i',$value['created_at']);
-            $value['follow_at_str']=date('Y-m-d H:i',$value['follow_at']);
+            $value['follow_at_str']=$value['follow_at']>0?date('Y-m-d H:i',$value['follow_at']):'';
             if($value['car_source_id']>0){
             	$map=[];
 	            if($ismerchant){
@@ -430,7 +430,7 @@ class Customer extends Admin
             }
             $customer['region_text']=region_text([$customer['province_id'],$customer['city_id']]);
             $customer['created_at_str']=date('Y-m-d H:i',$customer['created_at']);
-            $customer['follow_at_str']=date('Y-m-d H:i',$customer['follow_at']);
+            $customer['follow_at_str']=$customer['follow_at']>0?date('Y-m-d H:i',$customer['follow_at']):'<div style="color:#ccc;">暂无</div>';
             $customer['admin_name']=(string)db('admin_user')->where('id',$customer['runner_id'])->value('username');
             $customer['shop_name']=(string)db('merchants')->where('id',$customer['merchant_id'])->value('shop_name');
             if($customer['car_source_id']>0){

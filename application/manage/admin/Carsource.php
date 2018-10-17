@@ -78,7 +78,7 @@ class Carsource extends Admin
         $order=input('param.order','a.audit_at desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->order($order)->paginate(10);
+        $object=db('car_sources')->alias('a')->field('a.id,a.name,a.sn,a.brand_id,a.serie_id,a.car_id,a.plate_province_id,a.plate_city_id,a.first_plate_at,a.mileage,a.price,a.imgs,a.stock_state,a.audit,a.audit_at,a.created_at,b.username admin_name,c.shop_name')->join('admin_user b','a.runner_id=b.id','LEFT')->join('merchants c','a.merchant_id=c.id','LEFT')->where($map)->orderRaw('field(a.stock_state,4),'.$order)->paginate(10);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -90,11 +90,11 @@ class Carsource extends Admin
             $data[$key]['price']=number_format($value['price']/100,2,'.','');
             $data[$key]['main_img']=explode(',',$value['imgs'])[0];
             $data[$key]['reservoir_age']=ceil((time()-$value['audit_at'])/(24*60*60));
-            $data[$key]['first_plate_year']=explode('-',$value['first_plate_at'])[0];
+            $data[$key]['first_plate_year']=$value['first_plate_at']!=''?explode('-',$value['first_plate_at'])[0]:'';
             $data[$key]['region_one_text']=region_text([$value['plate_province_id'],$value['plate_city_id']],false);
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,
@@ -154,20 +154,22 @@ class Carsource extends Admin
             if(!isset($data['is_oncard']) || $data['is_oncard']===''){
                 return json_return('F','1008','是否上牌必选');
             }
+            if($data['is_oncard']=='1'){
+                if($data['first_plate_at']===''){
+                    return json_return('F','1011','首次上牌时间必选');
+                }
+            }
             if(!isset($data['maintain']) || $data['maintain']===''){
                 return json_return('F','1009','定期保养必选');
             }
             if($data['mileage']===''){
                 return json_return('F','1010','表显里程必填');
             }
-            if(!preg_match('/^[\d]{1}(\.\d{1})?$/',$data['mileage'])) {
-                return json_return('F','1010','表显里程只允许输入数字与符号. 格式：X.X');
+            if(!preg_match('/^[\d]{1,2}(\.\d{1})?$/',$data['mileage'])) {
+                return json_return('F','1010','表显里程只允许输入数字与符号. 格式：XX.X');
             }
             if($data['mileage']==0){
                 return json_return('F','1010','表显里程需大于0');
-            }
-            if($data['first_plate_at']===''){
-                return json_return('F','1011','首次上牌时间必选');
             }
             if($data['guid_price']!==''){
                 if(!preg_match('/^[0-9]+(\.\d{1,2})?$/',$data['guid_price'])) {
@@ -194,8 +196,8 @@ class Carsource extends Admin
                 return json_return('F','1016','车源图片必传');
             }
             $imgs_count=count($data['imgs']);
-            if($imgs_count>15 || $imgs_count<4){
-                return json_return('F','1016','车源图片最少上传4张，最多上传15张');
+            if($imgs_count>16 || $imgs_count<4){
+                return json_return('F','1016','车源图片最少上传4张，最多上传16张');
             }
             if(mb_strlen($data['check_result'],'utf8')>1000) {
                 return json_return('F','1017','车源检测结论最多1000个字');
@@ -238,7 +240,7 @@ class Carsource extends Admin
             $insert['plate_province_id']=$data['plate_province_id'];
             $insert['plate_city_id']=$data['plate_city_id'];
             $insert['mileage']=number_format($data['mileage'],1,".","");
-            $insert['first_plate_at']=$data['first_plate_at'];
+            $insert['first_plate_at']=$data['is_oncard']=='1'?$data['first_plate_at'].'-01':null;
             $insert['year_check_at']=$data['year_check_at'];
             $insert['insurance_at']=$data['insurance_at'];
             $insert['out_factory_at']=$data['out_factory_at'];
@@ -292,7 +294,7 @@ class Carsource extends Admin
         //获取中国省份
         $province=db('regions')->field('id,name')->where(['parent_id'=>'1','level'=>'1'])->order('sort asc')->select();
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
         //模板赋值
         $this->assign([
             'province'=>$province,
@@ -359,20 +361,22 @@ class Carsource extends Admin
             if(!isset($data['is_oncard']) || $data['is_oncard']===''){
                 return json_return('F','1008','是否上牌必选');
             }
+            if($data['is_oncard']=='1'){
+                if($data['first_plate_at']===''){
+                    return json_return('F','1011','首次上牌时间必选');
+                }
+            }
             if(!isset($data['maintain']) || $data['maintain']===''){
                 return json_return('F','1009','定期保养必选');
             }
             if($data['mileage']===''){
                 return json_return('F','1010','表显里程必填');
             }
-            if(!preg_match('/^[\d]{1}(\.\d{1})?$/',$data['mileage'])) {
-                return json_return('F','1010','表显里程只允许输入数字与符号. 格式：X.X');
+            if(!preg_match('/^[\d]{1,2}(\.\d{1})?$/',$data['mileage'])) {
+                return json_return('F','1010','表显里程只允许输入数字与符号. 格式：XX.X');
             }
             if($data['mileage']==0){
                 return json_return('F','1010','表显里程需大于0');
-            }
-            if($data['first_plate_at']===''){
-                return json_return('F','1011','首次上牌时间必选');
             }
             if($data['guid_price']!==''){
                 if(!preg_match('/^[0-9]+(\.\d{1,2})?$/',$data['guid_price'])) {
@@ -399,8 +403,8 @@ class Carsource extends Admin
                 return json_return('F','1016','车源图片必传');
             }
             $imgs_count=count($data['imgs']);
-            if($imgs_count>15 || $imgs_count<4){
-                return json_return('F','1016','车源图片最少上传4张，最多上传15张');
+            if($imgs_count>16 || $imgs_count<4){
+                return json_return('F','1016','车源图片最少上传4张，最多上传16张');
             }
             if(mb_strlen($data['check_result'],'utf8')>1000) {
                 return json_return('F','1017','车源检测结论最多1000个字');
@@ -443,7 +447,7 @@ class Carsource extends Admin
             $update['plate_province_id']=$data['plate_province_id'];
             $update['plate_city_id']=$data['plate_city_id'];
             $update['mileage']=number_format($data['mileage'],1,".","");
-            $update['first_plate_at']=$data['first_plate_at'];
+            $update['first_plate_at']=$data['is_oncard']=='1'?$data['first_plate_at'].'-01':null;
             $update['year_check_at']=$data['year_check_at'];
             $update['insurance_at']=$data['insurance_at'];
             $update['out_factory_at']=$data['out_factory_at'];
@@ -496,6 +500,10 @@ class Carsource extends Admin
         //处理数据
         $car_source['created_at_str']=date('Y-m-d H:i',$car_source['created_at']);
         $car_source['audit_at_str']=date('Y-m-d H:i',$car_source['audit_at']);
+        if($car_source['first_plate_at']!=''){
+            $first_plate_at=explode('-',$car_source['first_plate_at']);
+            $car_source['first_plate_at']=$first_plate_at[0].'-'.$first_plate_at[1];
+        }
         $car_source['price']=number_format($car_source['price']/100,2,'.','');
         $car_source['guid_price']=number_format($car_source['guid_price']/100,2,'.','');
         $car_source['option_ids']=explode(',', $car_source['option_ids']);
@@ -521,7 +529,7 @@ class Carsource extends Admin
         $province=db('regions')->field('id,name')->where(['parent_id'=>'1','level'=>'1'])->order('sort asc')->select();
         $city=db('regions')->field('id,name')->where(['parent_id'=>$car_source['plate_province_id'],'level'=>'2'])->order('sort asc')->select();
         //获取车型
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
         $serie=db('series')->field('id,p_chexi_id,p_chexi')->where(['p_pinpai_id'=>$car_source['brand_id'],'is_show'=>'1'])->select();
         $car=db('cars')->field('id,p_pinpai,p_chexi,p_chexing_id,p_chexingmingcheng')->where(['p_chexi_id'=>$car_source['serie_id'],'is_show'=>'1'])->select();
         foreach ($car as $k => $v) {
@@ -554,6 +562,10 @@ class Carsource extends Admin
             $car_source['region_text']=region_text([$car_source['plate_province_id'],$car_source['plate_city_id']]);
             $car_source['created_at_str']=date('Y-m-d H:i',$car_source['created_at']);
             $car_source['audit_at_str']=date('Y-m-d H:i',$car_source['audit_at']);
+            if($car_source['first_plate_at']!=''){
+                $first_plate_at=explode('-',$car_source['first_plate_at']);
+                $car_source['first_plate_at']=$first_plate_at[0].'-'.$first_plate_at[1];
+            }
             $car_source['price']=number_format($car_source['price']/100,2,'.','');
             $car_source['guid_price']=number_format($car_source['guid_price']/100,2,'.','');
             $car_source['option']=db('check_report_options')->field('id,name,parent_id')->where('level','in','1,2,3')->where('id','in',$car_source['option_ids'])->order('sort asc')->select();
@@ -720,6 +732,8 @@ class Carsource extends Admin
             }
             $rt=db('car_sources')->where('id',$id)->update(['stock_state'=>'4']);
             if($rt!==false){
+                db('today_recomments')->where('car_source_id',$id)->delete();
+                db('guess_likes')->where('car_source_id',$id)->delete();
                 if($rt>0) record_log(request()->module(),request()->controller(),'车源退库');
                 return json_return('T','200','退库成功');
             }else{
@@ -749,6 +763,12 @@ class Carsource extends Admin
             }
             $car_source['created_at_str']=date('Y-m-d H:i',$car_source['created_at']);
             $car_source['audit_at_str']=date('Y-m-d H:i',$car_source['audit_at']);
+            if($car_source['first_plate_at']!=''){
+                $first_plate_at=explode('-',$car_source['first_plate_at']);
+                $car_source['first_plate_at']=$first_plate_at[0].'-'.$first_plate_at[1];
+            }else{
+                $car_source['first_plate_at']='未上牌';
+            }
             $car_source['price']=number_format($car_source['price']/100,2,'.','');
             $car_source['guid_price']=number_format($car_source['guid_price']/100,2,'.','');
             if($car_source['imgs']===''){
@@ -934,6 +954,10 @@ $pdf->lastPage();  $pdf->Ln(4);
     }*/
     //打印价签
     public function printig($id=''){
+        if ($this->request->isPost()) {
+            record_log(request()->module(),request()->controller(),'打印价签');
+            return json_return('T','','');
+        }
         $car_source=db('car_sources')->where('id',$id)->find();
         if($car_source){
             $ismerchant=ismerchant();
@@ -942,94 +966,9 @@ $pdf->lastPage();  $pdf->Ln(4);
                     return $this->error('请求错误');
                 }
             }
-            $car_source['attr']=db('cars')->where('p_chexing_id',$car_source['car_id'])->find();
-            if($car_source['plate_city_id']>0){
-                $car_source['region_text']=db('regions')->where('id',$car_source['plate_city_id'])->value('name');
-            }else if($car_source['plate_province_id']>0){
-                $car_source['region_text']=db('regions')->where('id',$car_source['plate_province_id'])->value('name');
-            }else{
-                $car_source['region_text']='';
-            }
-            $car_source['created_at_str']=date('Y-m-d H:i',$car_source['created_at']);
-            $car_source['audit_at_str']=date('Y-m-d H:i',$car_source['audit_at']);
-            $car_source['price']=number_format($car_source['price']/100,2,'.','');
-            $car_source['guid_price']=number_format($car_source['guid_price']/100,2,'.','');
-            if($car_source['imgs']===''){
-                $car_source['imgs']=[];
-            }else{
-                $car_source['imgs']=explode(',', $car_source['imgs']);
-            }
-            $car=db('cars')->where(['p_chexing_id'=>$car_source['car_id']])->find();
-            $car_attr=db('configs')->where('name','car_attr_category')->value('value');
-            $car_attr=json_decode($car_attr,true);
-            $wb_attr=[];
-            $waibu=[];
-            foreach ($car_attr[4]['attr'] as $k => $v) {
-                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
-                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
-                        $v=str_replace('/后','',$v);
-                    }
-                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
-                        $v=str_replace('前/','',$v);
-                    }
-                    if(mb_strlen($v,'utf8')<=7){
-                        if(count($wb_attr)>=3){
-                            $waibu[]=$v;
-                        }else{
-                            $wb_attr[]=$v;
-                        }
-                    }
-                }
-            }
-            $nb_attr=[];
-            $neibu=[];
-            foreach ($car_attr[5]['attr'] as $k => $v) {
-                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
-                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
-                        $v=str_replace('/后','',$v);
-                    }
-                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
-                        $v=str_replace('前/','',$v);
-                    }
-                    if(mb_strlen($v,'utf8')<=7){
-                        if(count($nb_attr)>=3){
-                            $neibu[]=$v;
-                        }else{
-                            $nb_attr[]=$v;
-                        }
-                    }
-                }
-            }
-            $fz_attr=[];
-            $fuzhu=[];
-            foreach ($car_attr[6]['attr'] as $k => $v) {
-                if($car[$k]=='●' || $car[$k]=='前●/后●' || $car[$k]=='前●/后○' || $car[$k]=='前○/后●' || $car[$k]=='前●/后-' || $car[$k]=='前-/后●'){
-                    if($car[$k]=='前●/后○' || $car[$k]=='前●/后-'){
-                        $v=str_replace('/后','',$v);
-                    }
-                    if($car[$k]=='前○/后●' || $car[$k]=='前-/后●'){
-                        $v=str_replace('前/','',$v);
-                    }
-                    if(mb_strlen($v,'utf8')<=7){
-                        if(count($fz_attr)>=3){
-                            $fuzhu[]=$v;
-                        }else{
-                            $fz_attr[]=$v;
-                        }
-                    }
-                }
-            }
-            $attr=array_merge($wb_attr,$nb_attr,$fz_attr);
-            $count_attr=count($attr);
-            if($count_attr<9){
-                $attr_yu=array_merge($waibu,$neibu,$fuzhu);
-                $yu=array_slice($attr_yu, 0,9-$count_attr);
-                $attr=array_merge($attr,$yu);
-            }
-            $car_source['configs']=$attr;
             //模板赋值
             $this->assign([
-                'car_source'=>$car_source,
+                'id'=>$id,
             ]);
             //渲染模板
             return $this->fetch();

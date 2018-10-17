@@ -38,6 +38,12 @@ class Adminrole extends Admin
         //处理数据
         foreach ($data as $key => $value) {
             $data[$key]['create_time_str']=date('Y-m-d H:i',$value['create_time']);
+            $merchant=db('merchants')->field('shop_name')->where('id',$value['merchant_id'])->find();
+            if($merchant){
+                $data[$key]['merchant']=$merchant['shop_name'];
+            }else{
+                $data[$key]['merchant']='<span style="color:#ccc;">系统角色</span>';
+            }
         }
         //模板赋值
         $this->assign([
@@ -55,13 +61,16 @@ class Adminrole extends Admin
 		if ($this->request->isPost()) {
             $data = $this->request->post();
             $data=fortrim($data);
+            $ismerchant=ismerchant();
             if($data['name']===''){
                 return json_return('F','1001','角色名称必填');
             }
             if(mb_strlen($data['name'],'utf8')>20) {
                 return json_return('F','1001','角色名称最多20个字');
             }
-            $ismerchant=ismerchant();
+            if(db('admin_role')->where(['merchant_id'=>(int)$ismerchant,'name'=>$data['name']])->find()){
+                return json_return('F','1001','角色名称已有');
+            }
             //检查有无越限
             if($ismerchant){
                 $menu_auth=db('admin_role')->where('id','2')->value('menu_auth');
@@ -168,6 +177,9 @@ class Adminrole extends Admin
             }
             if(mb_strlen($data['name'],'utf8')>20) {
                 return json_return('F','1001','角色名称最多20个字');
+            }
+            if(db('admin_role')->where(['merchant_id'=>(int)$ismerchant,'name'=>$data['name']])->where('id','neq',$data['id'])->find()){
+                return json_return('F','1001','角色名称已有');
             }
             //检查有无越限
             if($ismerchant){

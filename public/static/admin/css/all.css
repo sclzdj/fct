@@ -1,11 +1,14 @@
 .content input[type="text"],.content input[type="password"],.content select,.content textarea{border:1px solid #c6c6c6;}
 .datepicker{cursor: pointer;}
+.datepicker span.month,.datepicker span.year{padding:5px;}
+.datepicker th.next{text-align: right;}
+.datepicker th.datepicker-switch,.datepicker th.clear{text-align: center;}
 .filter_search{background: #fff;margin-bottom: 30px;padding: 20px 1%;}
 .filter_search form .blo{display: inline-block;float: left;margin-right: 30px;margin-top: 5px;margin-bottom: 5px;}
 .filter_search form .blo:last-child{margin-right: 0px;}
 .filter_search form .blo span.latips{font-size: 14px;display:inline-block;float: left;height: 34px;line-height: 34px;}
 .filter_search form .blo input[type="text"]{padding:0 3px;width:120px;height: 34px;line-height: 34px; font-size: 14px;float: left;border: 1px solid #ccc;}
-.filter_search form .blo select{padding:0 3px;width:120px;height: 34px;line-height: 34px; font-size: 14px;float: left;border: 1px solid #ccc;}
+.filter_search form .blo select{padding:0 3px;padding-right:0px;width:120px;height: 34px;line-height: 34px; font-size: 14px;float: left;border: 1px solid #ccc;}
 .filter_search form .blo input.timepick{cursor: pointer;}
 .filter_search .blo a.byt{float: left;}
 .filter_search .blo a.rbt{float: right;margin-top: 5px;}
@@ -40,7 +43,7 @@
 .add_edit .con ul li span.error{margin:3px 0px;margin-left: 40px; padding:0 5px;display:inline-block;height: 28px;line-height: 26px; font-size:12px;vertical-align: top;border:1px solid #c54736;color: #c54736;}
 .add_edit .con ul li textarea{padding:0 5px;width:40%;min-width:240px;height: 34px;line-height: 24px; border: 1px solid #ccc;height: 125px;vertical-align: top;}
 .add_edit .con ul li textarea.error{border:1px solid #c54736;}
-.add_edit .con ul li select{padding:0 5px;width:15%;min-width:200px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align: top;}
+.add_edit .con ul li select{padding:0 5px;padding-right:0px;width:15%;min-width:200px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align: top;}
 .add_edit .con ul li select.error{border:1px solid #c54736;}
 .add_edit .con ul li button{padding:0 5px;min-width:80px;height: 34px;line-height: 34px; border: 1px solid #ccc;vertical-align:top;background: #fff;}
 .add_edit .con ul li button:hover{background: #eee;}
@@ -65,6 +68,7 @@
 .add_edit .con ul li .addallimgno{cursor: auto;opacity: 0.3;}
 .add_edit .con ul li .addimg2 img{width: 58px;height: 58px;margin:30px;}
 .add_edit .con ul li input.timepick{cursor: pointer;}
+.add_edit .con ul li input.monthpick{cursor: pointer;}
 .add_edit .con ul li input.colorpick{cursor: pointer;}
 .onpickcolor{width: 76px;height: 24px;position: absolute;left: 5px;top:5px;border: 1px solid #ccc;}
 .colorpick_box{position: relative;display: none;z-index: 99;}

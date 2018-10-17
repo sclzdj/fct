@@ -100,7 +100,7 @@ class Order extends Admin
         }
         $merchant=db('merchants')->field('id,shop_name')->where($where)->select();
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
         //模板赋值
         $this->assign([
             'filter'=>$filter,

@@ -281,8 +281,8 @@ return [
 
     //finecar模块
     'finecar'=> [
-        'host_url'=> 'http://dyhc.jasonre.cn',//系统域名
-        'www_url'=> '',//前台域名
+        'host_url'=> 'http://admin.dyhc360.com',//系统域名
+        'www_url'=> 'http://www.dyhc360.com',//前台域名
     ],
     //模块名称
     'module_us'=>[
@@ -315,8 +315,8 @@ return [
     'alioss'=>[
         'KeyId' => 'LTAI09WSGMSD4Sgq',
         'KeySecret' => 'vvaWRnffKJyd0K6dCY3HRShFjJIaKs',
-        'Endpoint' => 'http://oss-cn-hangzhou.aliyuncs.com',//
-        'Bucket' => 'bestcar1',//oss-cn-hangzhou.aliyuncs.cn
+        'Endpoint' => 'http://oss-cn-hangzhou.aliyuncs.com',
+        'Bucket' => 'dyhc360',
     ],
     //颜色选择
     'colorpick'=>[

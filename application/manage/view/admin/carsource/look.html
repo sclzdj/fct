@@ -111,7 +111,7 @@
             </li>
             <li>
                 <span class="looktips">首次上牌时间：</span>
-                {if condition='$car_source.first_plate_at!==""'}
+                {if condition='$car_source.first_plate_at!=""'}
                 <span class="lacon">{$car_source.first_plate_at}</span>
                 {else/}
                 <span class="lacon" style="color:#ccc;">暂无</span>
@@ -381,7 +381,7 @@
 
         </div>
         <div style="clear: both;"></div>
-        <div style="padding: 20px auto; text-align: center;margin-top: 20px;">
+        <div style="padding: 20px auto; text-align: center;margin: 20px;">
             <a href="javascript:;" class="btn btn-minw btn-primary rbt close_car">关&nbsp;闭</a>
         </div>
     </div>

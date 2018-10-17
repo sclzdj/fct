@@ -8,8 +8,8 @@ $.fn.datepicker.dates['cn'] = {   //切换为中文显示
     today: "今天",  
     clear: "清除"  
 };    
- $('.timepick').datepicker({  
-    autoclose: true, //自动关闭  
+$('.timepick').datepicker({  
+    autoclose: true, //自动关闭 
     //beforeShowDay: $.noop,    //在显示日期之前调用的函数  
     calendarWeeks: false,     //是否显示今年是第几周  
     clearBtn: true,          //显示清除按钮  
@@ -19,7 +19,6 @@ $.fn.datepicker.dates['cn'] = {   //切换为中文显示
     format: 'yyyy-mm-dd',     //日期格式  
     keyboardNavigation: true, //是否显示箭头导航  
     language: 'cn',           //语言  
-    minViewMode: 0,  
     orientation: "bottom left",      //方向  
     rtl: false,  
     startDate: -Infinity,     //日历开始日期  
@@ -34,6 +33,32 @@ $.fn.datepicker.dates['cn'] = {   //切换为中文显示
     daysOfWeekHighlighted: [],
     datesDisabled: [],
     toggleActive: false  
+}); 
+$('.monthpick').datepicker({  
+    autoclose: true, //自动关闭
+    //beforeShowDay: $.noop,    //在显示日期之前调用的函数  
+    calendarWeeks: false,     //是否显示今年是第几周  
+    clearBtn: true,          //显示清除按钮  
+    daysOfWeekDisabled: [],   //星期几不可选  
+    endDate: Infinity,        //日历结束日期  
+    forceParse: true,         //是否强制转换不符合格式的字符串  
+    format: 'yyyy-mm',     //日期格式  
+    keyboardNavigation: true, //是否显示箭头导航  
+    language: 'cn',           //语言  
+    orientation: "bottom left",      //方向  
+    rtl: false,  
+    startDate: -Infinity,     //日历开始日期  
+    todayBtn: false,          //今天按钮  
+    todayHighlight: true,    //今天高亮 
+    weekStart: 1,   //星期几是开始 
+    multidate: false,
+    multidateSeparator: ',',
+    daysOfWeekHighlighted: [],
+    datesDisabled: [],
+    toggleActive: false, 
+    startView: 'months', //开始视图层，为月视图层
+    maxViewMode:'years', //最大视图层，为年视图层
+    minViewMode:'months' //最小视图层，为月视图层
 }); 
 
 function herhide(id){

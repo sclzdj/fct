@@ -85,7 +85,7 @@
                 <div style="float: left;min-height: 120px;"><img src="{$vo.main_img}"></div>
                 <div class="core">
                     <span>{$vo.name}</span>
-                    <span>{$vo.first_plate_year}年/{$vo.mileage}公里&nbsp;&nbsp;{$vo.region_one_text}</span>
+                    <span>{if condition='$vo.first_plate_year eq ""'}未上牌{else/}{$vo.first_plate_year}年{/if}/{$vo.mileage}公里&nbsp;&nbsp;{$vo.region_one_text}</span>
                     <span>{$vo.price}万</span>
                     <span>{if condition='$vo.shop_name'}{$vo.shop_name}{else/}<i style="color: #ccc;font-style: normal;">店铺名称暂无</i>{/if}</span>
                 </div>
@@ -156,7 +156,7 @@
                     <a href="{:url('manage/carsource/look',['id'=>$vo['id']])}">详情</a>
                 {/if} 
                 {if condition='$ismeunshow_printig'}
-                    <a href="javascript:;" onclick="printig({$vo.id});">打印价签</a>
+                    <a href="{:url('manage/carsource/printig',['id'=>$vo['id']])}">打印价签</a>
                 {/if} 
             </td>
         </tr>
@@ -168,7 +168,7 @@
 <div class="lit" style="color: #ccc;line-height: 80px;text-align: center;font-size: 20px;">！暂无数据</div>
 {/if}
 
-{if condition='count($data) > 1'}
+{if condition='count($data) > 0'}
 <div class="list_pi_run">
     <label><input type="checkbox" id="all_check">全选</label>
     {if condition='$ismeunshow_enable'}
@@ -188,10 +188,10 @@
     
 <script type="text/javascript">
     //打印价签
-    function printig(id){
+    /*function printig(id){
         var url="{:url('manage/carsource/printig',[],false)}/id/"+id;
         $('#iframe_printig').prop('src',url);
-    }
+    }*/
     //上架，下架，退库
     function carsource_update_stock_state(id,stock_state){
         var tips='';
@@ -307,15 +307,7 @@
                     $('#all_check').prop('checked',true);
                 }
             }else{
-                $('.one_check').each(function(){
-                    if($(this).prop("checked")){
-                        pix=false;
-                        return false;
-                    }
-                });
-                if(!pix){
-                    $('#all_check').removeAttr('checked');
-                }
+                $('#all_check').removeAttr('checked');
             }
          });
         //查出车系

@@ -63,7 +63,7 @@ class Homebrand extends Admin
             }
         }
         //获取品牌
-        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+        $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
         //模板赋值
         $this->assign([
             'brand'=>$brand,
@@ -111,7 +111,7 @@ class Homebrand extends Admin
         if($home_brand){
             $home_brand['created_at_str']=date('Y-m-d H:i',$home_brand['created_at']);
             //获取品牌
-            $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->select();
+            $brand=db('brands')->field('id,p_pinpai_id,p_pinpai')->where(['is_show'=>'1'])->order('p_shouzimu')->select();
             //模板赋值
             $this->assign([
                 'home_brand'=>$home_brand,

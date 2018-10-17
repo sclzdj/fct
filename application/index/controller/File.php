@@ -51,7 +51,7 @@ class File extends Home
                 $fix=$name_arr[count($name_arr)-1];
                 if($suffix!==''){
                     $suffix_arr=explode(',',$suffix);
-                    if(!in_array($fix,$suffix_arr)){
+                    if(!in_array(strtolower($fix),$suffix_arr)){
                         return json_text_return('F','1000','后缀只能为'.$suffix.'！');
                     }
                 }
@@ -99,7 +99,7 @@ class File extends Home
             $fix=$name_arr[count($name_arr)-1];
             if($suffix!==''){
                 $suffix_arr=explode(',',$suffix);
-                if(!in_array($fix,$suffix_arr)){
+                if(!in_array(strtolower($fix),$suffix_arr)){
                     return json_text_return('F','1000','后缀只能为'.$suffix.'！');
                 }
             }

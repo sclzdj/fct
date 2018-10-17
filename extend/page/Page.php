@@ -19,7 +19,7 @@ class Page extends Paginator
         parse_str($parse_url['query'], $query);
         $query['page']='';
         $go_url=$parse_url['path'].'?'.http_build_query($query);
-        $str="<p class='pageRemark'>跳至<input type='text' onkeyup='this.value=this.value.replace(/[^\d]/g,\"\");if(this.value==0) this.value=1;if(this.value>".$this->lastPage.") this.value=".$this->lastPage.";' onkeypress='if(event.keyCode == 13){location.href=\"".$go_url."\"+this.value}' value='".$this->currentPage()."'>页</p>";
+        $str="<p class='pageRemark'>跳至<input type='text' onkeyup='this.value=this.value.replace(/[^\d]/g,\"\");if(this.value==0) this.value=1;if(this.value>".$this->lastPage.") this.value=".$this->lastPage.";' onkeypress='if(event.keyCode == 13){location.href=\"".$go_url."\"+this.value}' value='".$this->currentPage()."' title='输入完成后敲击回车键'>页</p>";
         return $str;
     }
     //首页
@@ -137,7 +137,7 @@ class Page extends Paginator
      */
     protected function getAvailablePageWrapper($url, $page)
     {
-        return '<a href="' . htmlentities($url) . '" title="第"'. $page .'"页" >' . $page . '</a>';
+        return '<a href="' . htmlentities($url) . '" title="第'. $page .'页" >' . $page . '</a>';
     }
     /**
      * 生成一个禁用的按钮

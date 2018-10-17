@@ -41,7 +41,7 @@ class Adminuser extends Admin
         $order=input('param.order','a.create_time desc');
         $order=str_replace('+', ' ', $order);
         //查出数据
-        $object=db('admin_user')->alias('a')->field('a.id,a.username,a.nickname,a.job,a.mobile,a.create_time,a.status,a.role,b.name role_name')->join('admin_role b','a.role=b.id','LEFT')->where($where)->where('a.id','neq','1')->where($map)->order($order)->paginate(15);
+        $object=db('admin_user')->alias('a')->field('a.id,a.username,a.nickname,a.job,a.mobile,a.create_time,a.status,a.role,b.name role_name,b.merchant_id')->join('admin_role b','a.role=b.id','LEFT')->where($where)->where('a.id','neq','1')->where($map)->order($order)->paginate(15);
         // 获取分页显示
         $page = $object->render();
         $data_all = json_decode(json_encode($object),TRUE);
@@ -49,6 +49,12 @@ class Adminuser extends Admin
         //处理数据
         foreach ($data as $key => $value) {
             $data[$key]['create_time_str']=date('Y-m-d H:i',$value['create_time']);
+            $merchant=db('merchants')->field('shop_name')->where('id',$value['merchant_id'])->find();
+            if(!$ismerchant && $merchant){
+                $data[$key]['merchant']='('.$merchant['shop_name'].')';
+            }else{
+                $data[$key]['merchant']='';
+            }
         }
         //模板赋值
         $this->assign([
@@ -68,6 +74,9 @@ class Adminuser extends Admin
             $data=fortrim($data);
             if($data['username']===''){
                 return json_return('F','1001','登录名必填');
+            }
+            if(db('admin_user')->where('username',$data['username'])->find()){
+                return json_return('F','1001','登录名称已有');
             }
             if(!preg_match('/^[A-Za-z0-9@]{3,20}$/',$data['username'])) {
                 return json_return('F','1001','登录名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
@@ -142,7 +151,15 @@ class Adminuser extends Admin
         if($ismerchant){
             $roles=db('admin_role')->field('id,name')->where('merchant_id',$ismerchant)->select();
         }else{
-            $roles=db('admin_role')->field('id,name')->where('id','not in','1,2')->select();
+            $roles=db('admin_role')->field('id,name,merchant_id')->where('id','not in','1,2')->select();
+            foreach ($roles as $key => $value) {
+                $merchant=db('merchants')->field('shop_name')->where('id',$value['merchant_id'])->find();
+                if(!$ismerchant && $merchant){
+                    $roles[$key]['name']=$value['name'].'('.$merchant['shop_name'].')';
+                }else{
+                    $roles[$key]['name']=$value['name'];
+                }
+            }
         }
         //模板赋值
         $this->assign([
@@ -173,6 +190,9 @@ class Adminuser extends Admin
             }
             if(!preg_match('/^[A-Za-z0-9@]{3,20}$/',$data['username'])) {
                 return json_return('F','1001','登录名允许数字、大小写字母及@符号（邮箱时）的3-20个字符');
+            }
+            if(db('admin_user')->where('username',$data['username'])->where('id','neq',$data['id'])->find()){
+                return json_return('F','1001','登录名称已有');
             }
             if($data['password0']!==''){
                 if(!preg_match('/^[A-Za-z0-9!@#$%^&*-,.?;]{8,16}$/',$data['password0'])) {
@@ -261,7 +281,15 @@ class Adminuser extends Admin
         if($ismerchant){
             $roles=db('admin_role')->field('id,name')->where('merchant_id',$ismerchant)->select();
         }else{
-            $roles=db('admin_role')->field('id,name')->where('id','not in','1,2')->select();
+            $roles=db('admin_role')->field('id,name,merchant_id')->where('id','not in','1,2')->select();
+            foreach ($roles as $key => $value) {
+                $merchant=db('merchants')->field('shop_name')->where('id',$value['merchant_id'])->find();
+                if(!$ismerchant && $merchant){
+                    $roles[$key]['name']=$value['name'].'('.$merchant['shop_name'].')';
+                }else{
+                    $roles[$key]['name']=$value['name'];
+                }
+            }
         }
         //模板赋值
         $this->assign([
